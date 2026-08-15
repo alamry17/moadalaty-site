@@ -1,0 +1,15 @@
+# الموقع مكانش فيه أي حماية Clickjacking (X-Frame-Options / CSP frame-ancestors)
+# على أي صفحة قبل كده. القاعدة دي بتحمي كل صفحات الموقع العادية (منع أي حد
+# يحطها جوه iframe في موقع تاني)، ما عدا صفحات /widgets/* المصممة للتضمين
+# عمدًا في مواقع تانية (تُستثنى تحت).
+/*
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-ancestors 'self'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# صفحات الـ Widgets مصمَّمة عمدًا عشان تتحمّل جوه iframe في أي موقع تاني،
+# فبنشيل قيود التضمين اللي اتوَرِّثت من القاعدة العامة فوق.
+/widgets/*
+  ! X-Frame-Options
+  ! Content-Security-Policy

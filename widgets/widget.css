@@ -1,0 +1,156 @@
+/* ═══════════════════════════════════════════════════
+   widget.css — تنسيق خفيف مستقل لصفحات /widgets/*
+   (مش نفس CSS الموقع الكامل، عشان حجم التحميل يفضل صغير
+   جوه iframe على مواقع تانية)
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --primary: #1a3c6e;
+  --primary-light: #2557a7;
+  --success: #1e7e4a;
+  --success-light: #d4f0e0;
+  --danger: #c0392b;
+  --danger-light: #fde8e6;
+  --text: #1a1f2e;
+  --text-muted: #5a6478;
+  --bg: #f8f9fc;
+  --white: #fff;
+  --border: #dde3ef;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --font-body: 'Cairo', sans-serif;
+  --font-heading: 'Tajawal', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+body {
+  direction: rtl;
+  font-family: var(--font-body);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 16px;
+}
+
+.widget-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 16px;
+}
+
+.widget-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--primary);
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subject-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 10px; flex-wrap: wrap; }
+.subject-row > * { flex: 1; min-width: 90px; }
+.subj-name, .subj-grade, .subj-credits {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--text);
+  width: 100%;
+  font-size: 14px;
+}
+.remove-btn {
+  background: var(--danger);
+  color: #fff;
+  border: 0;
+  border-radius: var(--radius-sm);
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+.remove-btn:hover { opacity: .85; }
+
+.add-btn, .add-row-btn {
+  background: var(--white);
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+.add-btn:hover, .add-row-btn:hover { background: var(--bg); }
+
+.calc-btn {
+  background: var(--primary);
+  color: #fff;
+  border: 0;
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.calc-btn:hover { background: var(--primary-light); }
+
+.calc-result { display: none; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px; }
+.calc-result.show { display: block; }
+.result-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.result-row:last-child { border-bottom: 0; }
+.result-val { font-weight: 700; color: var(--primary-light); }
+.result-badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-weight: 700; font-size: 13px; margin-top: 6px; }
+
+.gpa-final { text-align: center; margin-top: 10px; }
+.gpa-final .num { font-size: 30px; font-weight: 900; color: var(--primary); }
+.gpa-final .label { font-size: 12px; color: var(--text-muted); }
+
+/* ── حقول الحاسبات القائمة على فورم ثابت (form-calc.js) ── */
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+@media (max-width: 360px) { .calc-grid { grid-template-columns: 1fr; } }
+.calc-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; }
+.calc-group input, .calc-group select {
+  width: 100%; padding: 8px 10px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 14px;
+  color: var(--text); background: var(--white);
+}
+.calc-group input:focus, .calc-group select:focus { outline: none; border-color: var(--primary-light); }
+.calc-group input.err, .calc-group select.err { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(192,57,43,.12); }
+.err-msg { color: var(--danger); font-size: 11px; margin-top: 4px; display: none; }
+.err-msg.show { display: block; }
+.calc-error-banner {
+  display: none; background: var(--danger-light); border-right: 3px solid var(--danger);
+  border-radius: var(--radius-sm); padding: 8px 12px; font-size: 13px; color: var(--danger);
+  font-weight: 700; margin-bottom: 12px;
+}
+.calc-error-banner.show { display: block; }
+
+.widget-footer {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  text-align: left;
+  font-size: 11px;
+}
+.widget-footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 700;
+}
+.widget-footer a:hover { color: var(--primary); text-decoration: underline; }

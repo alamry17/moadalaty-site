@@ -1,0 +1,862 @@
+<!--
+═══════════════════════════════════════════════════════════════════
+  قالب مقال موحّد — حاسبة المعدلات الجامعية (v2)
+  ───────────────────────────────────────────────────────────────
+  ✅ = ثابت · لا تغيّره (نفسه بكل المقالات)
+  📝 = متغيّر · املأه بمحتوى المقال
+  🎁 = ميزة قابلة للإضافة · انسخ الكتلة الجاهزة
+═══════════════════════════════════════════════════════════════════
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- Google Consent Mode v2 — لازم يتحمّل قبل GTM عشان يوقف التتبّع فعليًا
+     لحد ما الزائر يوافق (مش بس لافتة شكلية). راجع js/cookie-consent.js -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function () {
+    try {
+      var saved = localStorage.getItem('cookieConsent');
+      if (saved === 'accepted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WDKV7WH2');</script>
+<!-- End Google Tag Manager -->
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 📝 عنوان المقال (≤ 60 حرف) + سنة -->
+  <title>تحويل الساعات المعتمدة إلى ECTS | دليل الطلاب 2026</title>
+
+  <!-- 📝 وصف SEO (≤ 155 حرف) -->
+  <meta name="description" content="خطوات واضحة لتحويل ساعاتك الدراسية المعتمدة إلى نظام ECTS الأوروبي للتقديم على الجامعات وبرامج الابتعاث الأوروبية.">
+
+  <!-- 📝 كلمات مفتاحية مفصولة بفواصل -->
+  <meta name="keywords" content="تحويل الساعات المعتمدة إلى ECTS, كم تساوي الساعة المعتمدة المصرية في ECTS, محول وحدات دراسية عربي أوروبي مجاني, تحويل بكالوريوس 120 ساعة للنظام الأوروبي, نقاط ECTS">
+
+  <!-- ✅ ثابت -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#1a3c6e">
+  <meta name="author" content="بوابة الأدوات التعليمية">
+  <meta name="copyright" content="© 2026 بوابة الأدوات التعليمية — أداة مجانية للطلاب وأولياء الأمور">
+
+  <!-- ✅ Open Graph ثابت + صورة متغيّرة -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="تحويل الساعات المعتمدة إلى ECTS | دليل الطلاب العرب 2026">
+  <meta property="og:description" content="خطوات واضحة لتحويل ساعاتك الدراسية المعتمدة إلى نظام ECTS الأوروبي للتقديم على الجامعات وبرامج الابتعاث الأوروبية.">
+  <meta property="og:url" content="https://moadalaty.com/articles/ects-conversion.html">
+  <meta property="og:site_name" content="بوابة الأدوات التعليمية">
+  <meta property="og:image" content="https://moadalaty.com/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="دليل تحويل الساعات المعتمدة العربية إلى نظام ECTS الأوروبي للقبول الجامعي">
+
+  <!-- 📝 تواريخ ISO 8601 (YYYY-MM-DDTHH:MM:SS+03:00) -->
+  <meta property="article:published_time" content="2026-01-15T08:00:00+03:00">
+  <meta property="article:modified_time" content="2026-07-17T09:58:00+03:00">
+  <meta property="article:section" content="تعليم جامعي">
+  <meta property="article:tag" content="ECTS, ساعات معتمدة, تحويل وحدات دراسية, بكالوريوس مصري, جامعات أوروبية">
+
+  <!-- ✅ Twitter card ثابت + متغيّرات -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="تحويل الساعات المعتمدة إلى ECTS | دليل الطلاب العرب 2026">
+  <meta name="twitter:description" content="خطوات واضحة لتحويل ساعاتك الدراسية المعتمدة إلى نظام ECTS الأوروبي.">
+  <meta name="twitter:image" content="https://moadalaty.com/assets/og-image.jpg">
+  <meta name="twitter:site" content="@moadalaty">
+  <meta name="twitter:creator" content="@moadalaty">
+
+  <!-- 📝 الرابط الثابت (canonical) -->
+  <link rel="canonical" href="https://moadalaty.com/articles/ects-conversion.html">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- ═══ Schema.org JSON-LD ═══ -->
+
+  <!-- ✅ Article schema -->
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "كيف تحوّل ساعاتك الدراسية إلى نظام ECTS الأوروبي؟", "description": "خطوات واضحة لتحويل ساعاتك الدراسية المعتمدة إلى نظام ECTS الأوروبي للتقديم على الجامعات وبرامج الابتعاث الأوروبية.", "author": {"@type": "Organization", "name": "حاسبة المعدلات الجامعية", "url": "https://moadalaty.com", "logo": {"@type": "ImageObject", "url": "https://moadalaty.com/assets/logo.png", "width": 512, "height": 512}}, "publisher": {"@type": "Organization", "name": "حاسبة المعدلات الجامعية", "logo": {"@type": "ImageObject", "url": "https://moadalaty.com/assets/logo.png", "width": 512, "height": 512}}, "image": {"@type": "ImageObject", "url": "https://moadalaty.com/assets/og-image.jpg", "width": 1200, "height": 630}, "datePublished": "2026-01-15T08:00:00+03:00", "dateModified": "2026-07-17T09:58:00+03:00", "inLanguage": "ar", "keywords": "تحويل الساعات المعتمدة إلى ECTS, كم تساوي الساعة المعتمدة المصرية في ECTS, محول وحدات دراسية عربي أوروبي مجاني, تحويل بكالوريوس 120 ساعة للنظام الأوروبي, نقاط ECTS", "wordCount": 1976, "articleSection": "المعدل الجامعي", "speakable": {"@type": "SpeakableSpecification", "xpath": ["/html/head/title", "/html/body//h1", "/html/body//h2[1]"]}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://moadalaty.com/articles/ects-conversion.html"}}</script>
+
+  <!-- ✅ Breadcrumb schema -->
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://moadalaty.com/"}, {"@type": "ListItem", "position": 2, "name": "المقالات", "item": "https://moadalaty.com/articles/"}, {"@type": "ListItem", "position": 3, "name": "كيف تحوّل ساعاتك الدراسية إلى نظام ECTS الأوروبي؟", "item": "https://moadalaty.com/articles/ects-conversion.html"}]}
+</script>
+
+  <!-- ✅ FAQPage schema — محدّث ليطابق الأسئلة المعروضة -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "كم تساوي الساعة المعتمدة المصرية في ECTS؟",
+        "acceptedAnswer": { "@type": "Answer", "text": "في الغالب تساوي الساعة المعتمدة الواحدة من نظام 120 ساعة ما بين 1.5 و2 نقطة ECTS. بكالوريوس 120 ساعة مصرية يعادل تقريباً 180–240 نقطة ECTS وهو ما يوازي 3–4 سنوات دراسية أوروبية." }
+      },
+      {
+        "@type": "Question",
+        "name": "هل يقبل الاتحاد الأوروبي تحويل الساعات العربية إلى ECTS؟",
+        "acceptedAnswer": { "@type": "Answer", "text": "نعم، معظم الجامعات الأوروبية تقبل تحويل الساعات العربية المعتمدة إلى ECTS، لكنها تطلب وثيقة تحويل رسمية من جامعتك أو شرحاً توضيحياً مرفقاً بالملف." }
+      },
+      {
+        "@type": "Question",
+        "name": "ما الفرق بين ECTS والساعات الأمريكية المعتمدة؟",
+        "acceptedAnswer": { "@type": "Answer", "text": "الساعة الأمريكية المعتمدة تعادل حضور محاضرة 50 دقيقة أسبوعياً لفصل دراسي. أما نقطة ECTS فتقيس عبء العمل الكلي للطالب بما يشمل المذاكرة والتطبيق، وتساوي 25–30 ساعة عمل فعلية. لذلك 1 ساعة أمريكية ≈ 1.5–2 نقطة ECTS." }
+      },
+      {
+        "@type": "Question",
+        "name": "هل تقبل برامج الابتعاث الأوروبية مثل إيراسموس تحويل الساعات العربية؟",
+        "acceptedAnswer": { "@type": "Answer", "text": "نعم، برامج إيراسموس+ وغيرها من منح الاتحاد الأوروبي تقبل التحويل. المهم هو إرفاق كشف الدرجات الرسمي (Transcript) مع وثيقة توضح نظام التقييم المعتمد في جامعتك." }
+      },
+      {
+        "@type": "Question",
+        "name": "هل هناك فرق بين ECTS لبكالوريوس الهندسة وبكالوريوس الآداب؟",
+        "acceptedAnswer": { "@type": "Answer", "text": "الفارق في مجموع الساعات غالباً لا في معامل التحويل. بكالوريوس الهندسة 5 سنوات بـ 160–180 ساعة يُحوَّل بمعامل 1.5–1.7 ليصل إلى 240–300 ECTS، أما بكالوريوس آداب 4 سنوات بـ 120 ساعة فيُحوَّل بمعامل 2 ليصل إلى 240 ECTS." }
+      },
+      {
+        "@type": "Question",
+        "name": "كيف تُحسب المواد العملية والمختبرات في نظام ECTS؟",
+        "acceptedAnswer": { "@type": "Answer", "text": "ساعة المختبر تُحسب بمعامل أقل من ساعة المحاضرة في بعض الجامعات الأوروبية. في النظام الألماني، 2 ساعة مختبر تعادل 1 ECTS، بينما ساعة المحاضرة قد تساوي 1.5–2 ECTS. لذلك وضّح نسبة المواد العملية في برنامجك عند التقديم." }
+      },
+      {
+        "@type": "Question",
+        "name": "ماذا لو كان تحويلي أقل من الحد الأدنى المطلوب للبرنامج الأوروبي؟",
+        "acceptedAnswer": { "@type": "Answer", "text": "لديك خيارات: ابحث عن برامج جسر أو سنوات تحضيرية تُكمل النقص، أكمل مواد إضافية أونلاين من منصات معتمدة كـ Coursera أو edX، أو تواصل مع مكتب القبول مباشرةً لطلب تقييم فردي." }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ✅ HowTo schema — يطابق قسم الخطوات في المقال -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "كيفية تحويل الساعات المعتمدة إلى نقاط ECTS",
+    "description": "خطوات عملية لتحويل معدلك ووحداتك الدراسية إلى نظام ECTS الأوروبي للتقديم على المنح والقبول الجامعي",
+    "totalTime": "PT10M",
+    "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0" },
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "اجمع بيانات برنامجك", "text": "استخرج كشف الدرجات الرسمي المتضمن عدد الساعات المعتمدة لكل مادة، والمعدل التراكمي، ومدة الدراسة.", "url": "https://moadalaty.com/articles/ects-conversion.html#section-formula" },
+      { "@type": "HowToStep", "position": 2, "name": "حدّد معامل التحويل", "text": "احسب معامل التحويل: اقسم 240 (مجموع ECTS لبكالوريوس 4 سنوات) على مجموع ساعاتك المعتمدة للحصول على المعامل الخاص بك.", "url": "https://moadalaty.com/articles/ects-conversion.html#section-formula" },
+      { "@type": "HowToStep", "position": 3, "name": "حوّل الساعات إلى ECTS", "text": "اضرب عدد ساعات كل مادة في المعامل للحصول على نقاط ECTS المعادلة. استخدم الحاسبة المدمجة في هذه الصفحة للتحويل الفوري.", "url": "https://moadalaty.com/articles/ects-conversion.html#section-calculator" },
+      { "@type": "HowToStep", "position": 4, "name": "أعدّ ملف التحويل الرسمي", "text": "احصل على شهادة تقييم من NARIC أو Anabin أو WES لتوثيق التحويل رسمياً، وأرفق كشف الدرجات مع شرح نظام التقييم المعتمد في جامعتك.", "url": "https://moadalaty.com/articles/ects-conversion.html#section-tips" }
+    ]
+  }
+  </script>
+
+  <!-- ✅ Google Fonts — ثابت -->
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "محول الساعات المعتمدة إلى ECTS", "applicationCategory": "EducationalApplication", "operatingSystem": "Web Browser", "url": "https://moadalaty.com/articles/ects-conversion.html", "description": "أداة فورية لتحويل الساعات المعتمدة الجامعية إلى نظام ECTS الأوروبي.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "publisher": {"@type": "Organization", "name": "moadalaty.com"}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <!-- ✅ الملفات الموحدة — لا تُعدّل -->
+  <link rel="stylesheet" href="/css/variables.min.css">
+  <link rel="stylesheet" href="/css/article.min.css">
+  <link rel="stylesheet" href="/css/components.min.css">
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WDKV7WH2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<!-- ✅ شريط تقدّم القراءة — ثابت (JS في article.js) -->
+<div id="reading-progress" aria-hidden="true"><div id="reading-progress-bar"></div></div>
+
+<!-- ✅ رابط التخطي لإمكانية الوصول — ثابت -->
+<a href="#main-content" class="skip-link">تخطى إلى المحتوى الرئيسي</a>
+
+<!-- ✅ BREADCRUMB — حدّث العنصر الأخير -->
+<nav class="breadcrumb" aria-label="مسار التنقل">
+  <div class="container">
+    <ol>
+      <li><a href="/" target="_self">الرئيسية</a></li>
+      <li><a href="/articles/" target="_self">المقالات</a></li>
+      <li><span aria-current="page">تحويل الساعات إلى ECTS</span></li>
+    </ol>
+  </div>
+</nav>
+
+<!-- ✅ أزرار ثابتة -->
+<button id="dark-toggle" aria-label="تبديل الوضع الليلي">🌙</button>
+<button id="scroll-top" aria-label="العودة للأعلى" title="أعلى الصفحة">⬆</button>
+
+<!-- ════════════ HERO ════════════ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge"><span aria-hidden="true">🇪🇺</span> دليل الابتعاث الأوروبي | 2026</div>
+
+    <h1>كيف تحوّل ساعاتك الدراسية<br>إلى نظام ECTS الأوروبي؟</h1>
+
+    <p class="hero-sub">تريد التقديم لجامعة أوروبية أو منحة إيراسموس؟ اعرف كيف تحوّل ساعاتك المعتمدة العربية إلى نقاط ECTS بدقة وبدون أخطاء</p>
+
+    <a href="#section-calculator" class="hero-cta">
+      <span aria-hidden="true">🔢</span> احسب نقاط ECTS الآن
+    </a>
+
+    <div class="hero-meta" aria-label="معلومات المقال">
+      <span><span aria-hidden="true">⏱</span> وقت القراءة: 7 دقائق</span>
+      <span><span aria-hidden="true">🎓</span> للطلاب الجامعيين</span>
+      <span><span aria-hidden="true">📅</span> آخر تحديث: يوليو 2026</span>
+      <span class="view-meta"><span aria-hidden="true">👁</span> <span id="view-count">—</span> مشاهدة</span>
+    </div>
+  </div>
+</header>
+
+<!-- ════════════ ARTICLE BODY ════════════ -->
+<main class="article-body" id="main-content">
+  <div class="container">
+
+    <!-- ✅ زر الطباعة — ثابت -->
+    <div style="margin-bottom:8px;">
+      <button class="print-btn" onclick="window.print()" aria-label="طباعة المقال أو حفظه كـ PDF"><span aria-hidden="true">🖨️</span> طباعة / حفظ PDF</button>
+    </div>
+
+    <!-- 📝 الخلاصة -->
+    <div class="answer-box">
+      <span class="answer-label">✨ الخلاصة أولاً</span>
+      <p>الساعة المعتمدة الواحدة في نظامي مصر والدول العربية تساوي في الغالب <strong>1.5 إلى 2 نقطة ECTS</strong>. بكالوريوس 120 ساعة يعادل 180–240 نقطة ECTS، وبكالوريوس 132–150 ساعة يعادل 200–240 نقطة ECTS. المعادلة ليست ثابتة لأن ECTS يقيس عبء العمل الفعلي وليس ساعات الحضور فقط.</p>
+    </div>
+
+    <!-- 📝 فقرة مقدمة -->
+    <p>كثير من الطلاب العرب الذين يتقدمون للجامعات الأوروبية أو برامج الابتعاث مثل إيراسموس+ يجدون أنفسهم حائرين أمام خانة "ECTS Credits" في نموذج التقديم. هل أكتب عدد الساعات المعتمدة مباشرةً؟ هل أضربها في معامل ما؟ وكيف أعرف إذا كانت جامعتي معترفاً بها في النظام الأوروبي؟</p>
+
+    <!-- 📝 tip-box قبل الـ TOC -->
+    <div class="tip-box">
+      <span class="tip-icon" aria-hidden="true">💡</span>
+      <p><strong>قبل أن تكمل القراءة:</strong> استخدم <a href="#section-calculator">المحوّل التفاعلي أسفل المقال</a> لتحويل ساعاتك المعتمدة إلى نقاط ECTS في ثوانٍ — ثم احتفظ بالنتيجة لملف تقديمك.</p>
+    </div>
+
+    <!-- ════════════ جدول المحتويات ════════════ -->
+    <nav class="toc" aria-label="جدول المحتويات">
+      <div class="toc-title"><span aria-hidden="true">📋</span> جدول المحتويات</div>
+      <ol>
+        <li><a href="#section-what-is-ects">ما هو نظام ECTS ولماذا تحتاجه؟</a></li>
+        <li><a href="#section-formula">معادلة تحويل الساعة المعتمدة إلى ECTS</a></li>
+        <li><a href="#section-example">مثال: تحويل بكالوريوس 120 ساعة مصرية</a></li>
+        <li><a href="#section-comparison">الفرق بين ECTS والنظام الأمريكي والعربي</a></li>
+        <li><a href="#section-calculator">محوّل الوحدات: احسب نقاطك</a></li>
+        <li><a href="#section-tips">نصائح عند تقديم ملف التحويل</a></li>
+        <li><a href="#section-checklist">قائمة التحقق قبل الإرسال</a></li>
+        <li><a href="#section-faq">أسئلة شائعة</a></li>
+      </ol>
+    </nav>
+
+    <!-- ════════════ نظرة عامة (steps-visual) ════════════ -->
+    <div class="steps-visual">
+      <div class="step-card">
+        <span class="step-icon">📐</span>
+        <span class="step-n">المعامل الأساسي</span>
+        <strong>1 ساعة = 1.5–2 ECTS</strong>
+        <p>بحسب سنوات الدراسة ونظام جامعتك</p>
+      </div>
+      <div class="step-card">
+        <span class="step-icon">🎓</span>
+        <span class="step-n">بكالوريوس 4 سنوات</span>
+        <strong>180–240 ECTS</strong>
+        <p>120 ساعة مصرية × 1.5–2</p>
+      </div>
+      <div class="step-card">
+        <span class="step-icon">📋</span>
+        <span class="step-n">المستند المطلوب</span>
+        <strong>Transcript رسمي</strong>
+        <p>كشف درجات مُوثَّق مع شرح النظام المعتمد</p>
+      </div>
+      <div class="step-card">
+        <span class="step-icon">🇪🇺</span>
+        <span class="step-n">معيار الاتحاد الأوروبي</span>
+        <strong>60 ECTS / سنة</strong>
+        <p>240 ECTS للبكالوريوس 4 سنوات</p>
+      </div>
+    </div>
+
+    <!-- ════════════ الأقسام الرئيسية ════════════ -->
+
+    <!-- ──────── القسم 1: ما هو ECTS ──────── -->
+    <section id="section-what-is-ects" aria-labelledby="h2-what-is-ects">
+      <h2 id="h2-what-is-ects"><span class="icon" aria-hidden="true">🇪🇺</span> ما هو نظام ECTS ولماذا تحتاجه للتقديم لأوروبا؟</h2>
+
+      <p>ECTS اختصار لـ <strong>European Credit Transfer and Accumulation System</strong> — نظام التحويل والتراكم الأوروبي للوحدات الدراسية. أُطلق في إطار إعلان بولونيا عام 1999 بهدف توحيد المؤهلات الأكاديمية بين دول الاتحاد الأوروبي وتسهيل انتقال الطلاب بين جامعاتها.</p>
+
+      <p>الفكرة الجوهرية: بدلاً من قياس ساعات الحضور داخل القاعة فحسب، يقيس ECTS <strong>عبء العمل الكلي</strong> على الطالب — بما يشمل الحضور والمذاكرة والتطبيق والمشاريع والامتحانات. كل نقطة ECTS تمثل 25–30 ساعة عمل فعلية.</p>
+
+      <div class="tip-box">
+        <span class="tip-icon" aria-hidden="true">🔑</span>
+        <p><strong>لماذا تحتاجه؟</strong> أي جامعة أوروبية أو برنامج منحة مثل إيراسموس+ أو DAAD أو المنح الفرنسية ستطلب منك تحديد عدد نقاط ECTS المكتسبة أو المعادلة لمؤهلك. بدون هذا التحويل، يصعب على لجنة القبول تقييم مستواك الأكاديمي مقارنةً بالطلاب الأوروبيين.</p>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>المرحلة الأكاديمية</th>
+              <th>نقاط ECTS المطلوبة</th>
+              <th>ما يعادلها عربياً (تقريبي)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>بكالوريوس (3 سنوات)</strong></td><td>180 ECTS</td><td>90–110 ساعة معتمدة</td></tr>
+            <tr><td><strong>بكالوريوس (4 سنوات)</strong></td><td>240 ECTS</td><td>120–140 ساعة معتمدة</td></tr>
+            <tr><td><strong>ماجستير</strong></td><td>60–120 ECTS</td><td>30–60 ساعة معتمدة</td></tr>
+            <tr><td><strong>سنة دراسية واحدة</strong></td><td>60 ECTS</td><td>30–35 ساعة معتمدة</td></tr>
+            <tr><td><strong>فصل دراسي</strong></td><td>30 ECTS</td><td>15–18 ساعة معتمدة</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ──────── القسم 2: المعادلة + Mistake Card ──────── -->
+    <section id="section-formula" aria-labelledby="h2-formula">
+      <h2 id="h2-formula"><span class="icon" aria-hidden="true">📐</span> معادلة تحويل الساعة المعتمدة إلى نقطة ECTS</h2>
+
+      <p>لا توجد معادلة رسمية مُقنَّنة دولياً لتحويل الساعات المعتمدة إلى ECTS، لكن الممارسة المعتمدة في معظم سفارات وجامعات أوروبا تعتمد على <strong>حساب عبء العمل السنوي</strong> للمقارنة.</p>
+
+      <!-- ✅ Mistake Card — مكوّن موحّد من components.css -->
+      <div class="mistake-card">
+        <div class="mistake-number">1</div>
+        <div class="mistake-title">❌ استخدام معامل ثابت (×2) لكل الحالات</div>
+        <p>كثير من الطلاب يقرؤون أن "كل ساعة معتمدة = 2 نقطة ECTS" ويطبقونها على ملفهم دون تدقيق. هذا الرقم صحيح فقط لبكالوريوس 120 ساعة على 4 سنوات. إذا كان برنامجك 130 ساعة أو 5 سنوات، فالمعامل سيختلف. الخطأ الأكبر أن بعضهم يكتب "120 ساعة" في خانة ECTS مباشرةً دون تحويل — وهذا يجعل المؤهل يبدو نصف بكالوريوس لدى لجنة القبول.</p>
+        <div class="mistake-fix">
+          <strong>✅ الحل الصحيح:</strong> احسب المعامل من مدة برنامجك: معامل التحويل = (سنوات البرنامج × 60) ÷ إجمالي ساعاتك. ثم اضرب كل ساعة في هذا المعامل. أو استخدم <a href="#section-calculator">المحوّل أدناه</a> مباشرةً.
+        </div>
+      </div>
+
+      <div class="example-box">
+        <span class="example-label">📌 معادلة التحويل المنطقية</span>
+        <div class="calc-row"><span>نقاط ECTS للبكالوريوس الأوروبي (4 سنوات)</span><span>240 ECTS</span></div>
+        <div class="calc-row"><span>ساعات البكالوريوس المصري (4 سنوات)</span><span>120 ساعة</span></div>
+        <div class="calc-row"><span>معامل التحويل = 240 ÷ 120</span><span>= 2</span></div>
+        <div class="calc-row"><span>إذاً: 1 ساعة معتمدة مصرية</span><span>= 2 ECTS</span></div>
+      </div>
+
+      <p>لكن المعامل يتفاوت بين 1.5 و2 بحسب ما إذا كانت جامعتك تقارن بنظام 3 سنوات أو 4 سنوات، وبحسب مجموع ساعات الخطة الدراسية:</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>نظام البكالوريوس</th>
+              <th>مجموع الساعات الشائع</th>
+              <th>معامل التحويل إلى ECTS</th>
+              <th>الناتج التقريبي</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>4 سنوات (مصر / المغرب / تونس)</td><td>120–132 ساعة</td><td><span class="badge-yes">× 2</span></td><td>240 ECTS</td></tr>
+            <tr><td>4 سنوات (الخليج / بعض الأردنية)</td><td>132–140 ساعة</td><td><span class="badge-yes">× 1.7</span></td><td>≈ 230 ECTS</td></tr>
+            <tr><td>5 سنوات (هندسة / طب بشري)</td><td>160–200 ساعة</td><td><span class="badge-yes">× 1.5</span></td><td>240–300 ECTS</td></tr>
+            <tr><td>3 سنوات (دبلوم / بعض الليبية)</td><td>90–100 ساعة</td><td><span class="badge-yes">× 2</span></td><td>180 ECTS</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ تنبيه مهم:</strong> بعض الجامعات الأوروبية تتحقق من الساعات الفعلية للخطة الدراسية ولا تعتمد أي معامل ثابت. إذا طلبت الجامعة تفاصيل دقيقة، احضر Transcript كامل مع وثيقة توضح نظام الساعات المعتمدة المعتمد في جامعتك.
+      </div>
+    </section>
+
+    <!-- ──────── القسم 3: مثال تفصيلي ──────── -->
+    <section id="section-example" aria-labelledby="h2-example">
+      <h2 id="h2-example"><span class="icon" aria-hidden="true">📚</span> مثال تفصيلي: تحويل بكالوريوس 120 ساعة مصرية</h2>
+
+      <p>لنأخذ مثالاً عملياً لطالب أنهى بكالوريوس تجارة (قسم محاسبة) من جامعة مصرية بإجمالي 120 ساعة معتمدة، ويريد التقديم لبرنامج ماجستير في ألمانيا.</p>
+
+      <div class="example-box">
+        <span class="example-label">📌 خطوات التحويل — بكالوريوس 120 ساعة</span>
+        <div class="calc-row"><span>مجموع الساعات المعتمدة الكلية</span><span>120 ساعة</span></div>
+        <div class="calc-row"><span>مدة الدراسة</span><span>4 سنوات (8 فصول)</span></div>
+        <div class="calc-row"><span>نقاط ECTS للبكالوريوس الأوروبي المعادل</span><span>240 ECTS</span></div>
+        <div class="calc-row"><span>معامل التحويل = 240 ÷ 120</span><span>= 2</span></div>
+        <div class="calc-row"><span>نقاط ECTS لكل مادة (مثال: مادة 3 ساعات)</span><span>= 3 × 2 = 6 ECTS</span></div>
+        <div class="calc-row"><span>إجمالي نقاط ECTS للمؤهل</span><span>120 × 2 = 240 ECTS ✅</span></div>
+      </div>
+
+      <h3>كيف تُرجم هذا على الـ Transcript لكل مادة؟</h3>
+      <p>عند ملء نماذج التقديم يُطلب منك أحياناً إدراج نقاط ECTS لكل مادة على حدة. الطريقة:</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>اسم المادة</th>
+              <th>الساعات المعتمدة</th>
+              <th>نقاط ECTS (× 2)</th>
+              <th>الدرجة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>محاسبة مالية</td><td>3 ساعات</td><td>6 ECTS</td><td>A</td></tr>
+            <tr><td>إحصاء تجاري</td><td>3 ساعات</td><td>6 ECTS</td><td>B+</td></tr>
+            <tr><td>اقتصاد كلي</td><td>2 ساعة</td><td>4 ECTS</td><td>A-</td></tr>
+            <tr><td>مشروع التخرج</td><td>6 ساعات</td><td>12 ECTS</td><td>A</td></tr>
+            <tr><td><strong>الإجمالي (مثال)</strong></td><td><strong>14 ساعة</strong></td><td><strong>28 ECTS</strong></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="success-box">
+        <strong>✅ نصيحة عملية:</strong> بعض الجامعات الألمانية والهولندية والبلجيكية تقبل الجدول المُعدَّل هذا كجزء من ملف التقديم إذا كان مرفقاً بالـ Transcript الرسمي. أضف ملاحظة توضيحية: "Credits converted from Egyptian credit hour system at a ratio of 2 ECTS per credit hour."
+      </div>
+    </section>
+
+    <!-- ──────── القسم 4: المقارنة بين الأنظمة ──────── -->
+    <section id="section-comparison" aria-labelledby="h2-comparison">
+      <h2 id="h2-comparison"><span class="icon" aria-hidden="true">⚖️</span> الفرق بين نظام ECTS والنظام الأمريكي والعربي</h2>
+
+      <p>كثيراً ما يحدث خلط بين الأنظمة لأن كلاً منها يستخدم مصطلح "وحدة" أو "ساعة" لكنها لا تعني الشيء نفسه. والفارق الحاسم هو في <strong>ساعات العمل الفعلية</strong> التي تمثلها كل وحدة:</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>المعيار</th>
+              <th>النظام المصري</th>
+              <th>النظام السعودي / الخليجي</th>
+              <th>النظام الأمريكي</th>
+              <th>النظام الأوروبي (ECTS)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ما تقيسه الوحدة؟</strong></td>
+              <td>ساعة حضور أسبوعية × فصل</td>
+              <td>مماثل للمصري مع فصول أقصر</td>
+              <td>ساعة حضور أسبوعية × فصل 15 أسبوع</td>
+              <td>عبء عمل الطالب الكلي</td>
+            </tr>
+            <tr>
+              <td><strong>ساعات العمل لكل وحدة</strong></td>
+              <td>≈ 40–45 ساعة عمل</td>
+              <td>≈ 40–45 ساعة عمل</td>
+              <td>≈ 45–48 ساعة عمل</td>
+              <td>25–30 ساعة عمل</td>
+            </tr>
+            <tr>
+              <td><strong>مدة البكالوريوس</strong></td>
+              <td>120–132 ساعة / 4 سنوات</td>
+              <td>132–140 ساعة / 4 سنوات</td>
+              <td>120 وحدة / 4 سنوات</td>
+              <td>240 ECTS / 4 سنوات</td>
+            </tr>
+            <tr>
+              <td><strong>وحدات في السنة</strong></td>
+              <td>28–33 ساعة</td>
+              <td>30–36 ساعة</td>
+              <td>30 وحدة</td>
+              <td>60 ECTS</td>
+            </tr>
+            <tr>
+              <td><strong>معامل التحويل لـ ECTS</strong></td>
+              <td><span class="badge-yes">× 1.8–2.0</span></td>
+              <td><span class="badge-yes">× 1.7–1.8</span></td>
+              <td><span class="badge-yes">× 1.5–1.8</span></td>
+              <td>— هو المرجع —</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ تنبيه — اختلاف الدول الأوروبية:</strong> ألمانيا وهولندا تعتمدان <strong>30 ساعة عمل لكل نقطة ECTS</strong>، بينما فرنسا وإسبانيا والبرتغال تعتمدان <strong>25 ساعة عمل</strong>. هذا يعني أن نفس برنامجك قد يُحوَّل إلى عدد مختلف من النقاط حسب الجهة المستهدفة. تحقق دائماً من سياسة الجامعة قبل تثبيت الرقم في ملفك.
+      </div>
+    </section>
+
+    <!-- ──────── القسم 5: الحاسبة التفاعلية ──────── -->
+    <section id="section-calculator" aria-labelledby="h2-calculator">
+      <h2 id="h2-calculator"><span class="icon" aria-hidden="true">🔢</span> محوّل الوحدات: احسب نقاط ECTS الخاصة بك</h2>
+
+      <p>أدخل بياناتك أدناه وستحصل فوراً على مجموع نقاط ECTS المعادلة لساعاتك الدراسية، جاهزة للإدراج في ملف تقديمك:</p>
+
+      <!-- ✅ Calc Widget — مكوّن موحّد من components.css -->
+      <div class="calc-widget">
+        <h3><span aria-hidden="true">🔢</span> محوّل الساعات المعتمدة ← ECTS</h3>
+
+        <div class="calc-grid">
+          <div class="calc-group">
+            <label for="total-credits-input">مجموع ساعاتك المعتمدة الكلية</label>
+            <input type="text" inputmode="numeric" id="total-credits-input" placeholder="مثال: 120">
+          </div>
+          <div class="calc-group">
+            <label for="study-years-input">مدة الدراسة (بالسنوات)</label>
+            <select id="study-years-input">
+              <option value="3">3 سنوات (دبلوم / بكالوريوس مكثّف)</option>
+              <option value="4" selected>4 سنوات (بكالوريوس معظم التخصصات)</option>
+              <option value="5">5 سنوات (هندسة / صيدلة / علوم)</option>
+              <option value="6">6 سنوات (طب بشري / طب أسنان)</option>
+            </select>
+          </div>
+          <div class="calc-group">
+            <label for="eu-standard-select">معيار الدولة الأوروبية المستهدفة</label>
+            <select id="eu-standard-select">
+              <option value="30">ألمانيا / هولندا / بلجيكا (30 ساعة / نقطة)</option>
+              <option value="25">فرنسا / إسبانيا / البرتغال (25 ساعة / نقطة)</option>
+              <option value="27" selected>متوسط أوروبي (27 ساعة / نقطة — موصى به)</option>
+              <option value="28">إيطاليا / السويد / الدنمارك (28 ساعة / نقطة)</option>
+            </select>
+          </div>
+          <div class="calc-group">
+            <label for="program-select">نوع المؤهل المستهدف</label>
+            <select id="program-select">
+              <option value="240">بكالوريوس / اعتراف بالمؤهل (240 ECTS مرجع)</option>
+              <option value="180">بكالوريوس 3 سنوات أوروبي (180 ECTS مرجع)</option>
+              <option value="120">ماجستير (120 ECTS مرجع)</option>
+              <option value="60">ماجستير مكثّف / سنة تحضيرية (60 ECTS مرجع)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="calc-btn" id="ects-calc-btn" type="button">احسب نقاط ECTS الآن</button>
+        <button class="calc-btn-reset" id="reset-calc" type="button">↺ إعادة تعيين</button>
+
+        <div class="calc-result" id="ects-result">
+          <div class="result-row">
+            <span>مجموع ساعاتك المعتمدة</span>
+            <span class="result-val" id="res-credits">—</span>
+          </div>
+          <div class="result-row">
+            <span>معامل التحويل المستخدم</span>
+            <span class="result-val" id="res-factor">—</span>
+          </div>
+          <div class="result-row">
+            <span>مجموع نقاط ECTS المعادلة</span>
+            <span class="result-val" id="res-ects">—</span>
+          </div>
+          <div class="result-row">
+            <span>نقاط ECTS لكل ساعة معتمدة</span>
+            <span class="result-val" id="res-per-credit">—</span>
+          </div>
+          <div style="margin-top:12px;text-align:center;">
+            <span class="result-badge" id="res-badge" style="background:var(--success-light);color:var(--success);"></span>
+          </div>
+          <div id="res-note" style="margin-top:14px;padding:12px 16px;background:var(--accent-light);border-radius:8px;font-size:13px;color:#5a3e00;"></div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <span class="tip-icon" aria-hidden="true">🔍</span>
+        <p><strong>كيف تستخدم الناتج في ملف تقديمك؟</strong> اكتب في نموذج التقديم: "Total ECTS equivalent: [الناتج]" وأرفق ملاحظة توضح معامل التحويل ومصدره. كذلك أرفق Transcript رسمي من جامعتك يوضح نظام الساعات المعتمدة.</p>
+      </div>
+    </section>
+
+    <!-- ──────── القسم 6: نصائح ──────── -->
+    <section id="section-tips" aria-labelledby="h2-tips">
+      <h2 id="h2-tips"><span class="icon" aria-hidden="true">📝</span> نصائح عند تقديم ملف التحويل للجامعة الأوروبية</h2>
+
+      <p>مجرد حساب الأرقام لا يكفي — طريقة تقديم وثائق التحويل تؤثر مباشرةً على قرار القبول. إليك أهم النصائح من خبرة متقدمين ناجحين:</p>
+
+      <!-- ✅ Steps Visual — مكوّن موحّد -->
+      <div class="steps-visual">
+        <div class="step-card">
+          <span class="step-icon">📄</span>
+          <span class="step-n">الخطوة 1</span>
+          <strong>اطلب Transcript رسمياً</strong>
+          <p>مُختوم من مكتب التسجيل، باللغتين العربية والإنجليزية إذا أمكن</p>
+        </div>
+        <div class="step-card">
+          <span class="step-icon">📊</span>
+          <span class="step-n">الخطوة 2</span>
+          <strong>أرفق جدول التحويل</strong>
+          <p>جدول مبسّط يوضح معامل التحويل ومرجعه (هذا المقال مثلاً)</p>
+        </div>
+        <div class="step-card">
+          <span class="step-icon">🌐</span>
+          <span class="step-n">الخطوة 3</span>
+          <strong>تحقق من NARIC</strong>
+          <p>ابحث عن جامعتك في قاعدة بيانات ENIC-NARIC للاعتراف الأوروبي</p>
+        </div>
+        <div class="step-card">
+          <span class="step-icon">✉️</span>
+          <span class="step-n">الخطوة 4</span>
+          <strong>تواصل مع قسم القبول</strong>
+          <p>اسألهم مباشرةً عن معامل التحويل المعتمد في جامعتهم تحديداً</p>
+        </div>
+      </div>
+
+      <h3>📋 ما تُدرجه في الرسالة التوضيحية (Cover Letter)</h3>
+
+      <div class="example-box">
+        <span class="example-label">📌 نموذج نص توضيحي بالإنجليزية</span>
+        <p style="font-size:14px;line-height:1.9;margin:0;color:var(--text);">
+          "My undergraduate degree was obtained under the Egyptian credit hour system, where the Bachelor's program consists of 120 credit hours over 4 years.
+          Based on the standard conversion framework (1 credit hour = 2 ECTS), my degree is equivalent to approximately <strong>240 ECTS</strong>,
+          consistent with a 4-year European Bachelor's programme.
+          The full transcript and course descriptions are attached for your review."
+        </p>
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ تجنّب هذا الخطأ الشائع:</strong> لا تكتب مجموع ساعاتك المعتمدة مباشرةً في خانة ECTS بدون تحويل. 120 ساعة ≠ 120 ECTS. الجامعة الأوروبية ستعتبر أن مؤهلك نصف بكالوريوس فقط!
+      </div>
+
+      <div class="success-box">
+        <strong>✅ نقطة إيجابية:</strong> بعض الجامعات الأوروبية — خاصةً الهولندية والإسكندنافية — لديها آليات تقييم معتمدة للمؤهلات العربية ولن تحتاج منك سوى كشف الدرجات الرسمي. تحقق من موقع الجامعة أولاً قبل إعداد وثائق إضافية.
+      </div>
+
+      <div class="quote-box">
+        "لا تترجم ساعاتك بنفسك وتُقدّمها كـ ECTS دون إيضاح — أوضح المعامل ومصدره، وسيحترم لجنة القبول دقتك ومنهجيتك."
+      </div>
+    </section>
+
+    <!-- ════════════ CTA BOX ════════════ -->
+    <div class="cta-box">
+      <h3>🎯 جهّز ملف تقديمك للجامعات الأوروبية</h3>
+      <p>احسب معدلك بدقة واحصل على جميع الأرقام التي تحتاجها لملف قبول مقنع.</p>
+      <a href="/" class="cta-btn">استخدم حاسبة المعدلات الكاملة ←</a>
+    </div>
+
+    <!-- ──────── القسم 7: قائمة التحقق ──────── -->
+    <section id="section-checklist" aria-labelledby="h2-checklist">
+      <h2 id="h2-checklist"><span class="icon" aria-hidden="true">✔️</span> قائمة التحقق السريعة قبل إرسال ملف التحويل</h2>
+
+      <div class="success-box">
+        <strong>✅ تأكد من هذه النقاط قبل تقديم ملفك لأي جامعة أوروبية:</strong>
+        <ul class="checklist-simple">
+          <li>حسبت نقاط ECTS بمعامل صحيح يتناسب مع سنوات دراستك.</li>
+          <li>أرفقت كشف درجات (Transcript) رسمياً مُختوماً ومُرجماً.</li>
+          <li>لم تُدخل الساعات المعتمدة مباشرةً في خانة ECTS دون تحويل.</li>
+          <li>أضفت ملاحظة توضيحية في Cover Letter توضح المعامل ومرجعه.</li>
+          <li>تحققت من قاعدة ENIC-NARIC لمعرفة ما إذا كانت جامعتك مُدرجة.</li>
+          <li>راسلت قسم القبول في الجامعة للاستفسار عن معامل التحويل المعتمد لديهم.</li>
+          <li>أعددت جدولاً تفصيلياً بالمواد وساعاتها ونقاط ECTS المقابلة لكل منها.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ════════════ FAQ ════════════ -->
+    <h2 id="section-faq"><span class="icon" aria-hidden="true">❓</span> أسئلة شائعة</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <details>
+          <summary>كم تساوي الساعة المعتمدة المصرية في ECTS؟</summary>
+          <div class="faq-a">في الغالب تساوي الساعة المعتمدة الواحدة ما بين 1.5 و2 نقطة ECTS. للبكالوريوس المصري من 120 ساعة على 4 سنوات، يُستخدم معامل 2، أي أن المؤهل ككل يعادل 240 ECTS — وهو ما يوازي البكالوريوس الأوروبي الكامل.</div>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>هل يقبل الاتحاد الأوروبي تحويل الساعات العربية إلى ECTS؟</summary>
+          <div class="faq-a">نعم، معظم الجامعات الأوروبية تقبل التحويل شريطة إرفاق وثيقة تحويل توضيحية مع كشف الدرجات الرسمي. بعض الدول كألمانيا وهولندا وفرنسا لديها مراكز اعتراف متخصصة (NARIC) تُقيّم المؤهلات العربية رسمياً.</div>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>ما الفرق بين ECTS والساعات الأمريكية المعتمدة؟</summary>
+          <div class="faq-a">الساعة الأمريكية المعتمدة تعادل ساعة حضور أسبوعية لمدة فصل دراسي. أما نقطة ECTS فتقيس عبء العمل الكلي بما يشمل المذاكرة والتطبيق، وتساوي 25–30 ساعة عمل فعلية. لذلك 1 ساعة أمريكية ≈ 1.5 نقطة ECTS، وهو نفس معامل التحويل للساعات العربية في معظم الحالات.</div>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>هل تقبل برامج الابتعاث مثل إيراسموس+ تحويل الساعات العربية؟</summary>
+          <div class="faq-a">نعم. إيراسموس+ وغيرها من منح الاتحاد الأوروبي تقبل الطلاب من مؤسسات خارج أوروبا بشرط تقديم كشف درجات رسمي مع إيضاح نظام التقييم المعتمد في الجامعة. الجامعة الشريكة في أوروبا هي التي تُقرّ التحويل النهائي للوحدات.</div>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>هل هناك فرق بين ECTS لبكالوريوس الهندسة وبكالوريوس الآداب؟</summary>
+          <div class="faq-a">الفارق في مجموع الساعات غالباً، لا في معامل التحويل. بكالوريوس الهندسة 5 سنوات بـ 160–180 ساعة يُحوَّل بمعامل 1.5–1.7 ليصل إلى 240–300 ECTS. أما بكالوريوس آداب 4 سنوات بـ 120 ساعة فيُحوَّل بمعامل 2 ليصل إلى 240 ECTS. الهدف في كلتا الحالتين تحقيق المعادلة مع نظيره الأوروبي.</div>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>كيف تُحسب المواد العملية والمختبرات في نظام ECTS؟</summary>
+          <div class="faq-a">ساعة المختبر تُحسب بمعامل أقل من ساعة المحاضرة في بعض الجامعات الأوروبية — إذ يُعدّ عبء عملها أخف من الدراسة النظرية. في النظام الألماني مثلاً، 2 ساعة مختبر = 1 ECTS، بينما ساعة محاضرة واحدة قد تساوي 1.5–2 ECTS. لذلك إذا كان برنامجك يحتوي على نسبة عالية من المختبرات، وضّح ذلك صراحةً في ملف التقديم مع توصيف كل مادة.</div>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>ماذا لو كان تحويلي أقل من الحد الأدنى المطلوب للبرنامج الأوروبي؟</summary>
+          <div class="faq-a">لا تيأس — لديك خيارات: (1) ابحث عن "برامج جسر" أو سنوات تحضيرية تُكمل النقص، (2) أكمل مواد إضافية أونلاين من منصات معتمدة كـ Coursera أو edX، (3) تواصل مع مكتب القبول مباشرةً لطلب تقييم فردي — بعض الجامعات تمنح استثناءات بناءً على قوة الملف الأكاديمي والبحثي.</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ✅ أزرار المشاركة — ثابت -->
+    <div class="share-btns" role="group" aria-label="مشاركة المقال">
+      <span class="share-btns-label">شارك المقال:</span>
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmoadalaty.com%2Farticles%2Fects-conversion.html&text=%D9%83%D9%8A%D9%81%20%D8%AA%D8%AD%D9%88%D9%91%D9%84%20%D8%B3%D8%A7%D8%B9%D8%A7%D8%AA%D9%83%20%D8%A5%D9%84%D9%89%20ECTS"
+         class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="تويتر" title="تويتر">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmoadalaty.com%2Farticles%2Fects-conversion.html"
+         class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" title="فيسبوك">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://wa.me/?text=%D9%83%D9%8A%D9%81%20%D8%AA%D8%AD%D9%88%D9%91%D9%84%20%D8%B3%D8%A7%D8%B9%D8%A7%D8%AA%D9%83%20%D8%A5%D9%84%D9%89%20ECTS%20%E2%86%92%20https%3A%2F%2Fmoadalaty.com%2Farticles%2Fects-conversion.html"
+         class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="واتساب" title="واتساب">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+      <button class="share-btn" onclick="copyPageLink()" aria-label="نسخ" title="نسخ" id="copy-link-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </button>
+      <button class="share-btn" onclick="window.print()" aria-label="طباعة" title="طباعة">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </button>
+    </div>
+
+    <!-- ════════════ روابط ذات صلة ════════════ -->
+    <h3 class="related-heading"><span aria-hidden="true">🔗</span> مقالات وأدوات مكملة</h3>
+    <div class="related-links" aria-label="مقالات وأدوات مكملة">
+      <a href="/articles/gpa-mistakes.html" class="related-link" target="_self">
+        <span aria-hidden="true">⚠️</span> أخطاء حساب GPA
+      </a>
+      <a href="/" class="related-link" target="_self">
+        <span aria-hidden="true">🧮</span> حاسبة المعدلات الجامعية
+      </a>
+    </div>
+
+  </div><!-- /container -->
+</main>
+
+<!-- ✅ FOOTER — ثابت 100% (مع تحديث publisher brand) -->
+<footer class="article-footer" role="contentinfo">
+  <div class="container">
+    <nav aria-label="روابط الموقع الرئيسية">
+      <div class="footer-nav">
+        <a href="/"><span aria-hidden="true">🏠</span> الأداة</a>
+        <span aria-hidden="true">·</span>
+        <a href="/articles/">📚 المقالات</a>
+        <span aria-hidden="true">·</span>
+        <a href="/articles/faq.html">❓ الأسئلة الشائعة</a>
+        <span aria-hidden="true">·</span>
+        <a href="/about.html">من نحن</a>
+        <span aria-hidden="true">·</span>
+        <a href="/contact.html">اتصل بنا</a>
+        <span aria-hidden="true">·</span>
+        <a href="/privacy.html">الخصوصية</a>
+        <span aria-hidden="true">·</span>
+        <a href="/terms.html">الشروط</a>
+        <span aria-hidden="true">·</span>
+        <a href="/disclaimer.html">إخلاء المسؤولية</a>
+      </div>
+    </nav>
+    <p>آخر تحديث: يوليو 2026 | فريق المحتوى التعليمي</p>
+    <p style="margin-top:6px;">© 2026 بوابة الأدوات التعليمية — أداة مجانية للطلاب وأولياء الأمور</p>
+  </div>
+</footer>
+
+<!-- ════════════ السكربتات ════════════ -->
+
+<!-- 🎁 Calculator widget JS — per-article widget (per template convention) -->
+<script src="/js/core-utils.min.js"></script>
+<script>
+/* ── ECTS Calculator (per-article widget) ── */
+(function() {
+  const btn = document.getElementById('ects-calc-btn');
+  const reset = document.getElementById('reset-calc');
+  if (!btn) return;
+
+  btn.addEventListener('click', function () {
+    const credits = parseFloat(CoreUtils.toWesternDigits(document.getElementById('total-credits-input').value));
+    const years   = parseInt(document.getElementById('study-years-input').value);
+    const euStd   = parseInt(document.getElementById('eu-standard-select').value);
+    const refEcts = parseInt(document.getElementById('program-select').value);
+
+    if (!credits || isNaN(credits) || credits <= 0) {
+      alert('يرجى إدخال مجموع ساعاتك المعتمدة بشكل صحيح.');
+      return;
+    }
+
+    // Method 1: workload-based — local credit ≈ 45 workload hours
+    const localWorkload = 45;
+    const factorWorkload = +(localWorkload / euStd).toFixed(2);
+    const ectsWorkload   = Math.round(credits * factorWorkload);
+
+    // Method 2: year-ratio — (years × 60) / credits
+    const factorRatio = +((years * 60) / credits).toFixed(2);
+    const ectsRatio   = Math.round(credits * factorRatio);
+
+    const ectsMin = Math.min(ectsWorkload, ectsRatio);
+    const ectsMax = Math.max(ectsWorkload, ectsRatio);
+    const factorDisplay = factorRatio;
+    const ectsDisplay   = ectsRatio;
+
+    document.getElementById('res-credits').textContent    = credits + ' ساعة';
+    document.getElementById('res-factor').textContent     = '× ' + factorDisplay + ' (بناءً على مدة البرنامج)';
+    document.getElementById('res-ects').textContent       = ectsMin === ectsMax
+      ? ectsDisplay + ' ECTS'
+      : ectsMin + ' – ' + ectsMax + ' ECTS (نطاق التقدير)';
+    document.getElementById('res-per-credit').textContent = factorDisplay + ' ECTS / ساعة';
+
+    const badge = document.getElementById('res-badge');
+    if (ectsDisplay >= 240) {
+      badge.textContent = '🏛️ يعادل بكالوريوس أوروبي كامل (4 سنوات)';
+      badge.style.background = 'var(--success-light)'; badge.style.color = 'var(--success)';
+    } else if (ectsDisplay >= 180) {
+      badge.textContent = '🎓 يعادل بكالوريوس أوروبي (3 سنوات)';
+      badge.style.background = '#e8f4fd'; badge.style.color = 'var(--primary)';
+    } else if (ectsDisplay >= 120) {
+      badge.textContent = '📘 يعادل دراسة جامعية جزئية (2 سنوات)';
+      badge.style.background = '#fff8e8'; badge.style.color = '#b8720a';
+    } else {
+      badge.textContent = '📋 يعادل سنة جامعية أو أقل';
+      badge.style.background = 'var(--danger-light)'; badge.style.color = 'var(--danger)';
+    }
+
+    const rangeNote = ectsMin === ectsMax ? '' : ` (النطاق: ${ectsMin}–${ectsMax} ECTS حسب معيار الدولة)`;
+    document.getElementById('res-note').innerHTML =
+      `<strong>📝 ملاحظة للتقديم:</strong> أدرج في ملفك: "Total ECTS equivalent: <strong>~${ectsDisplay} ECTS</strong>${rangeNote} (based on ${credits} credit hours × ${factorDisplay} conversion factor for a ${years}-year programme). Subject to host institution validation."`;
+
+    const result = document.getElementById('ects-result');
+    result.classList.add('show');
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'calculator_used', calculator_id: 'ects-conversion', calculator_engine: 'ects-inline' });
+    } catch (e) {}
+  });
+
+  if (reset) reset.addEventListener('click', function() {
+    if (!confirm('هل تريد إعادة تعيين الحاسبة؟')) return;
+    document.getElementById('total-credits-input').value = '';
+    document.getElementById('study-years-input').value = '4';
+    document.getElementById('eu-standard-select').value = '27';
+    document.getElementById('program-select').value = '240';
+    document.getElementById('ects-result').classList.remove('show');
+    document.getElementById('res-credits').textContent = '—';
+    document.getElementById('res-factor').textContent = '—';
+    document.getElementById('res-ects').textContent = '—';
+    document.getElementById('res-per-credit').textContent = '—';
+    document.getElementById('res-badge').textContent = '';
+    document.getElementById('res-note').innerHTML = '';
+  });
+
+  // Enter key support
+  const input = document.getElementById('total-credits-input');
+  if (input) input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') btn.click();
+  });
+})();
+</script>
+
+<!-- ✅ السكربت الموحّد — ثابت، يأتي آخر شيء -->
+<script src="/js/article.min.js" defer></script>
+
+<script src="/js/cookie-consent.min.js" defer></script>
+</body>
+</html>

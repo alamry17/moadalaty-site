@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- Google Consent Mode v2 — لازم يتحمّل قبل GTM عشان يوقف التتبّع فعليًا
+     لحد ما الزائر يوافق (مش بس لافتة شكلية). راجع js/cookie-consent.js -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function () {
+    try {
+      var saved = localStorage.getItem('cookieConsent');
+      if (saved === 'accepted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WDKV7WH2');</script>
+<!-- End Google Tag Manager -->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a3c6e" />
+  <meta name="description" content="حاسبة الرسوم المدرسية الذكية 2026 — الإصدار الأمثل المدمج النهائي: حساب فوري + مصاريف إدارية + رسوم تأخير + PDF + Excel + واتساب + حفظ تلقائي + عداد + شريط خصم + toast" />
+  <meta name="keywords" content="حاسبة رسوم مدرسية, تقسيط مصاريف, أقساط مدارس, PDF, Excel, واتساب, 2026" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://moadalaty.com/" />
+  <meta name="author" content="بوابة الأدوات التعليمية">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ar_EG" />
+  <meta property="og:url" content="https://moadalaty.com/" />
+  <meta property="og:site_name" content="بوابة الأدوات التعليمية" />
+  <meta property="og:title" content="بوابة الأدوات التعليمية 2026" />
+  <meta property="og:description" content="احسب الأقساط والخصومات، شارك الخطة مع ولي الأمر، واحفظها PDF أو Excel." />
+  <meta property="og:image" content="https://moadalaty.com/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>بوابة الأدوات التعليمية 2026 | احسب الأقساط والخصومات فوريًا</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"حاسبة الرسوم المدرسية الذكية","url":"https://moadalaty.com/","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"EGP"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"بوابة الأدوات التعليمية","url":"https://moadalaty.com/","logo":"https://moadalaty.com/assets/logo.png","sameAs":["https://twitter.com/moadalaty","https://facebook.com/moadalaty"]}
+  </script>
+
+  <!-- CDNs مع Fallback كامل -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.1/chart.umd.min.js'"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"
+          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
+          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'"></script>
+  <script src="/js/core-utils.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  
+  <link rel="stylesheet" href="/css/variables.min.css">
+  <link rel="stylesheet" href="/css/article.min.css">
+  <link rel="stylesheet" href="/css/components.min.css">
+</head>
+
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WDKV7WH2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<div class="max-w-5xl mx-auto px-4 py-5 md:py-8">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="flex justify-between items-center mb-5 no-print">
+    <div class="flex items-center gap-3">
+      <div class="w-14 h-14 rounded-3xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-3xl text-emerald-700 dark:text-emerald-300 shadow-inner">
+        <i class="fas fa-school"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-black text-emerald-700 dark:text-emerald-400 leading-tight">
+          بوابة الأدوات التعليمية 2026
+        </h1>
+        <p class="text-xs muted font-bold flex items-center gap-2">
+          <span class="live-badge"><span class="live-dot"></span>مباشر</span>
+          الإصدار الأمثل المدمج النهائي ✦ PDF + Excel + واتساب
+        </p>
+      </div>
+    </div>
+    <button id="themeToggle" type="button" aria-label="تبديل الوضع الليلي"
+      class="p-3 rounded-2xl bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700 transition hover:scale-105">
+      <i id="themeIcon" class="fas fa-moon text-slate-500 text-xl"></i>
+    </button>
+  </header>
+
+  <main id="main-content">
+
+  <!-- ═══ INTRO + COUNTDOWN ═══ -->
+  <div class="glass-card rounded-[2rem] p-5 md:p-7 mb-5 no-print">
+    <div class="flex items-start justify-between gap-4 mb-4">
+      <div>
+        <div class="badge mb-3"><i class="fas fa-star"></i> أداة مجانية للمدارس وأولياء الأمور</div>
+        <p class="muted text-sm max-w-2xl leading-relaxed">
+          احسب الأقساط والخصومات فورياً عند الكتابة، أنشئ جدولاً واضحاً بتواريخ الاستحقاق،
+          أرسله لولي الأمر عبر واتساب، واحفظه PDF متعدد الصفحات أو Excel تفصيلياً خلال ثوانٍ.
+        </p>
+      </div>
+      <div class="hidden md:flex w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 items-center justify-center text-2xl text-emerald-700 dark:text-emerald-300 flex-shrink-0">
+        <i class="fas fa-calculator"></i>
+      </div>
+    </div>
+    <div class="countdown mb-4" id="countdown">⏳ جاري تحميل العداد...</div>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="stat-box text-center">
+        <div class="text-xs muted">الإخراج</div>
+        <div class="font-bold mt-1 text-sm">🧮 PDF + Excel</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xs muted">مناسب لـ</div>
+        <div class="font-bold mt-1 text-sm">🏫 المدارس والأولياء</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xs muted">مشاركة فورية</div>
+        <div class="font-bold mt-1 text-sm">💬 واتساب مباشرة</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TWO-COLUMN LAYOUT ═══ -->
+  <div class="layout-grid">
+
+    <!-- ══ MAIN COLUMN ══ -->
+    <div class="space-y-5">
+
+      <!-- ── بطاقة الإدخال ── -->
+      <div class="glass-card rounded-[1.75rem] p-5 md:p-7 border-b-4 border-emerald-500 no-print">
+        <h2 class="font-black text-emerald-700 dark:text-emerald-400 text-lg mb-5">
+          <i class="fas fa-calculator ml-2"></i> بيانات حساب الرسوم
+        </h2>
+        <div class="space-y-4">
+
+          <div>
+            <label class="block text-sm font-bold muted mb-2">🏫 اسم المدرسة / المؤسسة</label>
+            <input id="schoolNameInput" type="text" value="مدرسة النور النموذجية"
+              class="input-field" oninput="liveCalculate()" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold muted mb-2">📊 إجمالي الرسوم السنوية (ج.م)</label>
+              <input id="total" type="number" value="30000" min="0" step="100" class="input-field"
+                oninput="clearErr('total'); liveCalculate()" />
+              <p class="err-msg" id="err-total">برجاء إدخال قيمة أكبر من صفر</p>
+            </div>
+            <div>
+              <label class="block text-sm font-bold muted mb-2">🏷️ نسبة الخصم (%)</label>
+              <input id="discount" type="number" value="10" min="0" max="100" step="1" class="input-field"
+                oninput="clearErr('discount'); liveCalculate()" />
+              <p class="err-msg" id="err-discount">القيمة يجب أن تكون بين 0 و100</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-bold muted mb-2">📅 نظام التقسيط</label>
+              <select id="months" class="input-field" onchange="liveCalculate()">
+                <option value="1">دفع كاش (دفعة واحدة)</option>
+                <option value="2">2 شهران</option>
+                <option value="3">3 أشهر</option>
+                <option value="4">4 أشهر</option>
+                <option value="6">6 أشهر</option>
+                <option value="9">9 أشهر</option>
+                <option value="10" selected>10 أشهر</option>
+                <option value="12">12 شهراً</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold muted mb-2 tip"
+                data-tip="تُضاف مرة واحدة للإجمالي">
+                💼 مصاريف إدارية (ج.م) <i class="fas fa-info-circle text-xs opacity-50 mr-1"></i>
+              </label>
+              <input id="adminFees" type="number" value="500" min="0" step="50" class="input-field"
+                oninput="liveCalculate()" placeholder="0" />
+              <p class="text-[10px] muted mt-1">تُضاف مرة واحدة للإجمالي</p>
+            </div>
+            <div>
+              <label class="block text-sm font-bold muted mb-2 tip"
+                data-tip="تُضاف على كل قسط شهري">
+                ⏰ رسوم تأخير/شهر <i class="fas fa-info-circle text-xs opacity-50 mr-1"></i>
+              </label>
+              <input id="lateFee" type="number" value="0" min="0" step="50" class="input-field"
+                oninput="liveCalculate()" placeholder="0 (اختياري)" />
+              <p class="text-[10px] muted mt-1">تُضاف على كل قسط شهري</p>
+            </div>
+          </div>
+
+          <!-- شريط الخصم (كود 1 فقط — ميزة مميزة) -->
+          <div id="discountProgressWrap" class="hidden">
+            <div class="flex justify-between text-xs muted mb-1">
+              <span>نسبة الخصم المطبّقة</span>
+              <span id="discountProgressLabel" class="font-bold text-emerald-600 dark:text-emerald-400"></span>
+            </div>
+            <div class="progress-wrap">
+              <div id="discountProgressBar" class="progress-bar" style="width:0%"></div>
+            </div>
+          </div>
+
+          <button id="calculateBtn" type="button" class="btn-main">
+            <i class="fas fa-calculator ml-2"></i> احسب الآن وأنشئ الخطة الكاملة
+          </button>
+          <button id="clearSavedBtn" type="button" class="btn-outline mt-2" style="width:100%;">
+            🗑️ مسح البيانات المحفوظة على هذا الجهاز
+          </button>
+        </div>
+      </div>
+
+      <!-- ── قسم النتائج ── -->
+      <section id="results" class="hidden fade-in space-y-4" aria-live="polite" role="status">
+
+        <div id="pdf-content" class="glass-card rounded-[1.75rem] p-5 md:p-7 border-t-4 border-emerald-500">
+
+          <!-- رأس التقرير -->
+          <div class="flex items-start justify-between mb-5 pb-4 border-b border-slate-100 dark:border-slate-700 flex-wrap gap-3">
+            <div>
+              <h2 id="displaySchoolName" class="text-xl font-black text-emerald-700 dark:text-emerald-300"></h2>
+              <p class="text-xs muted mt-1">📋 تقرير الرسوم المدرسية — 2026</p>
+            </div>
+            <span class="bg-emerald-100 dark:bg-emerald-900/30 px-3 py-1 rounded-lg text-xs font-bold text-emerald-700 dark:text-emerald-300">
+              نسخة مدرسية رسمية
+            </span>
+          </div>
+
+          <!-- KPIs ثلاثية -->
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <div class="kpi-card">
+              <p class="text-[10px] muted">الرسوم الأصلية</p>
+              <p id="origTotal" class="font-black mt-1 text-sm text-slate-800 dark:text-slate-100"></p>
+            </div>
+            <div class="kpi-card">
+              <p class="text-[10px] muted">قيمة الخصم</p>
+              <p id="discountAmount" class="font-black mt-1 text-sm text-red-500"></p>
+            </div>
+            <div class="kpi-card">
+              <p class="text-[10px] muted">بعد الخصم</p>
+              <p id="afterDiscount" class="font-black mt-1 text-sm text-emerald-700 dark:text-emerald-300"></p>
+            </div>
+          </div>
+
+          <!-- القسط الشهري -->
+          <div class="kpi-monthly mb-4">
+            <p class="text-sm opacity-90 font-semibold relative z-10">القسط الشهري</p>
+            <p id="monthly" class="text-4xl md:text-5xl font-black mt-1 relative z-10"></p>
+            <p id="monthlySubtitle" class="text-xs opacity-70 mt-2 relative z-10"></p>
+          </div>
+
+          <!-- تفاصيل إضافية -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+            <div class="mini-kpi">
+              <p class="text-[10px] muted">المصاريف الإدارية</p>
+              <p id="adminFeesDisplay" class="font-black text-slate-700 dark:text-slate-200 mt-1 text-sm"></p>
+            </div>
+            <div class="mini-kpi">
+              <p class="text-[10px] muted">الإجمالي الكلي النهائي</p>
+              <p id="totalWithLate" class="font-black text-emerald-700 dark:text-emerald-300 mt-1 text-sm"></p>
+            </div>
+            <div class="mini-kpi">
+              <p class="text-[10px] muted">موعد القسط الأول</p>
+              <p id="firstDueDate" class="font-bold text-slate-700 dark:text-slate-200 mt-1 text-xs"></p>
+            </div>
+          </div>
+
+          <!-- رسم بياني + جدول -->
+          <div class="chart-wrap mb-4">
+            <p class="text-sm font-bold text-center mb-3 muted">📊 توزيع الأقساط الشهرية</p>
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+              <div class="w-full md:w-2/5 flex justify-center">
+                <canvas id="feeChart" style="max-height:220px;"></canvas>
+              </div>
+              <div class="w-full md:w-3/5 overflow-x-auto rounded-xl">
+                <table class="tbl">
+                  <thead><tr>
+                    <th>القسط</th>
+                    <th>تاريخ الاستحقاق</th>
+                    <th style="text-align:left">المبلغ</th>
+                  </tr></thead>
+                  <tbody id="tableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ملاحظة رسوم التأخير -->
+          <div id="lateNoteWrap" class="hidden bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-3 mb-2">
+            <p id="lateNote" class="text-xs font-bold text-amber-700 dark:text-amber-300"></p>
+          </div>
+        </div><!-- /pdf-content -->
+
+        <!-- إرسال لولي الأمر -->
+        <div class="wa-block no-print">
+          <div class="relative z-10">
+            <p class="font-bold mb-3 flex items-center gap-2 text-sm">
+              <i class="fab fa-whatsapp text-xl"></i> أرسل الخطة مباشرة لولي الأمر
+            </p>
+            <div class="flex flex-col md:flex-row gap-3">
+              <input id="parentPhone" type="tel" dir="ltr" inputmode="numeric"
+                placeholder="رقم واتساب مع مفتاح الدولة (201012345678)"
+                class="px-4 py-3 rounded-2xl text-slate-800 font-semibold outline-none focus:ring-4 ring-white/40 w-full text-sm" />
+              <button id="sendParentBtn" type="button"
+                class="bg-white text-emerald-700 py-3 rounded-2xl font-black hover:bg-emerald-50 transition w-full md:w-44 text-sm flex-shrink-0">
+                <i class="fas fa-paper-plane ml-1"></i> إرسال الآن
+              </button>
+            </div>
+            <p class="text-xs text-emerald-100 mt-2 opacity-80">سيفتح واتساب برسالة احترافية بكل تفاصيل الخطة.</p>
+          </div>
+          <i class="fab fa-whatsapp wa-bg-icon"></i>
+        </div>
+
+        <!-- أزرار التصدير -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 no-print">
+          <button id="pdfBtn" type="button" class="btn-outline">
+            <i class="fas fa-file-pdf text-red-500 ml-1"></i> حفظ PDF
+          </button>
+          <button id="excelBtn" type="button" class="btn-outline">
+            <i class="fas fa-file-excel text-emerald-600 ml-1"></i> Excel
+          </button>
+          <button id="shareBtn" type="button" class="btn-outline text-green-600 dark:text-green-400">
+            <i class="fab fa-whatsapp ml-1"></i> مشاركة عامة
+          </button>
+          <button id="copyBtn" type="button" class="btn-outline text-slate-600 dark:text-slate-300">
+            <i class="fas fa-copy ml-1"></i> نسخ
+          </button>
+        </div>
+      </section>
+
+      <!-- ── نموذج التحويل (كود 4: أفضل تصميم lead form) ── -->
+      <section class="rounded-[1.75rem] p-5 md:p-7 soft-card no-print">
+        <div class="text-center mb-5">
+          <div class="badge mx-auto mb-3"><i class="fas fa-bolt"></i> نسخة مجانية للمدارس فقط</div>
+          <h2 class="section-title leading-tight">احصل على أداة إدارة الرسوم المجانية</h2>
+          <p class="text-xs muted mt-2">ملف Excel احترافي لمتابعة التحصيل المدرسي بالكامل.</p>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mb-5">
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-3 text-center border border-emerald-100 dark:border-slate-700">
+            <p class="text-xs muted">حساب فوري</p><p class="font-bold text-sm mt-1">بضغطة واحدة</p>
+          </div>
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-3 text-center border border-emerald-100 dark:border-slate-700">
+            <p class="text-xs muted">مشاركة</p><p class="font-bold text-sm mt-1">واتساب مباشر</p>
+          </div>
+          <div class="bg-white dark:bg-slate-900 rounded-xl p-3 text-center border border-emerald-100 dark:border-slate-700">
+            <p class="text-xs muted">مجانية</p><p class="font-bold text-sm mt-1">للتحميل</p>
+          </div>
+        </div>
+        <form name="school-leads-2026" method="POST" data-netlify="true"
+              netlify-honeypot="bot-field" id="leadForm" class="space-y-3">
+          <input type="hidden" name="form-name" value="school-leads-2026" />
+          <p class="hidden"><label>لا تملأ هذا: <input name="bot-field" /></label></p>
+          <input name="school_name" type="text" placeholder="🏫 اسم المدرسة" class="input-field" required />
+          <input name="email" type="email" placeholder="📧 البريد الإلكتروني الرسمي" class="input-field" required />
+          <input name="whatsapp" type="tel" placeholder="📱 رقم الواتساب (اختياري)" class="input-field" />
+          <button type="submit" id="leadSubmitBtn" class="btn-main">🚀 احصل على النسخة المجانية الآن</button>
+        </form>
+        <div id="leadSuccess" class="success-msg">✅ تم التسجيل بنجاح! سنتواصل معك قريباً.</div>
+        <p class="text-xs muted mt-3 text-center">لن نشارك بياناتك مع أي طرف ثالث.</p>
+      </section>
+
+      <!-- ── مزايا الأداة ── -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-4 no-print">
+        <article class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-emerald-100 dark:border-slate-700 transition hover:shadow-md">
+          <h3 class="font-bold text-emerald-700 dark:text-emerald-300 mb-2 text-sm">🏫 للمدارس</h3>
+          <p class="text-xs muted">اعرض خطة التقسيط بوضوح، ووفّر ملفاً جاهزاً للإرسال والحفظ والمتابعة الشهرية.</p>
+        </article>
+        <article class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-emerald-100 dark:border-slate-700 transition hover:shadow-md">
+          <h3 class="font-bold text-emerald-700 dark:text-emerald-300 mb-2 text-sm">👨‍👩‍👧 لأولياء الأمور</h3>
+          <p class="text-xs muted">رسالة واتساب احترافية تحتوي الأقساط والتواريخ والمبالغ والإجمالي النهائي.</p>
+        </article>
+        <article class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-emerald-100 dark:border-slate-700 transition hover:shadow-md">
+          <h3 class="font-bold text-emerald-700 dark:text-emerald-300 mb-2 text-sm">🎯 للتحويل التجاري</h3>
+          <p class="text-xs muted">نموذج يلتقط بيانات المدرسة والبريد الإلكتروني ووسيلة التواصل بدلاً من زائر عابر.</p>
+        </article>
+      </section>
+
+      <!-- ── الأسئلة الشائعة ── -->
+      <section class="soft-card rounded-[1.75rem] p-5 md:p-6 no-print">
+        <h2 class="section-title mb-4">أسئلة شائعة</h2>
+        <div class="space-y-2">
+          <details class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+            <summary class="font-bold text-sm flex items-center justify-between">
+              هل يحسب فورياً عند الكتابة؟
+              <i class="fas fa-chevron-down text-xs muted chevron"></i>
+            </summary>
+            <p class="text-xs muted mt-2 leading-relaxed">نعم، الحاسبة تُحدّث كل النتائج تلقائياً بمجرد تغيير أي حقل بتأخير 200ms لضمان الأداء الأمثل.</p>
+          </details>
+          <details class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+            <summary class="font-bold text-sm flex items-center justify-between">
+              ما الفرق بين المصاريف الإدارية ورسوم التأخير؟
+              <i class="fas fa-chevron-down text-xs muted chevron"></i>
+            </summary>
+            <p class="text-xs muted mt-2">المصاريف الإدارية تُضاف مرة واحدة للإجمالي الكلي. رسوم التأخير تُضاف على كل قسط شهري وتتراكم طوال مدة التقسيط.</p>
+          </details>
+          <details class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+            <summary class="font-bold text-sm flex items-center justify-between">
+              كيف يعمل تصدير PDF؟
+              <i class="fas fa-chevron-down text-xs muted chevron"></i>
+            </summary>
+            <p class="text-xs muted mt-2">يحاول أولاً html2pdf (الأسرع)، وعند فشله ينتقل لـ html2canvas+jsPDF متعدد الصفحات. الجودة scale 2.5 لضمان الوضوح.</p>
+          </details>
+          <details class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+            <summary class="font-bold text-sm flex items-center justify-between">
+              هل يحفظ البيانات تلقائياً؟
+              <i class="fas fa-chevron-down text-xs muted chevron"></i>
+            </summary>
+            <p class="text-xs muted mt-2">نعم، يحفظ جميع الحقول تلقائياً في المتصفح عند كل تغيير ويظهر toast تأكيد. يستعيدها عند إعادة الفتح. العداد ثابت لا يتجدد بكل زيارة.</p>
+          </details>
+          <details class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+            <summary class="font-bold text-sm flex items-center justify-between">
+              هل يعمل على الجوال؟
+              <i class="fas fa-chevron-down text-xs muted chevron"></i>
+            </summary>
+            <p class="text-xs muted mt-2">نعم، الواجهة متجاوبة تماماً على الهاتف والتابلت والكمبيوتر بكل المتصفحات الحديثة.</p>
+          </details>
+          <details class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+            <summary class="font-bold text-sm flex items-center justify-between">
+              هل يتوافق مع Netlify Forms؟
+              <i class="fas fa-chevron-down text-xs muted chevron"></i>
+            </summary>
+            <p class="text-xs muted mt-2">نعم، مضبوط مع Netlify Forms ويحتوي honeypot للحماية من الرسائل المزعجة مع loading spinner وgraceful fallback.</p>
+          </details>
+        </div>
+      </section>
+
+      <div class="text-center no-print pb-4">
+        <a href="https://www.buymeacoffee.com/yourname" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700 bg-amber-50 dark:bg-amber-950/30 px-5 py-3 rounded-full font-bold transition text-sm">
+          <i class="fas fa-coffee"></i> ادعمني بكوب قهوة ☕
+        </a>
+      </div>
+    </div><!-- /main column -->
+
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sticky-aside">
+      <div id="captureArea" class="glass-card rounded-[1.75rem] p-5 border border-emerald-100 dark:border-emerald-900/30">
+
+        <!-- رأس -->
+        <div class="text-center mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-2xl text-emerald-700 dark:text-emerald-300 mx-auto mb-2">
+            <i class="fas fa-file-invoice-dollar"></i>
+          </div>
+          <h3 id="sideSchool" class="font-black text-emerald-700 dark:text-emerald-400 text-base">مدرسة النور النموذجية</h3>
+          <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-wide">ملخص خطة الدفع 2026</p>
+          <span class="inline-block bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-300 mt-2">نسخة مدرسية</span>
+        </div>
+
+        <!-- القسط الشهري — side-monthly-box (كود 1: الأجمل) -->
+        <div class="side-monthly-box mb-4">
+          <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 block mb-1">القسط الشهري</span>
+          <span id="sideMonthly" class="text-4xl font-black text-emerald-700 dark:text-emerald-300">---</span>
+          <span id="sideMonthlyMeta" class="block text-[10px] muted mt-1"></span>
+        </div>
+
+        <!-- ملخص رقمي -->
+        <div class="space-y-1.5 mb-4">
+          <div class="summary-row">
+            <span class="muted text-xs">الرسوم الأصلية</span>
+            <span id="sideOrigTotal" class="font-black text-slate-700 dark:text-slate-200 text-xs">---</span>
+          </div>
+          <div class="summary-row">
+            <span class="muted text-xs">قيمة الخصم</span>
+            <span id="sideDiscAmt" class="font-black text-red-500 text-xs">---</span>
+          </div>
+          <div class="summary-row">
+            <span class="muted text-xs">بعد الخصم</span>
+            <span id="sideAfterDisc" class="font-black text-emerald-700 dark:text-emerald-300 text-xs">---</span>
+          </div>
+          <div class="summary-row">
+            <span class="muted text-xs">المصاريف الإدارية</span>
+            <span id="sideAdmin" class="font-black text-slate-700 dark:text-slate-200 text-xs">---</span>
+          </div>
+          <div class="summary-row">
+            <span class="muted text-xs">رسوم التأخير/شهر</span>
+            <span id="sideLateFee" class="font-black text-orange-500 text-xs">---</span>
+          </div>
+          <div class="summary-row highlight">
+            <span class="font-bold text-xs text-emerald-700 dark:text-emerald-300">الإجمالي الكلي النهائي</span>
+            <span id="sideTotalFinal" class="font-black text-emerald-700 dark:text-emerald-300 text-xs">---</span>
+          </div>
+          <div class="summary-row">
+            <span class="muted text-xs">موعد أول قسط</span>
+            <span id="sideFirstDue" class="font-bold text-slate-700 dark:text-slate-200 text-[10px]">---</span>
+          </div>
+        </div>
+
+        <!-- رسم بياني مصغر -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-3 mb-4 border border-slate-100 dark:border-slate-700">
+          <p class="text-xs font-bold text-center mb-2 muted">📊 توزيع الأقساط</p>
+          <canvas id="sideChart" style="max-height:160px;width:100%;"></canvas>
+        </div>
+
+        <!-- جدول الأقساط (sidebar) -->
+        <div class="overflow-x-auto rounded-xl mb-4">
+          <table class="tbl">
+            <thead><tr>
+              <th>القسط</th>
+              <th>تاريخ الاستحقاق</th>
+              <th style="text-align:left">المبلغ</th>
+            </tr></thead>
+            <tbody id="sideTableBody">
+              <tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:1.2rem;font-size:.82rem">سيظهر الجدول بعد الحساب</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- أزرار التصدير (sidebar) -->
+        <div class="grid grid-cols-2 gap-2 mb-4 no-print">
+          <button id="sidePdfBtn" type="button" class="btn-outline text-xs py-2">
+            <i class="fas fa-file-pdf text-red-500 ml-1"></i> PDF
+          </button>
+          <button id="sideExcelBtn" type="button" class="btn-outline text-xs py-2">
+            <i class="fas fa-file-excel text-emerald-600 ml-1"></i> Excel
+          </button>
+          <button id="sideShareBtn" type="button" class="btn-outline text-green-600 dark:text-green-400 text-xs py-2">
+            <i class="fab fa-whatsapp ml-1"></i> مشاركة
+          </button>
+          <button id="sideCopyBtn" type="button" class="btn-outline text-slate-600 dark:text-slate-300 text-xs py-2">
+            <i class="fas fa-copy ml-1"></i> نسخ
+          </button>
+        </div>
+
+        <!-- إرسال لولي الأمر (sidebar) -->
+        <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-2xl p-4 text-white relative overflow-hidden no-print">
+          <p class="font-bold text-sm mb-2 flex items-center gap-2 relative z-10">
+            <i class="fab fa-whatsapp text-lg"></i> إرسال لولي الأمر
+          </p>
+          <input id="sideParentPhone" type="tel" dir="ltr" inputmode="numeric"
+            placeholder="201012345678"
+            class="px-3 py-2 rounded-xl text-slate-800 font-semibold outline-none w-full text-sm mb-2 relative z-10" />
+          <button id="sideSendParentBtn" type="button"
+            class="bg-white text-emerald-700 py-2 rounded-xl font-black hover:bg-emerald-50 transition w-full text-sm relative z-10">
+            <i class="fas fa-paper-plane ml-1"></i> إرسال الآن
+          </button>
+          <i class="fab fa-whatsapp absolute bottom-[-12px] right-[-10px] text-[7rem] opacity-[.08] rotate-12"></i>
+        </div>
+
+        <p class="text-[10px] text-center muted mt-3">✨ تتحدث النتائج فورياً عند الكتابة</p>
+      </div>
+    </aside>
+
+  </div><!-- /layout-grid -->
+
+  <div class="glass-card rounded-2xl p-5 md:p-7 mb-5 mt-5 no-print">
+    <h2 class="text-lg font-black mb-3">📚 مركز المحتوى — كل ما تحتاج معرفته</h2>
+
+    <h3 style="font-size:14px;font-weight:800;color:var(--primary);margin:16px 0 8px;">💰 الرسوم المدرسية</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <a href="/articles/school-fees-installments.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">📅 كيفية تقسيط الرسوم المدرسية</a>
+      <a href="/articles/school-fees-saving.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">💰 10 طرق لتوفير المصاريف المدرسية</a>
+      <a href="/articles/school-fees-negotiation.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">🤝 التفاوض على أقساط المدرسة</a>
+      <a href="/articles/family-education-budget.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">📊 ميزانية التعليم الأسرية</a>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:800;color:var(--primary);margin:20px 0 8px;">🎓 المعدل الجامعي GPA</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <a href="/articles/gpa-article.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">🧮 حاسبة GPA مجانية 2026</a>
+      <a href="/articles/raise-gpa-fast-2-5-to-3-5.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">📈 رفع GPA من 2.5 إلى 3.5</a>
+      <a href="/articles/percentage-to-gpa-conversion.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">🔄 تحويل الدرجات من مئوي إلى GPA</a>
+      <a href="/articles/gpa-requirements-scholarships.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">🎓 GPA المطلوب للمنح الدراسية</a>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:800;color:var(--primary);margin:20px 0 8px;">📅 التخطيط الدراسي</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <a href="/articles/build-study-schedule.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">🗓️ بناء جدول دراسي بدون تعارض</a>
+      <a href="/articles/midterm-review-schedule.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">📖 جدول مراجعة لامتحانات منتصف الفصل</a>
+      <a href="/articles/pomodoro-study-technique.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">⏱️ تقنية Pomodoro للمذاكرة</a>
+      <a href="/articles/stop-procrastination.html" class="related-link block p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition text-sm font-bold">🚫 التخلص من تسويف المذاكرة</a>
+    </div>
+
+    <p style="text-align:center;margin-top:18px;">
+      <a href="/articles/" class="related-link" style="display:inline-block;padding:10px 20px;border-radius:10px;font-weight:800;">📚 تصفّح كل الـ36 مقال ←</a>
+    </p>
+  </div>
+
+  
+    <div class="share-btns" role="group" aria-label="مشاركة المقال">
+      <span class="share-btns-label">شارك الأداة:</span>
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmoadalaty.com%2F&text=حاسبة%20الرسوم%20المدرسية%20الذكية%202026%20%20احسب%20الأقساط%20والخصومات%20فوريًا" class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="تويتر" title="تويتر">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmoadalaty.com%2F" class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" title="فيسبوك">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+      <a href="https://wa.me/?text=حاسبة%20الرسوم%20المدرسية%20الذكية%202026%20%20احسب%20الأقساط%20والخصومات%20فوريًا%20%E2%86%92%20https%3A%2F%2Fmoadalaty.com%2F" class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="واتساب" title="واتساب">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+      <button class="share-btn" onclick="copyPageLink()" aria-label="نسخ" title="نسخ" id="copy-link-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+      <button class="share-btn" onclick="window.print()" aria-label="طباعة" title="طباعة">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
+    </div>
+
+  </main>
+
+  <footer class="article-footer no-print" role="contentinfo">
+    <div class="container">
+      <nav aria-label="روابط الموقع الرئيسية">
+        <div class="footer-nav">
+          <a href="/"><span aria-hidden="true">🏠</span> الرئيسية</a>
+          <span aria-hidden="true">·</span>
+          <a href="/articles/">📚 المقالات</a>
+          <span aria-hidden="true">·</span>
+          <a href="/articles/faq.html">❓ الأسئلة الشائعة</a>
+          <span aria-hidden="true">·</span>
+          <a href="/about.html">من نحن</a>
+          <span aria-hidden="true">·</span>
+          <a href="/contact.html">اتصل بنا</a>
+          <span aria-hidden="true">·</span>
+          <a href="/privacy.html">الخصوصية</a>
+          <span aria-hidden="true">·</span>
+          <a href="/terms.html">الشروط</a>
+          <span aria-hidden="true">·</span>
+          <a href="/disclaimer.html">إخلاء المسؤولية</a>
+        </div>
+      </nav>
+      <p>© 2026 بوابة الأدوات التعليمية — أداة مجانية للمدارس وأولياء الأمور</p>
+    </div>
+  </footer>
+</div>
+
+<button id="scroll-top" aria-label="العودة للأعلى" title="العودة للأعلى">⬆</button>
+<button id="dark-toggle" aria-label="تبديل الوضع الليلي">🌙</button>
+
+<!-- Save Toast (كود 1 فقط) -->
+<div id="saveToast" class="save-toast">💾 تم الحفظ تلقائياً</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const $ = id => document.getElementById(id);
+
+  /* ════ DOM References ════ */
+  const schoolNameInput    = $('schoolNameInput');
+  const totalInput         = $('total');
+  const discountInput      = $('discount');
+  const monthsSelect       = $('months');
+  const adminFeesInput     = $('adminFees');
+  const lateFeeInput       = $('lateFee');
+  const parentPhoneInput   = $('parentPhone');
+  const sideParentPhoneInp = $('sideParentPhone');
+
+  const displaySchoolName    = $('displaySchoolName');
+  const origTotalEl          = $('origTotal');
+  const discountAmountEl     = $('discountAmount');
+  const afterDiscountEl      = $('afterDiscount');
+  const monthlyEl            = $('monthly');
+  const monthlySubtitleEl    = $('monthlySubtitle');
+  const adminFeesDisplay     = $('adminFeesDisplay');
+  const totalWithLateEl      = $('totalWithLate');
+  const firstDueDateEl       = $('firstDueDate');
+  const tableBody            = $('tableBody');
+  const sideTableBody        = $('sideTableBody');
+  const resultsEl            = $('results');
+  const countdownEl          = $('countdown');
+  const leadSuccess          = $('leadSuccess');
+  const lateNoteWrap         = $('lateNoteWrap');
+  const lateNoteEl           = $('lateNote');
+  const discountProgressWrap = $('discountProgressWrap');
+  const discountProgressBar  = $('discountProgressBar');
+  const discountProgressLabel= $('discountProgressLabel');
+  const saveToast            = $('saveToast');
+
+  /* ════ State ════ */
+  let _r             = {};
+  let chartInstance  = null;
+  let sideChartInst  = null;
+  let calcDebounce   = null;
+  let toastTimer     = null;
+
+  /* ════ Formatter — Intl.NumberFormat (كود 1: الأدق) ════ */
+  const _fmt = new Intl.NumberFormat('ar-EG', { maximumFractionDigits: 2 });
+  const money = v => `${_fmt.format(Number(v || 0))} ج.م`;
+
+  /* ════ Auto-Save + Toast (كود 1: الوحيد الذي يظهر toast) ════
+     البيانات دي بتفضل على جهاز المستخدم بس، وبتتمسح تلقائيًا بعد
+     مدة صلاحيتها (٩٠ يوم) عبر CoreUtils.saveWithExpiry/loadWithExpiry
+     — راجع js/core-utils.js وصفحة سياسة الخصوصية لمزيد من التفاصيل. */
+  const STORAGE_KEY = 'schoolFees_ULTIMATE_v1';
+  function saveData() {
+    const ok = CoreUtils.saveWithExpiry(STORAGE_KEY, {
+      school   : schoolNameInput.value,
+      total    : totalInput.value,
+      discount : discountInput.value,
+      months   : monthsSelect.value,
+      adminFees: adminFeesInput.value,
+      lateFee  : lateFeeInput.value
+    });
+    if (ok) {
+      /* Toast (كود 1 الحصري) */
+      clearTimeout(toastTimer);
+      saveToast.style.display = 'block';
+      saveToast.style.animation = 'fadeUp .3s ease';
+      toastTimer = setTimeout(() => {
+        saveToast.style.animation = 'toastFade .4s ease forwards';
+        setTimeout(() => { saveToast.style.display = 'none'; }, 400);
+      }, 1800);
+    }
+  }
+  function loadData() {
+    const d = CoreUtils.loadWithExpiry(STORAGE_KEY);
+    if (!d) return;
+    if (d.school    !== undefined) schoolNameInput.value = d.school;
+    if (d.total     !== undefined) totalInput.value      = d.total;
+    if (d.discount  !== undefined) discountInput.value   = d.discount;
+    if (d.months    !== undefined) monthsSelect.value    = d.months;
+    if (d.adminFees !== undefined) adminFeesInput.value  = d.adminFees;
+    if (d.lateFee   !== undefined) lateFeeInput.value    = d.lateFee;
+  }
+
+  /* ════ Validation ════ */
+  window.clearErr = function(id) {
+    const inp = $(id), msg = $('err-' + id);
+    if (inp) { inp.classList.remove('err'); inp.removeAttribute('aria-invalid'); }
+    if (msg) msg.classList.remove('show');
+  };
+  function showErr(id) {
+    const inp = $(id), msg = $('err-' + id);
+    if (inp) { inp.classList.add('err'); inp.setAttribute('aria-invalid', 'true'); inp.setAttribute('aria-describedby', 'err-' + id); }
+    if (msg) msg.classList.add('show');
+  }
+  function getFormData() {
+    return {
+      school   : schoolNameInput.value.trim() || 'المدرسة',
+      total    : parseFloat(totalInput.value)     || 0,
+      discount : parseFloat(discountInput.value)   || 0,
+      months   : parseInt(monthsSelect.value, 10)  || 1,
+      adminFees: parseFloat(adminFeesInput.value)  || 0,
+      lateFee  : parseFloat(lateFeeInput.value)    || 0
+    };
+  }
+  function validate(total, discount) {
+    let ok = true;
+    if (!(total > 0))                        { showErr('total');    ok = false; }
+    if (!(discount >= 0 && discount <= 100)) { showErr('discount'); ok = false; }
+    return ok;
+  }
+
+  /* ════ Dark Mode (كود 1: CSS variables ← الأنظف) ════ */
+  const DARK_KEY = 'darkMode';
+  function applyDark(on) {
+    document.body.classList.toggle('dark', on);
+    $('themeIcon').className = on
+      ? 'fas fa-sun text-yellow-400 text-xl'
+      : 'fas fa-moon text-slate-500 text-xl';
+    const floatBtn = $('dark-toggle');
+    if (floatBtn) floatBtn.textContent = on ? '☀️' : '🌙';
+    updateChartTheme();
+    localStorage.setItem(DARK_KEY, on ? 'on' : 'off');
+  }
+  function initTheme() {
+    if (localStorage.getItem(DARK_KEY) === 'on') applyDark(true);
+  }
+
+  /* ════ Charts ════ */
+  const CL = ['#1a3c6e','#4a8fd4','#7fb3f0','#1a3c6e','#15325c','#0c1c33','#14b8a6','#0d9488','#0891b2','#0e7490','#0369a1','#1d4ed8'];
+  const CD = ['#4a8fd4','#7fb3f0','#a3c9ec','#1a3c6e','#1a3c6e','#15325c','#0f766e','#14b8a6','#22d3ee','#67e8f9','#38bdf8','#7dd3fc'];
+
+  function makeChartCfg(months, monthlyAmt, isDark, showLegend) {
+    const cols = (isDark ? CD : CL).slice(0, months);
+    return {
+      type: 'doughnut',
+      data: {
+        labels: Array.from({ length: months }, (_, i) => `قسط ${i + 1}`),
+        datasets: [{ data: Array(months).fill(monthlyAmt), backgroundColor: cols, borderWidth: 0, hoverOffset: 6 }]
+      },
+      options: {
+        cutout: '68%', responsive: true, maintainAspectRatio: true,
+        animation: { duration: 550 },
+        plugins: {
+          legend: {
+            display: showLegend && months <= 8,
+            position: 'bottom',
+            labels: { color: isDark ? '#cbd5e1' : '#334155', font: { family: 'Cairo', size: 11 }, boxWidth: 12, usePointStyle: true }
+          },
+          tooltip: { callbacks: { label: ctx => `${ctx.label}: ${money(ctx.parsed)}` } }
+        }
+      }
+    };
+  }
+
+  function renderCharts(months, monthlyAmt) {
+    if (typeof Chart === 'undefined') return;
+    const isDark = document.body.classList.contains('dark');
+    if (chartInstance)  chartInstance.destroy();
+    if (sideChartInst)  sideChartInst.destroy();
+    chartInstance = new Chart($('feeChart').getContext('2d'),  makeChartCfg(months, monthlyAmt, isDark, true));
+    sideChartInst = new Chart($('sideChart').getContext('2d'), makeChartCfg(months, monthlyAmt, isDark, false));
+  }
+
+  function updateChartTheme() {
+    [chartInstance, sideChartInst].forEach(inst => {
+      if (!inst) return;
+      const isDark = document.body.classList.contains('dark');
+      inst.data.datasets[0].backgroundColor = (isDark ? CD : CL).slice(0, inst.data.labels.length);
+      if (inst.options.plugins.legend.labels)
+        inst.options.plugins.legend.labels.color = isDark ? '#cbd5e1' : '#334155';
+      inst.update();
+    });
+  }
+
+  /* ════ Build Table Rows ════ */
+  function buildTableRows(months, monthlyAmt, now) {
+    let rows = '';
+    for (let i = 1; i <= months; i++) {
+      const due = new Date(now);
+      due.setMonth(due.getMonth() + i);
+      const lbl = due.toLocaleDateString('ar-EG', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      rows += `<tr>
+        <td>القسط ${i}</td>
+        <td style="color:#64748b">${lbl}</td>
+        <td style="text-align:left;font-weight:800">${money(monthlyAmt)}</td>
+      </tr>`;
+    }
+    return rows;
+  }
+
+  /* ════ Calculate ════ */
+  function calculate(scrollToResults = true) {
+    const { school, total, discount, months, adminFees, lateFee } = getFormData();
+    if (!validate(total, discount)) return;
+
+    const discountAmt = total * (discount / 100);
+    const afterDisc   = total - discountAmt;
+    const monthlyAmt  = (afterDisc / months) + lateFee;
+    const totalFinal  = afterDisc + (lateFee * months) + adminFees;
+
+    const now = new Date();
+    const firstDue = new Date(now);
+    firstDue.setMonth(firstDue.getMonth() + 1);
+    const firstDueLbl = firstDue.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    _r = { school, total, discount, months, adminFees, lateFee, discountAmt, afterDisc, monthlyAmt, totalFinal, firstDueLbl };
+
+    /* ── العمود الرئيسي ── */
+    displaySchoolName.innerText  = school;
+    origTotalEl.innerText        = money(total);
+    discountAmountEl.innerText   = '- ' + money(discountAmt);
+    afterDiscountEl.innerText    = money(afterDisc);
+    monthlyEl.innerText          = money(monthlyAmt);
+    monthlySubtitleEl.innerText  = months > 1 ? `لمدة ${months} شهراً` : 'دفعة واحدة كاملة';
+    adminFeesDisplay.innerText   = money(adminFees);
+    totalWithLateEl.innerText    = money(totalFinal);
+    firstDueDateEl.innerText     = `📅 ${firstDueLbl}`;
+
+    /* ملاحظة رسوم التأخير */
+    if (lateFee > 0) {
+      lateNoteWrap.classList.remove('hidden');
+      lateNoteEl.innerText = `⚠️ رسوم التأخير: ${money(lateFee)} × ${months} شهر = ${money(lateFee * months)} إجمالي`;
+    } else {
+      lateNoteWrap.classList.add('hidden');
+    }
+
+    /* شريط الخصم (كود 1 الحصري) */
+    if (discount > 0) {
+      discountProgressWrap.classList.remove('hidden');
+      discountProgressBar.style.width = Math.min(discount, 100) + '%';
+      discountProgressLabel.innerText = `${discount}% خصم ← وفّرت ${money(discountAmt)}`;
+    } else {
+      discountProgressWrap.classList.add('hidden');
+    }
+
+    /* الجداول */
+    const rows     = buildTableRows(months, monthlyAmt, now);
+    const totalRow = `<tr class="total-row"><td colspan="2">الإجمالي الكلي (شامل المصاريف الإدارية)</td><td style="text-align:left">${money(totalFinal)}</td></tr>`;
+    tableBody.innerHTML     = rows + totalRow;
+    sideTableBody.innerHTML = rows + totalRow;
+
+    resultsEl.classList.remove('hidden');
+    if (scrollToResults) setTimeout(() => resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+
+    renderCharts(months, monthlyAmt);
+
+    /* ── الشريط الجانبي ── */
+    $('sideSchool').innerText      = school;
+    $('sideMonthly').innerText     = money(monthlyAmt);
+    $('sideMonthlyMeta').innerText = months > 1 ? `لمدة ${months} شهراً` : 'دفعة واحدة';
+    $('sideOrigTotal').innerText   = money(total);
+    $('sideDiscAmt').innerText     = '- ' + money(discountAmt);
+    $('sideAfterDisc').innerText   = money(afterDisc);
+    $('sideAdmin').innerText       = money(adminFees);
+    $('sideLateFee').innerText     = lateFee > 0 ? money(lateFee) + '/شهر' : '---';
+    $('sideTotalFinal').innerText  = money(totalFinal);
+    $('sideFirstDue').innerText    = firstDueLbl;
+
+    saveData();
+  }
+
+  window.liveCalculate = function () {
+    clearTimeout(calcDebounce);
+    calcDebounce = setTimeout(() => calculate(false), 200);
+  };
+
+  /* ════ PDF — html2pdf أولاً ثم html2canvas+jsPDF fallback (كود 1+2: أفضل تنفيذ) ════ */
+  async function saveAsPDF(btn, targetId) {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin ml-1"></i> جاري التجهيز...';
+    btn.disabled = true;
+
+    const school  = _r.school || 'المدرسة';
+    const isDark  = document.body.classList.contains('dark');
+    const element = $(targetId);
+
+    if (window.html2pdf) {
+      try {
+        await html2pdf().set({
+          margin: 8,
+          filename: `خطة_رسوم_${school}_2026.pdf`,
+          image: { type: 'jpeg', quality: 0.97 },
+          html2canvas: { scale: 2.5, backgroundColor: isDark ? '#0f172a' : '#ffffff', useCORS: true },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }).from(element).save();
+        btn.innerHTML = orig; btn.disabled = false;
+        return;
+      } catch (_) { /* fallback */ }
+    }
+
+    if (window.html2canvas && window.jspdf) {
+      try {
+        const canvas = await html2canvas(element, {
+          scale: 2.5, backgroundColor: isDark ? '#0f172a' : '#ffffff',
+          logging: false, useCORS: true
+        });
+        const { jsPDF } = window.jspdf;
+        const pdf  = new jsPDF('p', 'mm', 'a4');
+        const pw   = pdf.internal.pageSize.getWidth();
+        const ph   = pdf.internal.pageSize.getHeight();
+        const img  = canvas.toDataURL('image/png');
+        const imgH = (canvas.height * pw) / canvas.width;
+
+        pdf.addImage(img, 'PNG', 0, 0, pw, imgH);
+        let remaining = imgH - ph, page = 1;
+        while (remaining > 0) {
+          page++;
+          pdf.addPage();
+          pdf.addImage(img, 'PNG', 0, -(ph * (page - 1)), pw, imgH);
+          remaining -= ph;
+        }
+        pdf.save(`خطة_رسوم_${school}_2026.pdf`);
+      } catch (_) {
+        alert('حدث خطأ أثناء إنشاء PDF. تأكد من أن النتائج ظاهرة أولاً.');
+      }
+    } else {
+      alert('مكتبة PDF غير متاحة الآن، يرجى المحاولة لاحقاً.');
+    }
+
+    btn.innerHTML = orig; btn.disabled = false;
+  }
+
+  /* ════ Excel — header كامل تفصيلي (كود 1+2: الأشمل) ════ */
+  function exportToExcel() {
+    if (!window.XLSX) { alert('مكتبة Excel غير متاحة الآن.'); return; }
+    if (!_r.school)   { alert('احسب الرسوم أولاً.'); return; }
+
+    const data = [
+      ['بوابة الأدوات التعليمية 2026 — الإصدار الأمثل المدمج النهائي', '', ''],
+      [''],
+      ['اسم المدرسة / المؤسسة', _r.school, ''],
+      ['الرسوم الأصلية', money(_r.total), ''],
+      ['نسبة الخصم', `${_r.discount}%`, ''],
+      ['قيمة الخصم', '- ' + money(_r.discountAmt), ''],
+      ['الرسوم بعد الخصم', money(_r.afterDisc), ''],
+      ['المصاريف الإدارية (مرة واحدة)', money(_r.adminFees), ''],
+      ['رسوم التأخير / شهر', _r.lateFee > 0 ? money(_r.lateFee) + '/شهر' : '---', ''],
+      ['القسط الشهري', money(_r.monthlyAmt), ''],
+      ['الإجمالي الكلي النهائي', money(_r.totalFinal), ''],
+      ['موعد أول قسط', _r.firstDueLbl, ''],
+      ['عدد الأقساط', `${_r.months} شهر`, ''],
+      [''],
+      ['القسط', 'تاريخ الاستحقاق', 'المبلغ']
+    ];
+    document.querySelectorAll('#tableBody tr').forEach(tr => {
+      const cells = [...tr.querySelectorAll('td')].map(td => td.innerText.trim());
+      if (cells.length) data.push(cells);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    ws['!cols'] = [{ wch: 30 }, { wch: 32 }, { wch: 24 }];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'خطة التقسيط 2026');
+    XLSX.writeFile(wb, `خطة_رسوم_${_r.school}_2026.xlsx`);
+  }
+
+  /* ════ WhatsApp — مشاركة عامة مع app_absent=0 (كود 1+2) ════ */
+  function shareWhatsApp() {
+    if (!_r.school) { alert('احسب الرسوم أولاً.'); return; }
+    const text =
+      `📚 *بوابة الأدوات التعليمية 2026*\n🏫 *${_r.school}*\n\n` +
+      `💰 بعد الخصم: ${money(_r.afterDisc)}\n` +
+      `💼 المصاريف الإدارية: ${money(_r.adminFees)}\n` +
+      `📅 عدد الأقساط: ${_r.months} شهر\n` +
+      `🔖 القسط الشهري: ${money(_r.monthlyAmt)}\n` +
+      `✅ الإجمالي الكلي: ${money(_r.totalFinal)}\n\n` +
+      `جرّبها بنفسك: ${window.location.href}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}&app_absent=0`, '_blank', 'noopener');
+  }
+
+  /* ════ WhatsApp — إرسال لولي الأمر (رسالة احترافية كاملة — كود 1+2) ════ */
+  function sendToParent(phoneInput) {
+    const phone = (phoneInput.value || '').trim().replace(/\D/g, '');
+    if (!phone || phone.length < 8) {
+      alert('أدخل رقم واتساب صحيح مع مفتاح الدولة (مثال: 201012345678)');
+      return;
+    }
+    if (!_r.school) { alert('احسب الرسوم أولاً.'); return; }
+    const msg =
+      `📋 *خطة تقسيط الرسوم المدرسية – ${_r.school}*\n\n👋 مرحباً ولي الأمر الكريم،\n\n` +
+      `يسرنا إرسال خطة تقسيط الرسوم للعام الدراسي 2026:\n\n📊 *التفاصيل الكاملة:*\n` +
+      `• إجمالي الرسوم الأصلية: ${money(_r.total)}\n` +
+      `• نسبة الخصم: ${_r.discount}%  |  قيمة الخصم: - ${money(_r.discountAmt)}\n` +
+      `• الرسوم بعد الخصم: ${money(_r.afterDisc)}\n` +
+      `• المصاريف الإدارية: ${money(_r.adminFees)}\n` +
+      `• رسوم التأخير الشهرية: ${_r.lateFee > 0 ? money(_r.lateFee) + '/شهر' : 'لا يوجد'}\n` +
+      `• عدد الأقساط: ${_r.months} شهراً\n` +
+      `• *القسط الشهري: ${money(_r.monthlyAmt)}*\n` +
+      `• الإجمالي الكلي النهائي: ${money(_r.totalFinal)}\n` +
+      `• موعد أول قسط: ${_r.firstDueLbl}\n\n` +
+      `مع أطيب التحيات وتمنياتنا بعام دراسي موفق،\nإدارة ${_r.school} 🏫`;
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}&app_absent=0`, '_blank', 'noopener');
+    phoneInput.value = '';
+  }
+
+  /* ════ Copy ════ */
+  function copyResult(btn) {
+    const text =
+      `بوابة الأدوات التعليمية 2026\n` +
+      `المدرسة: ${_r.school || '---'}\n` +
+      `الرسوم الأصلية: ${_r.total ? money(_r.total) : '---'}\n` +
+      `الرسوم بعد الخصم: ${_r.afterDisc !== undefined ? money(_r.afterDisc) : '---'}\n` +
+      `المصاريف الإدارية: ${_r.adminFees !== undefined ? money(_r.adminFees) : '---'}\n` +
+      `رسوم التأخير/شهر: ${_r.lateFee > 0 ? money(_r.lateFee) : 'لا يوجد'}\n` +
+      `القسط الشهري: ${_r.monthlyAmt !== undefined ? money(_r.monthlyAmt) : '---'}\n` +
+      `الإجمالي الكلي: ${_r.totalFinal !== undefined ? money(_r.totalFinal) : '---'}\n` +
+      `أول قسط: ${_r.firstDueLbl || '---'}`;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-check ml-1"></i> تم النسخ!';
+      setTimeout(() => { btn.innerHTML = orig; }, 1800);
+    }).catch(() => alert('تعذّر النسخ، يرجى المحاولة يدوياً.'));
+  }
+
+  /* ════ Lead Form ════ */
+  async function handleLeadSubmit(e) {
+    e.preventDefault();
+    const btn  = $('leadSubmitBtn');
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin ml-1"></i> جاري الإرسال...';
+    try {
+      const res = await fetch('/', {
+        method : 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body   : new URLSearchParams(new FormData($('leadForm'))).toString()
+      });
+      if (!res.ok) throw new Error();
+    } catch (_) { /* graceful fallback */ }
+    finally {
+      $('leadForm').reset();
+      leadSuccess.style.display = 'block';
+      setTimeout(() => { leadSuccess.style.display = 'none'; }, 5000);
+      btn.disabled  = false;
+      btn.innerHTML = orig;
+    }
+  }
+
+  /* ════ Countdown — ثابت في localStorage لا يتجدد (كود 1+2: أفضل من كود 4) ════ */
+  const CD_KEY = 'sfCountdown_ULTIMATE';
+  const endDate = (() => {
+    const saved = localStorage.getItem(CD_KEY);
+    if (saved && !isNaN(parseInt(saved, 10))) return new Date(parseInt(saved, 10));
+    const d = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+    localStorage.setItem(CD_KEY, d.getTime().toString());
+    return d;
+  })();
+
+  function updateCountdown() {
+    const diff = endDate.getTime() - Date.now();
+    if (diff <= 0) { countdownEl.innerText = '⏳ انتهى العرض المجاني'; return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000)  / 60000);
+    const s = Math.floor((diff % 60000)    / 1000);
+    countdownEl.innerText = `⏳ العرض المجاني ينتهي خلال: ${d} يوم  ${h} ساعة  ${m} دقيقة  ${s} ثانية`;
+  }
+
+  /* ════ Wire Events ════ */
+  function wireEvents() {
+    $('themeToggle').addEventListener('click', () => applyDark(!document.body.classList.contains('dark')));
+    const floatDarkBtn = $('dark-toggle');
+    if (floatDarkBtn) floatDarkBtn.addEventListener('click', () => applyDark(!document.body.classList.contains('dark')));
+    $('calculateBtn').addEventListener('click', () => calculate(true));
+    $('clearSavedBtn').addEventListener('click', () => {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+      clearTimeout(toastTimer);
+      saveToast.textContent = '🗑️ تم مسح البيانات المحفوظة';
+      saveToast.style.display = 'block';
+      saveToast.style.animation = 'fadeUp .3s ease';
+      toastTimer = setTimeout(() => {
+        saveToast.style.animation = 'toastFade .4s ease forwards';
+        setTimeout(() => { saveToast.style.display = 'none'; saveToast.textContent = '💾 تم الحفظ تلقائياً'; }, 400);
+      }, 1800);
+    });
+
+    $('pdfBtn').addEventListener('click',     () => saveAsPDF($('pdfBtn'),     'pdf-content'));
+    $('sidePdfBtn').addEventListener('click', () => saveAsPDF($('sidePdfBtn'), 'captureArea'));
+
+    $('excelBtn').addEventListener('click',     exportToExcel);
+    $('sideExcelBtn').addEventListener('click', exportToExcel);
+
+    $('shareBtn').addEventListener('click',     shareWhatsApp);
+    $('sideShareBtn').addEventListener('click', shareWhatsApp);
+
+    $('copyBtn').addEventListener('click',     () => copyResult($('copyBtn')));
+    $('sideCopyBtn').addEventListener('click', () => copyResult($('sideCopyBtn')));
+
+    $('sendParentBtn').addEventListener('click',     () => sendToParent(parentPhoneInput));
+    $('sideSendParentBtn').addEventListener('click', () => sendToParent(sideParentPhoneInp));
+
+    $('leadForm').addEventListener('submit', handleLeadSubmit);
+
+    /* Auto-save on any field change */
+    [schoolNameInput, totalInput, discountInput, monthsSelect, adminFeesInput, lateFeeInput].forEach(el => {
+      el.addEventListener('input',  saveData);
+      el.addEventListener('change', saveData);
+    });
+  }
+
+  /* ════ Init ════ */
+  window.addEventListener('load', () => {
+    initTheme();
+    loadData();
+    wireEvents();
+    calculate(false);
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  });
+
+  /* ── Copy Page Link ── */
+  window.copyPageLink = function() {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => alert('تم نسخ الرابط!'))
+      .catch(() => alert('تعذّر نسخ الرابط.'));
+  };
+
+  /* ── Scroll Top Button ── */
+  (function() {
+    const btn = document.getElementById('scroll-top');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+      btn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  })();
+
+  })();
+</script>
+<script src="/js/cookie-consent.min.js" defer></script>
+</body>
+</html>

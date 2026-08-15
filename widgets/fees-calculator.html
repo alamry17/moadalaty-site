@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة الرسوم المدرسية</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/widgets/widget.css">
+</head>
+<body>
+
+<div class="widget-box">
+  <h3 class="widget-title">🏫 حاسبة القسط الشهري المدرسي</h3>
+
+  <div class="calc-grid">
+    <div class="calc-group">
+      <label>الرسوم الدراسية الأساسية السنوية (جنيه)</label>
+      <input type="text" inputmode="numeric" id="fees-basic" placeholder="مثال: 30000">
+      <p class="err-msg" id="err-fees-basic">يرجى إدخال الرسوم الدراسية الأساسية (رقم أكبر من صفر).</p>
+    </div>
+    <div class="calc-group">
+      <label>مصاريف الأنشطة السنوية (جنيه)</label>
+      <input type="text" inputmode="numeric" id="fees-activities" placeholder="مثال: 3000">
+    </div>
+    <div class="calc-group">
+      <label>المصاريف الإدارية السنوية (جنيه)</label>
+      <input type="text" inputmode="numeric" id="fees-admin" placeholder="مثال: 2000">
+    </div>
+    <div class="calc-group">
+      <label>مصاريف أخرى ثابتة (كتب / نقل / تأمين)</label>
+      <input type="text" inputmode="numeric" id="fees-other" placeholder="مثال: 1000">
+    </div>
+  </div>
+
+  <div class="calc-grid">
+    <div class="calc-group">
+      <label>نسبة خصم الإخوة على الرسوم الأساسية (%)</label>
+      <input type="text" inputmode="numeric" id="discount-siblings" placeholder="مثال: 10">
+    </div>
+    <div class="calc-group">
+      <label>نسبة خصم السداد المبكر على الرسوم الأساسية (%)</label>
+      <input type="text" inputmode="numeric" id="discount-early" placeholder="مثال: 4">
+    </div>
+    <div class="calc-group">
+      <label>هل الأنشطة تخضع لخصم الإخوة؟</label>
+      <select id="activities-discount">
+        <option value="no">لا — مصاريف ثابتة</option>
+        <option value="yes">نعم — تخضع للخصم</option>
+      </select>
+    </div>
+    <div class="calc-group">
+      <label>عدد أشهر الدراسة</label>
+      <select id="months-count">
+        <option value="10">10 أشهر (سبتمبر–يونيو)</option>
+        <option value="11">11 شهراً</option>
+        <option value="12">12 شهراً كاملاً</option>
+        <option value="9">9 أشهر</option>
+        <option value="3">3 أقساط (فصلي)</option>
+        <option value="2">قسطان (نصف سنوي)</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="calc-btn" id="calc-fees-btn" type="button">احسب القسط الشهري الآن</button>
+
+  <div class="calc-result" id="fees-result">
+    <div class="result-row"><span>الرسوم الأساسية بعد الخصومات</span><span class="result-val" id="res-basic-after">—</span></div>
+    <div class="result-row"><span>مصاريف الأنشطة</span><span class="result-val" id="res-activities">—</span></div>
+    <div class="result-row"><span>المصاريف الإدارية والأخرى</span><span class="result-val" id="res-fixed">—</span></div>
+    <div class="result-row"><span>إجمالي الوفر السنوي من الخصومات</span><span class="result-val" id="res-saving" style="color:var(--success);">—</span></div>
+    <div class="result-row"><span>الإجمالي السنوي الصافي</span><span class="result-val" id="res-total-year">—</span></div>
+    <div class="result-row"><span>القسط الشهري الفعلي</span><span class="result-val" id="res-monthly">—</span></div>
+    <div style="margin-top:10px;text-align:center;">
+      <span class="result-badge" id="fees-badge"></span>
+    </div>
+    <div id="installment-note" style="display:none;margin-top:10px;padding:8px 12px;background:var(--danger-light,#fff8e8);border-radius:8px;font-size:12px;color:#5a3e00;"></div>
+  </div>
+
+  <div class="widget-footer">
+    🧮 حاسبة بواسطة <a href="https://moadalaty.com/articles/school-fees-installments.html?utm_source=widget&utm_medium=embed" target="_blank" rel="noopener">moadalaty.com</a>
+  </div>
+</div>
+
+<script src="/js/core-utils.min.js"></script>
+<script src="/js/form-calc.min.js"></script>
+<script src="/js/widget-common.js"></script>
+<script>
+// نفعّل جسر التتبّع الأول، قبل أي حساب — عشان أول حدث calculator_used
+// يترحّل لصفحة الموقع الحاضن برضو (راجع js/widget-common.js وembed-widget.js)
+MoadalatyWidgetBridge.initAnalyticsBridge();
+
+/* ── نفس منطق compute() بالظبط من articles/school-fees-installments.html —
+   عمداً منسوخ بدل ما يتغيّر، عشان نتيجة الودجت تفضل مطابقة لنتيجة
+   المقال الكامل 100%. لو عدّلت معادلة الحاسبة هناك، حدّثها هنا كمان. ── */
+initFormCalculator({
+  storageKey: null,
+  analyticsId: 'fees-widget',
+  fieldIds: ['fees-basic', 'fees-activities', 'fees-admin', 'fees-other', 'discount-siblings', 'discount-early'],
+  selectIds: ['activities-discount', 'months-count'],
+  calcBtnId: 'calc-fees-btn',
+  resultBoxId: 'fees-result',
+  invalidMessage: 'يرجى إدخال الرسوم الدراسية الأساسية على الأقل.',
+  compute: function (v) {
+    const basic      = v['fees-basic'] || 0;
+    const activities = v['fees-activities'] || 0;
+    const admin      = v['fees-admin'] || 0;
+    const other      = v['fees-other'] || 0;
+    const discSib    = v['discount-siblings'] || 0;
+    const discEarly  = v['discount-early'] || 0;
+    const actDisc    = v['activities-discount'] === 'yes';
+    const months     = parseInt(v['months-count'], 10) || 10;
+
+    if (!basic || basic <= 0) {
+      return { invalid: true, message: 'يرجى إدخال الرسوم الدراسية الأساسية على الأقل.', fields: { 'fees-basic': 'يرجى إدخال الرسوم الدراسية الأساسية (رقم أكبر من صفر).' } };
+    }
+
+    const totalDiscPct = Math.min(discSib + discEarly, 100);
+    const basicAfterDiscount = basic * (1 - totalDiscPct / 100);
+    const basicSaving = basic - basicAfterDiscount;
+
+    const activitiesAfterDiscount = actDisc ? activities * (1 - totalDiscPct / 100) : activities;
+    const activitiesSaving = activities - activitiesAfterDiscount;
+
+    const fixedTotal = admin + other;
+    const totalSaving = basicSaving + activitiesSaving;
+    const totalYear = basicAfterDiscount + activitiesAfterDiscount + fixedTotal;
+    const monthly = totalYear / months;
+
+    const fmt = n => CoreUtils.formatLikeInput(n.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' جنيه', v._arabicIndic);
+
+    let badge;
+    if (monthly < 2000)      badge = { text: '✅ في نطاق المدارس الاقتصادية', bg: '#d4f0e0', color: '#1e7e4a' };
+    else if (monthly < 4000) badge = { text: '📘 في نطاق المدارس المتوسطة', bg: '#e8f4fd', color: '#2557a7' };
+    else if (monthly < 7000) badge = { text: '🏫 في نطاق المدارس الخاصة الراقية', bg: '#fff8e8', color: '#b8720a' };
+    else                     badge = { text: '🌟 في نطاق المدارس الدولية', bg: '#fde8e6', color: '#c0392b' };
+
+    let noteText = '';
+    if (months === 3) {
+      noteText = '<strong>📅 هذا قسط فصلي.</strong> القسط المعادل ≈ ' + fmt(totalYear / 10) + ' على 10 أشهر.';
+    } else if (months === 2) {
+      noteText = '<strong>📅 هذا قسط نصف سنوي.</strong> القسط المعادل ≈ ' + fmt(totalYear / 10) + ' على 10 أشهر.';
+    } else if (months === 12) {
+      noteText = '<strong>📅 تنبيه:</strong> بعض المدارس لا تعتمد التقسيط على 12 شهراً — تأكد من سياستها.';
+    }
+
+    return {
+      outputs: {
+        'res-basic-after': fmt(basicAfterDiscount),
+        'res-activities': fmt(activitiesAfterDiscount),
+        'res-fixed': fmt(fixedTotal),
+        'res-saving': '− ' + fmt(totalSaving),
+        'res-total-year': fmt(totalYear),
+        'res-monthly': fmt(monthly)
+      },
+      badge: { elementId: 'fees-badge', text: badge.text, bg: badge.bg, color: badge.color },
+      note: { elementId: 'installment-note', html: noteText }
+    };
+  }
+});
+
+/* ── إبلاغ الصفحة الحاضنة بارتفاع المحتوى تلقائيًا (نفس نمط widgets/gpa-calculator.html) ── */
+MoadalatyWidgetBridge.initAutoResize();
+document.getElementById('calc-fees-btn').addEventListener('click', () => setTimeout(MoadalatyWidgetBridge.reportHeight, 50));
+</script>
+</body>
+</html>
