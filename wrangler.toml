@@ -1,7 +1,0 @@
-name = "moadalaty-site"
-compatibility_date = "2026-08-15"
-pages_build_output_dir = "."
-
-[[send_email]]
-name = "SEND_EMAIL"
-destination_address = "alamry17@gmail.com"
