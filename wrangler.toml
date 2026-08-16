@@ -1,0 +1,11 @@
+name = "moadalaty-site"
+main = "src/index.js"
+compatibility_date = "2026-08-15"
+
+[assets]
+directory = "./"
+binding = "ASSETS"
+
+[[send_email]]
+name = "SEND_EMAIL"
+destination_address = "alamry17@gmail.com"
