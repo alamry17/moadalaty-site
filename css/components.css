@@ -865,7 +865,7 @@ body.dark .glass-card { background: #1a2236; border: 1px solid #2a3550; }
 body.dark .kpi-card { background: #141c2e; }
 .mini-kpi { background: var(--bg); border-radius: var(--radius-sm); padding: 8px; text-align: center; font-size: 12px; }
 body.dark .mini-kpi { background: #141c2e; }
-.chart-wrap { position: relative; height: 220px; margin: 14px 0; }
+.chart-wrap { position: relative; min-height: 220px; margin: 14px 0; }
 .soft-card { background: var(--bg); border-radius: var(--radius-md); padding: 14px; }
 body.dark .soft-card { background: #141c2e; }
 .side-monthly-box { background: var(--primary); color: #fff; border-radius: var(--radius-md); padding: 16px; text-align: center; }
