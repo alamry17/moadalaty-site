@@ -187,7 +187,7 @@ body.dark .table-wrapper table td { border-color: #2a3550; }
 
 /* ── Share Buttons ── */
 .share-btns {
-  display: flex; gap: 10px; margin: 40px 0 0;
+  display: flex; gap: 10px; margin: 40px 0 32px;
   padding-top: 24px; border-top: 2px solid var(--border);
   flex-wrap: wrap; align-items: center;
 }
