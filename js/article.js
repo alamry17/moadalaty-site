@@ -144,6 +144,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // Build script updates dateModified once at deploy, reflecting real changes.
   // If you re-publish content without changes, just don't run the build script.
 
+  /* ── 10. Hero CTA smooth-scroll (fallback صريح بدل الاعتماد على سلوك
+     المتصفح الافتراضي للروابط #anchor، اللي ممكن ميشتغلش صح مع بعض
+     إعدادات المتصفح/الإضافات) ── */
+  document.querySelectorAll('a.hero-cta[href^="#"]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href').slice(1);
+      const target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.pushState(null, '', '#' + targetId);
+      }
+    });
+  });
+
 });
 /* ═══════════════════════════════════════════════════
    NOTE: الكود الخاص بالحاسبات والـ Timers يبقى داخل
