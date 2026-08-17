@@ -137,8 +137,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="/css/components.min.css">
   <!-- ██████████████████████████████████████ -->
 
-  <!-- ═══ أنماط خاصة بهذا المقال فقط (Checklist + Badges) ═══ --></head>
+  <!-- ═══ أنماط خاصة بهذا المقال فقط (Checklist + Badges) ═══ --><link rel="stylesheet" href="/css/site-search.css">
+</head>
 <body>
+<div id="site-search-bar" class="no-print" role="search">
+  <div id="site-search-inner">
+    <form id="site-search-form" role="search" autocomplete="off">
+      <span class="site-search-icon" aria-hidden="true">&#128269;</span>
+      <input id="site-search-input" type="text" name="q" placeholder="ابحث في الموقع... (مثال: تقسيط، GPA)" aria-label="ابحث في الموقع" />
+      <button type="button" id="site-search-clear" aria-label="مسح البحث">&#10005;</button>
+    </form>
+    <div id="site-search-results" role="listbox" aria-label="نتائج البحث"></div>
+  </div>
+</div>
+
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WDKV7WH2"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -608,5 +620,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="/js/article.min.js" defer></script>
 <!-- ██████████████████████████████████████ -->
 <script src="/js/cookie-consent.min.js" defer></script>
+<script src="/js/site-search-data.js"></script>
+<script src="/js/site-search.js"></script>
 </body>
 </html>

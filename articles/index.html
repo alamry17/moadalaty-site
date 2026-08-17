@@ -70,8 +70,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .article-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
   @media (min-width: 640px) { .article-grid { grid-template-columns: 1fr 1fr; } }
 </style>
+<link rel="stylesheet" href="/css/site-search.css">
 </head>
 <body>
+<div id="site-search-bar" class="no-print" role="search">
+  <div id="site-search-inner">
+    <form id="site-search-form" role="search" autocomplete="off">
+      <span class="site-search-icon" aria-hidden="true">&#128269;</span>
+      <input id="site-search-input" type="text" name="q" placeholder="ابحث في الموقع... (مثال: تقسيط، GPA)" aria-label="ابحث في الموقع" />
+      <button type="button" id="site-search-clear" aria-label="مسح البحث">&#10005;</button>
+    </form>
+    <div id="site-search-results" role="listbox" aria-label="نتائج البحث"></div>
+  </div>
+</div>
+
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WDKV7WH2"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -98,7 +110,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="hero-meta"><span>37 صفحة حول الرسوم المدرسية والمعدل الجامعي والتخطيط الدراسي</span></div>
   </header>
 
-  <main id="main-content">
+  <main class="article-body" id="main-content">
 
     <h2 class="cat-title"><span aria-hidden="true">❓</span> الأسئلة الشائعة</h2>
     <div class="article-grid">
@@ -180,5 +192,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="/js/core-utils.min.js"></script>
 <script src="/js/article.min.js" defer></script>
 <script src="/js/cookie-consent.min.js" defer></script>
+<script src="/js/site-search-data.js"></script>
+<script src="/js/site-search.js"></script>
 </body>
 </html>

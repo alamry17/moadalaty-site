@@ -912,7 +912,7 @@ body.dark .calc-error-banner { background: #2a0e0a; }
 .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); border-radius: var(--radius-md); padding: 10px 22px; font-weight: 700; cursor: pointer; }
 .input-field { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; font-family: var(--font-body); background: var(--white); color: var(--text); }
 body.dark .input-field { background: #1e293b; border-color: #334155; color: #f1f5f9; }
-.wa-block { background: #25d366; color: #fff; border-radius: var(--radius-md); padding: 12px; text-align: center; font-weight: 700; }
+.wa-block { background: #25d366; color: #fff; border-radius: var(--radius-md); padding: 12px; text-align: center; font-weight: 700; position: relative; overflow: hidden; }
 .wa-bg-icon { opacity: .15; font-size: 60px; position: absolute; left: 10px; bottom: -10px; }
 
 /* ══════════════ Tailwind-style utilities (index.html) ══════════════ */
