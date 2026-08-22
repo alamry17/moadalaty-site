@@ -10,3 +10,10 @@ run_worker_first = ["/api/*"]
 [[send_email]]
 name = "SEND_EMAIL"
 destination_address = "alamry17@gmail.com"
+
+# عداد المشاهدات الحقيقي — راجع handleViews في src/index.js.
+# الـ namespace ده اتعمل من Cloudflare Dashboard (Storage & databases → Workers KV)
+# باسم VIEWS_KV، والـ id تحت هو الـ Namespace ID الحقيقي بتاعه.
+[[kv_namespaces]]
+binding = "VIEWS_KV"
+id = "1c50f9910eba4707ad76b8dbaa0f9f1e"
