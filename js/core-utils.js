@@ -103,6 +103,59 @@
     });
   }
 
+  /* ── نسخ رابط الصفحة الحالي ──
+     كانت الدالة دي مكررة حرفيًا (بصيغ متطابقة تقريبًا: const/var،
+     arrow/function عادية) في 7 مقالات مختلفة. أي تعديل مستقبلي (مثلاً
+     تغيير مدة ظهور رسالة النجاح، أو إضافة رسالة خطأ أوضح) كان الزم
+     يتكرر يدويًا في السبعة كل مرة. دلوقتي أي صفحة بس بتنادي
+     CoreUtils.copyPageLink() من زرار onclick، وخلاص.
+     btnId اختياري — الافتراضي 'copy-link-btn' زي كل الصفحات الحالية. */
+  function copyPageLink(btnId) {
+    const url = window.location.href;
+    const btn = document.getElementById(btnId || 'copy-link-btn');
+    function flashSuccess() {
+      if (!btn) return;
+      btn.style.background = 'var(--success)';
+      btn.style.borderColor = 'var(--success)';
+      btn.style.color = '#fff';
+      setTimeout(() => { btn.style.background = ''; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+    }
+    navigator.clipboard.writeText(url).then(flashSuccess).catch(() => {
+      // متصفحات قديمة أو بدون صلاحية clipboard API — نفس الـ fallback
+      // اللي كان مكرر في كل نسخة: textarea مؤقت + execCommand.
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      flashSuccess();
+    });
+  }
+
+  /* ── عداد المشاهدات الحقيقي (عبر /api/views، مبني على Cloudflare KV) ──
+     كان العداد قبل كده معادلة وهمية (base + أيام×معدل) مكررة ومختلفة
+     شوية في كل مقالة. دلوقتي رقم حقيقي بيتزوّد فعليًا مع كل زيارة، عبر
+     نداء واحد مركزي. لو الطلب فشل (مثلاً تخطينا حد الـ 1000 كتابة
+     المجاني اليومي، أو مفيش إنترنت)، بنسيب النص الافتراضي "—" زي ما هو
+     بهدوء — hideEmptyViewCounter في article.js أصلاً بيخفي العنصر كله
+     في الحالة دي، فمفيش داعي نتعامل مع الخطأ هنا تاني.
+     pageSlug: حروف/أرقام/شرطات بس (نفس تنسيق الـ page slug في الـ API). */
+  async function initViewCounter(elId, pageSlug) {
+    const el = document.getElementById(elId);
+    if (!el || !pageSlug) return;
+    try {
+      const res = await fetch(`/api/views?page=${encodeURIComponent(pageSlug)}`, { method: 'POST' });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && typeof data.views === 'number') {
+        el.textContent = data.views.toLocaleString('ar-SA');
+      }
+    } catch (e) {
+      // فشل الشبكة أو أي خطأ تاني — نسيب "—" الافتراضي، مفيش داعي نكسر الصفحة.
+    }
+  }
+
   global.CoreUtils = {
     toWesternDigits,
     toArabicIndicDigits,
@@ -110,7 +163,9 @@
     formatLikeInput,
     saveWithExpiry,
     loadWithExpiry,
-    initDarkMode
+    initDarkMode,
+    copyPageLink,
+    initViewCounter
   };
 
 })(window);
