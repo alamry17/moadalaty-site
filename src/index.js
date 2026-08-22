@@ -10,6 +10,57 @@
 
 import { EmailMessage } from "cloudflare:email";
 
+// ═══ فوتر موحّد لكل صفحات الموقع (يحل مشكلة "تعديل 35+ ملف يدويًا") ═══
+// المصدر الوحيد للحقيقة بخصوص روابط الفوتر بقى هنا بس. أي إضافة/تعديل/حذف
+// لينك مستقبلي (حاسبة جديدة مثلاً) يتم في المصفوفة دي فقط، وهتتطبّق تلقائيًا
+// على كل صفحة HTML في الموقع من غير ما تلمس ولا ملف تاني.
+//
+// بيشتغل عن طريق HTMLRewriter (ميزة مبنية جوه Cloudflare Workers): بيقرأ
+// استجابة الصفحة وهي طالعة من env.ASSETS.fetch، ويستبدل محتوى أي عنصر
+// <nav aria-label="روابط الموقع الرئيسية"> بالقائمة الموحّدة دي — بغض النظر
+// عن شكل الـ HTML الأصلي جوه الملف نفسه (كان فيه كذا نمط مختلف قبل كده).
+//
+// ملحوظة مهمة: ده بيستبدل بس روابط التنقّل (nav links)، مش بيلمس سطر
+// "آخر تحديث" ولا سطر حقوق النشر تحته — دول لسه بيتقروا من كل ملف HTML
+// زي ما هم، لأن تاريخ "آخر تحديث" بيختلف من مقالة لمقالة ولازم يفضل كده.
+const FOOTER_NAV_LINKS = [
+  { href: "/", label: "🏠 الأداة" },
+  { href: "/tip-bill-split-calculator.html", label: "🧾 تقسيم الفاتورة والبقشيش" },
+  { href: "/roommate-expense-splitter.html", label: "🏠 تقسيم مصاريف السكن" },
+  { href: "/group-trip-cost-splitter.html", label: "✈️ تقسيم مصاريف الرحلة" },
+  { href: "/articles/", label: "📚 المقالات" },
+  { href: "/articles/faq.html", label: "❓ الأسئلة الشائعة" },
+  { href: "/about.html", label: "من نحن" },
+  { href: "/contact.html", label: "اتصل بنا" },
+  { href: "/privacy.html", label: "الخصوصية" },
+  { href: "/terms.html", label: "الشروط" },
+  { href: "/disclaimer.html", label: "إخلاء المسؤولية" },
+];
+
+function buildFooterNavHtml() {
+  return FOOTER_NAV_LINKS
+    .map(({ href, label }) => `<a href="${href}">${label}</a>`)
+    .join('\n        <span aria-hidden="true">·</span>\n        ');
+}
+
+class FooterNavHandler {
+  element(el) {
+    el.setInnerContent(buildFooterNavHtml(), { html: true });
+  }
+}
+
+// بيتطبّق بس على استجابات HTML فعلية (مش CSS/JS/صور... إلخ) — بنتأكد من
+// الـ Content-Type قبل ما نحاول نعمل rewrite، تجنبًا لأي محاولة تعديل على
+// ملفات مش HTML أصلاً.
+function applyUnifiedFooter(response) {
+  const contentType = response.headers.get("Content-Type") || "";
+  if (!contentType.includes("text/html")) return response;
+
+  return new HTMLRewriter()
+    .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler())
+    .transform(response);
+}
+
 // تحويل نص UTF-8 (بما فيه عربي) إلى Base64 — الأسلوب المضمون في Workers
 function toBase64Utf8(str) {
   const bytes = new TextEncoder().encode(str);
@@ -132,6 +183,10 @@ export default {
       return handleViews(request, env);
     }
 
-    return env.ASSETS.fetch(request);
+    // كل الطلبات التانية (صفحات HTML، CSS، JS، صور...) بتتقدّم من الملفات
+    // الساكنة زي ما هي، وبعدين لو كانت الاستجابة HTML فعلاً، بيتعمل عليها
+    // rewrite لفوتر موحّد قبل ما ترجع للزائر — راجع applyUnifiedFooter فوق.
+    const assetResponse = await env.ASSETS.fetch(request);
+    return applyUnifiedFooter(assetResponse);
   },
 };
