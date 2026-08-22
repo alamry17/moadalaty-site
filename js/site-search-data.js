@@ -6,6 +6,21 @@ window.SITE_SEARCH_INDEX = [
     "category": "الأداة"
   },
   {
+    "title": "حاسبة تقسيم الفاتورة والبقشيش",
+    "url": "/tip-bill-split-calculator.html",
+    "category": "الأداة"
+  },
+  {
+    "title": "حاسبة تقسيم مصاريف السكن بين الشركاء",
+    "url": "/roommate-expense-splitter.html",
+    "category": "الأداة"
+  },
+  {
+    "title": "حاسبة تقسيم مصاريف الرحلة الجماعية",
+    "url": "/group-trip-cost-splitter.html",
+    "category": "الأداة"
+  },
+  {
     "title": "كل المقالات",
     "url": "/articles/",
     "category": "الموقع"
