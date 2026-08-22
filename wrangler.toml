@@ -5,7 +5,12 @@ compatibility_date = "2026-08-15"
 [assets]
 directory = "./"
 binding = "ASSETS"
-run_worker_first = ["/api/*"]
+# كان بس ["/api/*"] — يعني الـ Worker كان بيشتغل بس على مسارات الـ API،
+# وأي صفحة HTML تانية كانت بتتقدّم مباشرة من الملفات الساكنة من غير ما
+# تمر على الـ Worker خالص. غيّرناها لـ true عشان كل صفحة HTML تعدّي على
+# الـ Worker أولاً، فيقدر يحقن فوتر موحّد فيها كلها (راجع rewriteFooterNav
+# في src/index.js) — ده اللي بيحل مشكلة "تعديل الفوتر في 35+ ملف يدويًا".
+run_worker_first = true
 
 [[send_email]]
 name = "SEND_EMAIL"
