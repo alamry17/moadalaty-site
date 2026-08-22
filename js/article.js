@@ -83,23 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ── 6. Copy Page Link ── */
+  /* ── 6. Copy Page Link ──
+     كانت هنا نسخة تالتة شبه مطابقة لنفس الدالة الموجودة في core-utils.js
+     (فرق بسيط: استرجاع الـ style بـ cssText بدل تصفير كل خاصية لوحدها).
+     دلوقتي بندّي للنسخة المركزية الوحيدة بدل ما نحتفظ بنسخة هنا كمان —
+     راجع CoreUtils.copyPageLink في core-utils.js. */
   window.copyPageLink = function() {
-    const btn = document.getElementById('copy-link-btn');
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      if (btn) {
-        const orig = btn.style.cssText;
-        btn.style.background = 'var(--success)';
-        btn.style.borderColor = 'var(--success)';
-        btn.style.color = '#fff';
-        setTimeout(() => btn.style.cssText = orig, 2000);
-      }
-    }).catch(() => {
-      const ta = document.createElement('textarea');
-      ta.value = window.location.href;
-      document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-    });
+    if (typeof CoreUtils !== 'undefined' && CoreUtils.copyPageLink) {
+      CoreUtils.copyPageLink();
+    }
   };
 
   /* ── 7. Hide view-meta لما يكون العداد فاضي ── */
