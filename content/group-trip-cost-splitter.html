@@ -1,0 +1,267 @@
+---
+layout: layouts/base.njk
+permalink: group-trip-cost-splitter.html
+footerLastUpdated: "أغسطس 2026"
+shareUrl: "https://moadalaty.com/group-trip-cost-splitter.html"
+shareText: "حاسبة تقسيم مصاريف الرحلة الجماعية"
+shareNoPrint: true
+shareLabel: "شارك الأداة:"
+copyFn: "CoreUtils.copyPageLink()"
+extraScripts:
+  - {src: "/js/core-utils.min.js"}
+  - {src: "/js/group-trip-cost-splitter.min.js"}
+head_extra: |
+  <meta name="theme-color" content="#1a3c6e" />
+  <meta name="description" content="سجّل مين دفع إيه في الرحلة الجماعية، واعرف رصيد كل مسافر ومين مديون لمين بأقل عدد تحويلات. احفظ النتيجة كملف PDF أو Excel أو شاركها على واتساب." />
+  <meta name="keywords" content="تقسيم مصاريف الرحلة, حاسبة رحلة جماعية, تسوية حسابات السفر, مين مديون لمين, 2026" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://moadalaty.com/group-trip-cost-splitter.html" />
+  <meta name="author" content="بوابة الأدوات التعليمية">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ar_EG" />
+  <meta property="og:url" content="https://moadalaty.com/group-trip-cost-splitter.html" />
+  <meta property="og:site_name" content="بوابة الأدوات التعليمية" />
+  <meta property="og:title" content="حاسبة تقسيم مصاريف الرحلة الجماعية | معدلاتي" />
+  <meta property="og:description" content="اعرف رصيد كل مسافر ومين مديون لمين، بأقل عدد تحويلات ممكن." />
+  <meta property="og:image" content="https://moadalaty.com/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>حاسبة تقسيم مصاريف الرحلة الجماعية | معدلاتي 2026</title>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"حاسبة تقسيم مصاريف الرحلة الجماعية","url":"https://moadalaty.com/group-trip-cost-splitter.html","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"EGP"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"إزاي بتحسب الحاسبة مين مديون لمين؟","acceptedAnswer":{"@type":"Answer","text":"الحاسبة بتجمع كل المصاريف وبتوزّعها بالتساوي على عدد المسافرين، بغض النظر مين دفع فعليًا. بعدين بتقارن اللي كل واحد دفعه فعلاً مع نصيبه العادل، وبتطلع أقل عدد تحويلات ممكن يسوّي كل الحسابات."}},
+  {"@type":"Question","name":"هل لازم كل مصروف يتقسّم على كل المسافرين؟","acceptedAnswer":{"@type":"Answer","text":"في النسخة دي، أيوه — كل مصروف بيتقسّم بالتساوي على كل المسافرين المُضافين. لو حد ما شاركش في مصروف معيّن (مثلاً واحد ما ركبش تاكسي)، سجّل المصروف ده بمبلغ أقل يراعي الفرق، أو اتفقوا يدويًا على الفرق البسيط ده."}}
+  ]}
+  </script>
+
+  <!-- CDNs مع Fallback كامل -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"
+  onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
+  onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+  onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.min.css">
+  <link rel="stylesheet" href="/css/article.min.css">
+  <link rel="stylesheet" href="/css/components.min.css">
+  <link rel="stylesheet" href="/css/site-search.css">
+
+  <style>
+  /* ===== خاص بالصفحة: صفوف المسافرين والمصاريف + التوازن والتسوية ===== */
+  .person-row, .expense-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  }
+  .person-row .person-name { flex: 1 1 auto; }
+  .expense-row .exp-desc   { flex: 1 1 40%; }
+  .expense-row .exp-amount { flex: 0 0 100px; }
+  .expense-row .exp-payer  { flex: 0 0 130px; }
+  .rm-remove {
+  flex: 0 0 auto; border: 1.5px solid var(--border, #e2e8f0); background: var(--white, #fff);
+  color: var(--danger, #dc2626); width: 38px; height: 38px; border-radius: var(--radius-sm, 10px);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .rm-remove:hover { background: var(--danger, #dc2626); color: #fff; border-color: var(--danger, #dc2626); }
+  body.dark .rm-remove { background: var(--card-dark, #16261F); border-color: #2a3d33; }
+
+  .balance-list { display: flex; flex-direction: column; gap: 8px; }
+  .balance-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px; border-radius: var(--radius-sm, 10px);
+  }
+  .balance-item.owed    { background: rgba(16,185,129,.1); }
+  .balance-item.owes    { background: rgba(220,38,38,.1); }
+  .balance-item.settled { background: var(--bg); }
+  .balance-item .name   { font-weight: 800; font-size: .92rem; }
+  .balance-item .status { font-size: .72rem; color: var(--muted, #64748b); display: block; }
+  .balance-item .amt    { font-size: 1rem; font-weight: 800; display: block; margin-top: 2px; }
+  .balance-item.owed .amt    { color: var(--primary); }
+  .balance-item.owes .amt    { color: var(--danger, #dc2626); }
+  .balance-item.settled .amt { color: var(--muted, #64748b); }
+
+  .settle-title { font-weight: 800; margin: 16px 0 8px; font-size: .95rem; }
+  .settle-list { display: flex; flex-direction: column; gap: 6px; }
+  .settle-empty { font-size: .85rem; color: var(--muted, #64748b); padding: 6px 2px; }
+  .settle-line {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--bg); border-radius: var(--radius-sm, 10px); padding: 10px 12px; font-size: .88rem;
+  }
+  .settle-line .amt { font-weight: 800; color: var(--primary); }
+
+  @media (max-width: 640px) {
+  .expense-row { flex-wrap: wrap; }
+  .expense-row .exp-desc, .expense-row .exp-amount, .expense-row .exp-payer { flex: 1 1 100%; }
+  }
+  </style>
+---
+</div>
+
+
+<div class="max-w-5xl mx-auto px-4 py-5 md:py-8">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="flex justify-between items-center mb-5 no-print">
+    <div class="flex items-center gap-3">
+      <div class="w-14 h-14 rounded-3xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-3xl text-emerald-700 dark:text-emerald-300 shadow-inner">
+        <i class="fas fa-plane-departure"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-black text-emerald-700 dark:text-emerald-400 leading-tight">
+          معدلاتي — حاسبة تقسيم مصاريف الرحلة الجماعية
+        </h1>
+        <p class="text-xs muted font-bold flex items-center gap-2">
+          <span class="live-badge"><span class="live-dot"></span>مباشر</span>
+          <span class="view-meta"><span aria-hidden="true">👁</span> <span id="view-count">—</span> مشاهدة</span>
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+  <!-- ═══ INTRO ═══ -->
+  <div class="mb-6">
+    <div class="grid grid-cols-3 gap-3">
+      <div class="stat-box text-center">
+        <div class="text-xs muted">الإخراج</div>
+        <div class="font-bold mt-1 text-sm">🧮 PDF + Excel</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xs muted">أقل عدد تحويلات</div>
+        <div class="font-bold mt-1 text-sm">⚖️ تسوية ذكية</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xs muted">مشاركة فورية</div>
+        <div class="font-bold mt-1 text-sm">💬 واتساب مباشرة</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-grid">
+    <div class="space-y-5">
+
+      <!-- ── بطاقة المسافرين ── -->
+      <div class="glass-card rounded-[1.75rem] p-5 md:p-7 border-b-4 border-emerald-500 no-print">
+        <h2 class="font-black text-emerald-700 dark:text-emerald-400 text-lg mb-5">
+          <i class="fas fa-users ml-2"></i> المسافرين
+        </h2>
+        <div id="peopleArea"></div>
+        <button id="addPerson" type="button" class="add-btn mt-2" style="width:100%;">
+          <i class="fas fa-plus ml-1"></i> إضافة مسافر
+        </button>
+      </div>
+
+      <!-- ── بطاقة المصاريف ── -->
+      <div class="glass-card rounded-[1.75rem] p-5 md:p-7 border-b-4 border-emerald-500 no-print">
+        <h2 class="font-black text-emerald-700 dark:text-emerald-400 text-lg mb-5">
+          <i class="fas fa-receipt ml-2"></i> المصاريف
+        </h2>
+        <div id="expenseArea"></div>
+        <button id="addExpense" type="button" class="add-btn mt-2" style="width:100%;">
+          <i class="fas fa-plus ml-1"></i> إضافة مصروف
+        </button>
+        <p class="text-xs muted mt-2">كل مصروف بيتقسّم بالتساوي على كل المسافرين، بغض النظر مين دفعه فعليًا.</p>
+      </div>
+
+      <button id="clearSavedBtn" type="button" class="btn-outline no-print" style="width:100%;">
+        🗑️ مسح البيانات المحفوظة على هذا الجهاز
+      </button>
+
+      <!-- ── قسم النتائج ── -->
+      <section id="results" class="hidden fade-in space-y-4" aria-live="polite" role="status">
+
+        <div id="pdf-content" class="glass-card rounded-[1.75rem] p-5 md:p-7 border-t-4 border-emerald-500">
+
+          <div class="flex items-start justify-between mb-5 pb-4 border-b border-slate-100 dark:border-slate-700 flex-wrap gap-3">
+            <div>
+              <h2 class="text-xl font-black text-emerald-700 dark:text-emerald-300">✈️ تقسيم مصاريف الرحلة</h2>
+              <p class="text-xs muted mt-1">معدلاتي — حاسبة تقسيم مصاريف الرحلة الجماعية</p>
+            </div>
+          </div>
+
+          <!-- KPIs -->
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="kpi-card">
+              <p class="text-[10px] muted">إجمالي المصاريف</p>
+              <p id="outTotal" class="font-black mt-1 text-sm text-slate-800 dark:text-slate-100"></p>
+            </div>
+            <div class="kpi-card">
+              <p class="text-[10px] muted">عدد المسافرين</p>
+              <p id="outPeopleCount" class="font-black mt-1 text-sm text-slate-800 dark:text-slate-100"></p>
+            </div>
+          </div>
+
+          <!-- رصيد كل مسافر -->
+          <div class="balance-list" id="balanceList"></div>
+
+          <!-- التسوية -->
+          <div id="settleSection" hidden>
+            <div class="settle-title">💸 التسوية — مين يدفع لمين</div>
+            <div class="settle-list" id="settleList"></div>
+          </div>
+
+        </div><!-- /pdf-content -->
+
+        <!-- أزرار التصدير -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 no-print">
+          <button id="pdfBtn" type="button" class="btn-outline">
+            <i class="fas fa-file-pdf text-red-500 ml-1"></i> حفظ PDF
+          </button>
+          <button id="excelBtn" type="button" class="btn-outline">
+            <i class="fas fa-file-excel text-emerald-600 ml-1"></i> Excel
+          </button>
+          <button id="shareBtn" type="button" class="btn-outline text-green-600 dark:text-green-400">
+            <i class="fab fa-whatsapp ml-1"></i> مشاركة عامة
+          </button>
+          <button id="copyBtn" type="button" class="btn-outline text-slate-600 dark:text-slate-300">
+            <i class="fas fa-copy ml-1"></i> نسخ
+          </button>
+        </div>
+      </section>
+
+      <!-- ── الأسئلة الشائعة ── -->
+      <section class="soft-card rounded-[1.75rem] p-5 md:p-6 no-print">
+        <h2 class="section-title mb-4">الأسئلة الشائعة</h2>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">إزاي بتحسب الحاسبة مين مديون لمين؟</summary>
+          <p class="text-xs muted mt-2">الحاسبة بتجمع كل المصاريف وبتوزّعها بالتساوي على عدد المسافرين، بغض النظر مين دفع فعليًا. بعدين بتقارن اللي كل واحد دفعه فعلاً مع نصيبه العادل، وبتطلع أقل عدد تحويلات ممكن يسوّي كل الحسابات.</p>
+        </details>
+        <details>
+          <summary class="font-bold cursor-pointer">هل لازم كل مصروف يتقسّم على كل المسافرين؟</summary>
+          <p class="text-xs muted mt-2">في النسخة دي، أيوه — كل مصروف بيتقسّم بالتساوي على كل المسافرين المُضافين. لو حد ما شاركش في مصروف معيّن (مثلاً واحد ما ركبش تاكسي)، سجّل المصروف ده بمبلغ أقل يراعي الفرق، أو اتفقوا يدويًا على الفرق البسيط ده.</p>
+        </details>
+      </section>
+
+      <!-- ── مشاركة الصفحة (زي باقي صفحات الموقع) ── -->
+      {% include "partials/share-buttons.njk" %}
+
+      <!-- ── أدوات ذات صلة ── -->
+      <section class="no-print">
+        <h2 class="section-title mb-4">أدوات ذات صلة</h2>
+        <div class="flex flex-wrap gap-2">
+          <a href="/" class="related-link">🏫 حاسبة الرسوم المدرسية</a>
+          <a href="/tip-bill-split-calculator.html" class="related-link">🧾 تقسيم الفاتورة والبقشيش</a>
+          <a href="/roommate-expense-splitter.html" class="related-link">🏠 تقسيم مصاريف السكن</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  {% include "partials/footer.njk" %}
+</div>
+
+<button id="scroll-top" aria-label="العودة للأعلى" title="العودة للأعلى">⬆</button>
+<button id="dark-toggle" aria-label="تبديل الوضع الليلي">🌙</button>
+
+<!-- Save Toast -->
+<div id="saveToast" class="save-toast">💾 تم الحفظ تلقائياً</div>
+

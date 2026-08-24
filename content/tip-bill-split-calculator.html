@@ -1,0 +1,250 @@
+---
+layout: layouts/base.njk
+permalink: tip-bill-split-calculator.html
+footerLastUpdated: "أغسطس 2026"
+shareUrl: "https://moadalaty.com/tip-bill-split-calculator.html"
+shareText: "حاسبة تقسيم الفاتورة والبقشيش"
+shareNoPrint: true
+shareLabel: "شارك الأداة:"
+copyFn: "CoreUtils.copyPageLink()"
+extraScripts:
+  - {src: "/js/tip-bill-split-calculator.min.js"}
+head_extra: |
+  <meta name="theme-color" content="#1a3c6e" />
+  <meta name="description" content="احسب البقشيش وقسّم الفاتورة بين أي عدد من الأشخاص فوريًا، واحفظ النتيجة كملف PDF أو Excel أو شاركها على واتساب." />
+  <meta name="keywords" content="حاسبة بقشيش, تقسيم فاتورة, حاسبة تقسيم الحساب, تقسيم مصاريف مطعم, 2026" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://moadalaty.com/tip-bill-split-calculator.html" />
+  <meta name="author" content="بوابة الأدوات التعليمية">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ar_EG" />
+  <meta property="og:url" content="https://moadalaty.com/tip-bill-split-calculator.html" />
+  <meta property="og:site_name" content="بوابة الأدوات التعليمية" />
+  <meta property="og:title" content="حاسبة تقسيم الفاتورة والبقشيش | معدلاتي" />
+  <meta property="og:description" content="احسب البقشيش وقسّم الفاتورة بين أصحابك فوريًا، واحفظ النتيجة أو شاركها على واتساب." />
+  <meta property="og:image" content="https://moadalaty.com/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>حاسبة تقسيم الفاتورة والبقشيش | معدلاتي 2026</title>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"حاسبة تقسيم الفاتورة والبقشيش","url":"https://moadalaty.com/tip-bill-split-calculator.html","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"EGP"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"إزاي بحسب البقشيش الصح في مصر؟","acceptedAnswer":{"@type":"Answer","text":"عادة البقشيش في المطاعم المصرية بيتراوح بين 10% و15% من قيمة الفاتورة قبل الضريبة، ولو الخدمة كانت ممتازة ممكن توصل لـ 18-20%. لو الفاتورة فيها بالفعل رسم خدمة (Service Charge)، البقشيش الإضافي بيبقى اختياري."}},
+  {"@type":"Question","name":"هل أحسب البقشيش قبل أو بعد الضريبة؟","acceptedAnswer":{"@type":"Answer","text":"الأفضل تحسب البقشيش على قيمة الفاتورة قبل إضافة الضريبة، مش بعدها — عشان الضريبة مش جزء من الخدمة اللي بتكافئ عليها النادل."}}
+  ]}
+  </script>
+
+  <!-- CDNs مع Fallback كامل -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"
+  onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
+  onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+  onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'"></script>
+  <script src="/js/core-utils.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.min.css">
+  <link rel="stylesheet" href="/css/article.min.css">
+  <link rel="stylesheet" href="/css/components.min.css">
+  <link rel="stylesheet" href="/css/site-search.css">
+
+  <style>
+  /* ===== خاص بالصفحة: أزرار نسبة البقشيش السريعة ===== */
+  .tip-btn-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .tip-btn {
+  border: 1.5px solid var(--border, #e2e8f0); background: var(--white, #fff);
+  border-radius: var(--radius-sm, 10px); padding: 10px 4px; font-weight: 800;
+  font-size: .95rem; cursor: pointer; transition: .15s ease;
+  }
+  .tip-btn:hover { border-color: var(--primary); }
+  .tip-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  body.dark .tip-btn { background: var(--card-dark, #16261F); color: #e7f0ea; border-color: #2a3d33; }
+  </style>
+---
+</div>
+
+
+<div class="max-w-5xl mx-auto px-4 py-5 md:py-8">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="flex justify-between items-center mb-5 no-print">
+    <div class="flex items-center gap-3">
+      <div class="w-14 h-14 rounded-3xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-3xl text-emerald-700 dark:text-emerald-300 shadow-inner">
+        <i class="fas fa-receipt"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-black text-emerald-700 dark:text-emerald-400 leading-tight">
+          معدلاتي — حاسبة تقسيم الفاتورة والبقشيش
+        </h1>
+        <p class="text-xs muted font-bold flex items-center gap-2">
+          <span class="live-badge"><span class="live-dot"></span>مباشر</span>
+          PDF + Excel + واتساب
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+  <!-- ═══ INTRO ═══ -->
+  <div class="mb-6">
+    <div class="grid grid-cols-3 gap-3">
+      <div class="stat-box text-center">
+        <div class="text-xs muted">الإخراج</div>
+        <div class="font-bold mt-1 text-sm">🧮 PDF + Excel</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xs muted">مناسب لـ</div>
+        <div class="font-bold mt-1 text-sm">🍽️ المطاعم والخروجات</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xs muted">مشاركة فورية</div>
+        <div class="font-bold mt-1 text-sm">💬 واتساب مباشرة</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-grid">
+    <div class="space-y-5">
+
+      <!-- ── بطاقة الإدخال ── -->
+      <div class="glass-card rounded-[1.75rem] p-5 md:p-7 border-b-4 border-emerald-500 no-print">
+        <h2 class="font-black text-emerald-700 dark:text-emerald-400 text-lg mb-5">
+          <i class="fas fa-calculator ml-2"></i> بيانات الفاتورة
+        </h2>
+        <div class="space-y-4">
+
+          <div>
+            <label class="block text-sm font-bold muted mb-2">🧾 إجمالي الفاتورة (ج.م)</label>
+            <input id="bill" type="number" value="500" min="0" step="10" class="input-field"
+              oninput="clearErr('bill'); liveCalculate()" />
+            <p class="err-msg" id="err-bill">برجاء إدخال قيمة أكبر من صفر</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold muted mb-2">💵 نسبة البقشيش</label>
+            <div class="tip-btn-row mb-2">
+              <button type="button" class="tip-btn" data-pct="10">10%</button>
+              <button type="button" class="tip-btn active" data-pct="15">15%</button>
+              <button type="button" class="tip-btn" data-pct="18">18%</button>
+              <button type="button" class="tip-btn" data-pct="20">20%</button>
+            </div>
+            <input id="tipCustom" type="number" min="0" max="100" step="1" class="input-field"
+              placeholder="أو اكتب نسبة مخصّصة..." />
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold muted mb-2">👥 عدد الأشخاص</label>
+            <input id="people" type="number" value="2" min="1" step="1" class="input-field"
+              oninput="clearErr('people'); liveCalculate()" />
+            <p class="err-msg" id="err-people">برجاء إدخال عدد شخص واحد على الأقل</p>
+          </div>
+
+          <button id="clearSavedBtn" type="button" class="btn-outline mt-2" style="width:100%;">
+            🗑️ مسح البيانات المحفوظة على هذا الجهاز
+          </button>
+        </div>
+      </div>
+
+      <!-- ── قسم النتائج ── -->
+      <section id="results" class="hidden fade-in space-y-4" aria-live="polite" role="status">
+
+        <div id="pdf-content" class="glass-card rounded-[1.75rem] p-5 md:p-7 border-t-4 border-emerald-500">
+
+          <div class="flex items-start justify-between mb-5 pb-4 border-b border-slate-100 dark:border-slate-700 flex-wrap gap-3">
+            <div>
+              <h2 class="text-xl font-black text-emerald-700 dark:text-emerald-300">🧾 تقسيم الفاتورة</h2>
+              <p class="text-xs muted mt-1">معدلاتي — حاسبة تقسيم الفاتورة والبقشيش</p>
+            </div>
+            <span class="bg-emerald-100 dark:bg-emerald-900/30 px-3 py-1 rounded-lg text-xs font-bold text-emerald-700 dark:text-emerald-300">
+              <span id="tipPctLabel"></span> بقشيش
+            </span>
+          </div>
+
+          <!-- KPIs -->
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <div class="kpi-card">
+              <p class="text-[10px] muted">إجمالي الفاتورة</p>
+              <p id="displayBill" class="font-black mt-1 text-sm text-slate-800 dark:text-slate-100"></p>
+            </div>
+            <div class="kpi-card">
+              <p class="text-[10px] muted">قيمة البقشيش</p>
+              <p id="tipAmount" class="font-black mt-1 text-sm text-emerald-700 dark:text-emerald-300"></p>
+            </div>
+            <div class="kpi-card">
+              <p class="text-[10px] muted">الإجمالي شامل البقشيش</p>
+              <p id="totalWithTip" class="font-black mt-1 text-sm text-slate-800 dark:text-slate-100"></p>
+            </div>
+          </div>
+
+          <!-- نصيب الفرد -->
+          <div class="kpi-monthly mb-4">
+            <p class="text-sm opacity-90 font-semibold relative z-10">نصيب الفرد (شامل البقشيش)</p>
+            <p id="perPersonTotal" class="text-4xl md:text-5xl font-black mt-1 relative z-10"></p>
+            <p class="text-xs opacity-70 mt-2 relative z-10">من ضمنها بقشيش قدره <span id="perPersonTip"></span></p>
+          </div>
+
+        </div><!-- /pdf-content -->
+
+        <!-- أزرار التصدير -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 no-print">
+          <button id="pdfBtn" type="button" class="btn-outline">
+            <i class="fas fa-file-pdf text-red-500 ml-1"></i> حفظ PDF
+          </button>
+          <button id="excelBtn" type="button" class="btn-outline">
+            <i class="fas fa-file-excel text-emerald-600 ml-1"></i> Excel
+          </button>
+          <button id="shareBtn" type="button" class="btn-outline text-green-600 dark:text-green-400">
+            <i class="fab fa-whatsapp ml-1"></i> مشاركة عامة
+          </button>
+          <button id="copyBtn" type="button" class="btn-outline text-slate-600 dark:text-slate-300">
+            <i class="fas fa-copy ml-1"></i> نسخ
+          </button>
+        </div>
+      </section>
+
+      <!-- ── الأسئلة الشائعة ── -->
+      <section class="soft-card rounded-[1.75rem] p-5 md:p-6 no-print">
+        <h2 class="section-title mb-4">الأسئلة الشائعة</h2>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">إزاي بحسب البقشيش الصح في مصر؟</summary>
+          <p class="text-xs muted mt-2">عادة البقشيش في المطاعم المصرية بيتراوح بين 10% و15% من قيمة الفاتورة قبل الضريبة، ولو الخدمة كانت ممتازة ممكن توصل لـ 18-20%. لو الفاتورة فيها بالفعل رسم خدمة (Service Charge)، البقشيش الإضافي بيبقى اختياري.</p>
+        </details>
+        <details>
+          <summary class="font-bold cursor-pointer">هل أحسب البقشيش قبل أو بعد الضريبة؟</summary>
+          <p class="text-xs muted mt-2">الأفضل تحسب البقشيش على قيمة الفاتورة قبل إضافة الضريبة، مش بعدها — عشان الضريبة مش جزء من الخدمة اللي بتكافئ عليها النادل.</p>
+        </details>
+      </section>
+
+      <!-- ── مشاركة الصفحة (زي باقي صفحات الموقع) ── -->
+      {% include "partials/share-buttons.njk" %}
+
+      <!-- ── أدوات ذات صلة ── -->
+      <section class="no-print">
+        <h2 class="section-title mb-4">أدوات ذات صلة</h2>
+        <div class="flex flex-wrap gap-2">
+          <a href="/" class="related-link">🏫 حاسبة الرسوم المدرسية</a>
+          <a href="/roommate-expense-splitter.html" class="related-link">🏠 تقسيم مصاريف السكن</a>
+          <a href="/group-trip-cost-splitter.html" class="related-link">✈️ تقسيم مصاريف الرحلة</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  {% include "partials/footer.njk" %}
+</div>
+
+<button id="scroll-top" aria-label="العودة للأعلى" title="العودة للأعلى">⬆</button>
+<button id="dark-toggle" aria-label="تبديل الوضع الليلي">🌙</button>
+
+<!-- Save Toast -->
+<div id="saveToast" class="save-toast">💾 تم الحفظ تلقائياً</div>
+

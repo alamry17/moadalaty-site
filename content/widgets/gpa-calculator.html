@@ -1,0 +1,111 @@
+---
+layout: layouts/base.njk
+permalink: widgets/gpa-calculator.html
+shareUrl: "https://moadalaty.com/widgets/gpa-calculator.html"
+extraScripts:
+  - {src: "/js/core-utils.min.js"}
+  - {src: "/js/gpa-subject-calc.min.js"}
+  - {src: "/js/widget-common.min.js"}
+head_extra: |
+  <title>حاسبة GPA</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/widgets/widget.css">
+---
+<div class="widget-box">
+  <h3 class="widget-title">🧮 حاسبة المعدل التراكمي (GPA)</h3>
+
+  <div id="subjects-container">
+    <div class="subject-row">
+      <input type="text" placeholder="اسم المادة (اختياري)" class="subj-name">
+      <input type="text" inputmode="numeric" placeholder="الساعات" class="subj-credits">
+      <select class="subj-grade">
+        <option value="">الدرجة</option>
+        <option value="A+">A+ (4.3)</option>
+        <option value="A">A (4.0)</option>
+        <option value="A-">A− (3.7)</option>
+        <option value="B+">B+ (3.3)</option>
+        <option value="B">B (3.0)</option>
+        <option value="B-">B− (2.7)</option>
+        <option value="C+">C+ (2.3)</option>
+        <option value="C">C (2.0)</option>
+        <option value="C-">C− (1.7)</option>
+        <option value="D">D (1.0)</option>
+        <option value="F">F (0.0)</option>
+      </select>
+      <button class="remove-btn" type="button" aria-label="حذف المادة">×</button>
+    </div>
+  </div>
+
+  <button class="add-btn" id="add-subj-btn" type="button">+ أضف مادة</button>
+  <button class="calc-btn" id="calc-btn" type="button">احسب GPA</button>
+
+  <div class="calc-result" id="calc-result">
+    <div id="subject-breakdown"></div>
+    <div class="result-row"><span>إجمالي الساعات</span><span class="result-val" id="total-credits-val">—</span></div>
+    <div class="result-row"><span>إجمالي النقاط</span><span class="result-val" id="total-points-val">—</span></div>
+    <div class="gpa-final">
+      <div class="num" id="gpa-val-result">0.00</div>
+      <div class="label">معدلك التراكمي (GPA)</div>
+      <span class="result-badge" id="gpa-badge-result"></span>
+    </div>
+  </div>
+
+  <div class="widget-footer">
+    🔢 حاسبة بواسطة <a href="https://moadalaty.com/articles/gpa-mistakes.html?utm_source=widget&utm_medium=embed" target="_blank" rel="noopener">moadalaty.com</a>
+  </div>
+</div>
+
+<script>
+// نفعّل جسر التتبّع الأول، قبل أي حساب — عشان أول حدث calculator_used
+// يترحّل لصفحة الموقع الحاضن برضو (راجع js/widget-common.js وembed-widget.js)
+MoadalatyWidgetBridge.initAnalyticsBridge();
+
+initSubjectGpaCalculator({
+  storageKey: null,
+  analyticsId: 'gpa-widget',
+  containerId: 'subjects-container',
+  addBtnId: 'add-subj-btn',
+  calcBtnId: 'calc-btn',
+  breakdownId: 'subject-breakdown',
+  resultBoxId: 'calc-result',
+  gradePoints: {
+    'A+': 4.3, 'A': 4.0, 'A-': 3.7,
+    'B+': 3.3, 'B': 3.0, 'B-': 2.7,
+    'C+': 2.3, 'C': 2.0, 'C-': 1.7,
+    'D': 1.0, 'F': 0.0, 'P': null
+  },
+  gradeOptionsHtml: `
+    <option value="">الدرجة</option>
+    <option value="A+">A+ (4.3)</option>
+    <option value="A">A (4.0)</option>
+    <option value="A-">A− (3.7)</option>
+    <option value="B+">B+ (3.3)</option>
+    <option value="B">B (3.0)</option>
+    <option value="B-">B− (2.7)</option>
+    <option value="C+">C+ (2.3)</option>
+    <option value="C">C (2.0)</option>
+    <option value="C-">C− (1.7)</option>
+    <option value="D">D (1.0)</option>
+    <option value="F">F (0.0)</option>
+  `,
+  outputs: {
+    totalCredits: 'total-credits-val',
+    totalPoints: 'total-points-val',
+    gpa: 'gpa-val-result',
+    badge: 'gpa-badge-result'
+  }
+});
+
+/* ── إبلاغ الصفحة الحاضنة بارتفاع المحتوى، عشان الـ iframe يتظبط تلقائيًا ──
+   المنطق نفسه دلوقتي مركزي في js/widget-common.js (initAutoResize +
+   reportHeight)، بدل ما يتكرر جوه كل ودجت جديد من الصفر. */
+MoadalatyWidgetBridge.initAutoResize();
+document.getElementById('add-subj-btn').addEventListener('click', () => setTimeout(MoadalatyWidgetBridge.reportHeight, 50));
+document.getElementById('calc-btn').addEventListener('click', () => setTimeout(MoadalatyWidgetBridge.reportHeight, 50));
+document.getElementById('subjects-container').addEventListener('click', (e) => {
+  if (e.target.closest('.remove-btn')) setTimeout(MoadalatyWidgetBridge.reportHeight, 50);
+});
+</script>

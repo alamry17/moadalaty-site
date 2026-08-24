@@ -1,0 +1,142 @@
+---
+layout: layouts/base.njk
+permalink: contact.html
+bodyClass: "min-h-screen"
+footerLastUpdated: "يوليو 2026"
+shareUrl: "https://moadalaty.com/contact.html"
+shareText: "اتصل بنا"
+extraScripts:
+  - {src: "/js/core-utils.min.js"}
+  - {src: "/js/article.min.js", defer: true}
+head_extra: |
+  <title>اتصل بنا | بوابة الأدوات التعليمية 2026</title>
+  <meta name="description" content="تواصل مع فريق الدعم الفني لبوابة الأدوات التعليمية للإبلاغ عن أخطاء، اقتراح ميزات، أو الاستفسار عن الخدمة." />
+  <link rel="canonical" href="https://moadalaty.com/contact.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="author" content="بوابة الأدوات التعليمية">
+  <meta property="og:type" content="website" /><meta property="og:title" content="اتصل بنا | بوابة الأدوات التعليمية" /><meta property="og:description" content="فريقنا يرد خلال 24 ساعة. تواصل معنا للاستفسار أو الدعم الفني." /><meta property="og:image" content="https://moadalaty.com/assets/og-image.jpg" /><meta property="og:url" content="https://moadalaty.com/contact.html" /><meta property="og:site_name" content="بوابة الأدوات التعليمية" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://moadalaty.com/"}, {"@type": "ListItem", "position": 2, "name": "اتصل بنا", "item": "https://moadalaty.com/contact.html"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Organization", "name": "بوابة الأدوات التعليمية", "url": "https://moadalaty.com", "logo": "https://moadalaty.com/assets/logo.png", "contactPoint": [{"@type": "ContactPoint", "contactType": "customer support", "email": "contact@moadalaty.com", "availableLanguage": ["Arabic"]}]}
+  </script>
+
+  <link rel="stylesheet" href="/css/variables.min.css">
+  <link rel="stylesheet" href="/css/article.min.css">
+  <link rel="stylesheet" href="/css/components.min.css">
+  <link rel="stylesheet" href="/css/site-search.css">
+---
+</div>
+
+
+<div id="reading-progress" aria-hidden="true"><div id="reading-progress-bar"></div></div>
+<button id="dark-toggle" aria-label="تبديل الوضع الليلي">🌙</button>
+<button id="scroll-top" aria-label="العودة للأعلى" title="العودة للأعلى">⬆</button>
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <header class="hero">
+    <div class="hero-badge"><span aria-hidden="true">📞</span> الدعم الفني</div>
+    <h1>اتصل بنا</h1>
+    <div class="hero-meta"><span>نرد خلال 24 ساعة</span>
+      <span class="view-meta"><span aria-hidden="true">👁</span> <span id="view-count">—</span> مشاهدة</span></div>
+  </header>
+
+  <nav class="breadcrumb" aria-label="مسار التنقل">
+    <div class="container">
+      <ol>
+        <li><a href="/">الرئيسية</a></li>
+        <li><span aria-current="page">اتصل بنا</span></li>
+      </ol>
+    </div>
+  </nav>
+
+  <article class="glass rounded-3xl p-6 md:p-8 mb-6">
+    <p class="text-center muted text-sm mb-8">نسعد بتلقّي استفساراتك واقتراحاتك. فريقنا يرد خلال 24 ساعة.</p>
+    
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- نموذج التواصل -->
+      <div id="form-status" style="display:none;" class="p-4 rounded-xl mb-4 text-sm font-bold"></div>
+      <form id="contact-form" action="/api/contact" method="POST" class="space-y-4">
+        <p style="position:absolute;left:-9999px;" aria-hidden="true"><label>لا تملأ هذا: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        
+        <input name="name" type="text" placeholder="👤 الاسم الكامل *" class="input" required />
+        <input name="email" type="email" placeholder="📧 البريد الإلكتروني *" class="input" required />
+        <input name="phone" type="tel" placeholder="📱 رقم الهاتف (اختياري)" class="input" />
+        
+        <select name="subject" class="input" required>
+          <option value="" disabled selected>📋 موضوع الرسالة *</option>
+          <option value="bug">🐛 الإبلاغ عن خطأ تقني</option>
+          <option value="feature">💡 اقتراح ميزة جديدة</option>
+          <option value="inquiry">❓ استفسار عن الأداة</option>
+          <option value="partnership">🤝 شراكة أو تعاون</option>
+        </select>
+        
+        <textarea name="message" rows="5" placeholder="✍️ تفاصيل رسالتك *" class="input" required></textarea>
+        
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition transform hover:scale-[1.02]">إرسال الرسالة</button>
+      </form>
+
+      <!-- معلومات وأسلحة شائعة -->
+      <div class="space-y-6">
+        <div class="bg-emerald-50 dark:bg-emerald-900/20 p-5 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+          <h3 class="font-bold text-emerald-700 dark:text-emerald-400 mb-3">📧 البريد المباشر</h3>
+          <a href="mailto:contact@moadalaty.com" class="text-emerald-600 hover:underline font-medium">contact@moadalaty.com</a>
+          <p class="text-xs muted mt-2">نرد على جميع الرسائل خلال 24 ساعة عمل.</p>
+        </div>
+
+        <div class="bg-emerald-50 dark:bg-emerald-900/20 p-5 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+          <h3 class="font-bold text-emerald-700 dark:text-emerald-400 mb-3">📱 واتساب (الأسرع)</h3>
+          <a href="#" id="wa-contact-link" class="text-emerald-600 hover:underline font-medium" target="_blank" rel="noopener">راسلنا عبر واتساب</a>
+          <p class="text-xs muted mt-2">رد فوري من 9ص - 9م يومياً.</p>
+        </div>
+        
+        <div class="bg-slate-50 dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+          <h3 class="font-bold text-slate-700 dark:text-slate-300 mb-3">❓ أسئلة شائعة</h3>
+          <details class="mb-3 group"><summary class="font-bold text-sm cursor-pointer flex justify-between items-center">هل الأداة مجانية للأبد؟<span class="text-xs muted transition group-open:rotate-180">▼</span></summary><p class="text-xs muted mt-2 leading-relaxed">نعم، مجانية 100% وتعتمد على الإعلانات فقط لتغطية تكاليف التشغيل.</p></details>
+          <details class="mb-3 group"><summary class="font-bold text-sm cursor-pointer flex justify-between items-center">هل تحفظون بياناتي؟<span class="text-xs muted transition group-open:rotate-180">▼</span></summary><p class="text-xs muted mt-2 leading-relaxed">لا، جميع الحسابات تتم محلياً في متصفحك فقط. رسائل الدعم تُحفظ بأمان للرد عليك فقط.</p></details>
+          <details class="group"><summary class="font-bold text-sm cursor-pointer flex justify-between items-center">كيف أبلغ عن خطأ في الحساب؟<span class="text-xs muted transition group-open:rotate-180">▼</span></summary><p class="text-xs muted mt-2 leading-relaxed">استخدم النموذج أعلاه مع إرفاق لقطة شاشة، وسنصلح الخطأ في أقرب وقت.</p></details>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  
+    {% include "partials/share-buttons.njk" %}
+  {% include "partials/footer.njk" %}
+</div>
+<script>
+(function () {
+  const box = document.getElementById('form-status');
+  if (!box) return;
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('sent') === '1') {
+    box.style.display = 'block';
+    box.style.background = 'var(--primary-light)';
+    box.style.color = 'var(--primary)';
+    box.textContent = '✅ تم إرسال رسالتك بنجاح، هنرد عليك في أقرب وقت.';
+    document.getElementById('contact-form')?.reset();
+  } else if (params.get('error') === '1') {
+    box.style.display = 'block';
+    box.style.background = '#fee2e2';
+    box.style.color = '#b91c1c';
+    box.textContent = '⚠️ حصل خطأ أثناء الإرسال، حاول تاني أو راسلنا مباشرة على البريد الإلكتروني.';
+  }
+})();
+</script>
+
+<script>
+(function () {
+  // رقم واتساب التواصل — عدّل القيمة دي فقط لو غيّرت الرقم مستقبلاً.
+  // الأرقام مكتوبة معكوسة عشان ما تظهرش كنص صريح واضح في السورس الخام (HTML).
+  var reversedDigits = '611486330120'; // الرقم معكوس عمدًا
+  var waNumber = reversedDigits.split('').reverse().join('');
+  var link = document.getElementById('wa-contact-link');
+  if (link) {
+    var msg = encodeURIComponent('مرحبا، عندي استفسار');
+    link.href = 'https://wa.me/' + waNumber + '?text=' + msg;
+  }
+})();
+</script>
+

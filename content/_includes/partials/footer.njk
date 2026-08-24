@@ -1,0 +1,22 @@
+{#
+  Written once, unified sitewide (per your approval to standardize it):
+  - nav list comes from the global _data/footerNav.js (same links, every page)
+  - home label + "team" credit line come from global _data/site.js
+  - always includes "no-print" and uses the "footer-nav" class wrapper
+  Per-page front-matter only needs (optionally):
+    footerLastUpdated: "يوليو 2026"   # omit to skip the "آخر تحديث" line
+#}
+<footer class="article-footer no-print" role="contentinfo">
+  <div class="container">
+    <nav aria-label="روابط الموقع الرئيسية">
+      <div class="footer-nav">
+        <a href="/"><span aria-hidden="true">🏠</span> {{ site.homeLabel }}</a>
+        {% for link in footerNav %}<span aria-hidden="true">·</span>
+        <a href="{{ link.href }}">{{ link.label }}</a>
+        {% endfor %}
+      </div>
+    </nav>
+    {% if footerLastUpdated %}<p>آخر تحديث: {{ footerLastUpdated }} | {{ site.footerTeam }}</p>
+    {% endif %}<p{% if footerLastUpdated %} style="margin-top:6px;"{% endif %}>© 2026 معدلاتي — بوابة الأدوات التعليمية — أداة مجانية للطلاب وأولياء الأمور</p>
+  </div>
+</footer>
