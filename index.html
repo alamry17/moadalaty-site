@@ -70,14 +70,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <!-- CDNs مع Fallback كامل -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
-          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.1/chart.umd.min.js'"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"
-          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
-          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
-          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'"></script>
+          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.1/chart.umd.min.js'" defer></script>
+  <!-- مكتبات PDF/Excel (html2pdf, jsPDF, html2canvas, xlsx) اتشالت من هنا —
+       مكانتش مستخدمة إلا وقت الضغط على "احفظ PDF"/"احفظ Excel"، فكانت بتبطّئ
+       أول رندر للصفحة من غير أي فايدة لمعظم الزوّار. دلوقتي بتتحمّل ديناميكيًا
+       أول ما المستخدم يضغط على الزرار (راجع loadScriptOnce/ensurePdfLibs/
+       ensureXlsxLib تحت) — راجع أيضًا saveAsPDF و exportToExcel اللي بقوا async. -->
   <script src="/js/core-utils.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
@@ -146,7 +144,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <i class="fas fa-calculator"></i>
       </div>
     </div>
-    <div class="countdown mb-4" id="countdown">⏳ جاري تحميل العداد...</div>
     <div class="grid grid-cols-3 gap-3">
       <div class="stat-box text-center">
         <div class="text-xs muted">الإخراج</div>
@@ -691,7 +688,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const tableBody            = $('tableBody');
   const sideTableBody        = $('sideTableBody');
   const resultsEl            = $('results');
-  const countdownEl          = $('countdown');
   const leadSuccess          = $('leadSuccess');
   const lateNoteWrap         = $('lateNoteWrap');
   const lateNoteEl           = $('lateNote');
@@ -930,11 +926,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     calcDebounce = setTimeout(() => calculate(false), 200);
   };
 
+  /* ════ تحميل مكتبات PDF/Excel وقت الحاجة بس (Lazy Load) ════
+     الأربع مكتبات دي (html2pdf, jsPDF, html2canvas, xlsx) كبيرة نسبيًا
+     ومستخدمة بس لما المستخدم يضغط "احفظ PDF"/"احفظ Excel"، فمفيش داعي
+     نحمّلها مع أول تحميل للصفحة. الدالة دي بتحمّل أي سكريبت مرة واحدة بس
+     (لو اتحمّل قبل كده، بترجّع فورًا) مع نفس الـ fallback URL الأصلي. */
+  const _loadedScripts = new Map();
+  function loadScriptOnce(primarySrc, fallbackSrc) {
+    if (_loadedScripts.has(primarySrc)) return _loadedScripts.get(primarySrc);
+    const p = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = primarySrc;
+      s.onload = () => resolve();
+      s.onerror = () => {
+        if (!fallbackSrc) { reject(new Error('script load failed: ' + primarySrc)); return; }
+        const s2 = document.createElement('script');
+        s2.src = fallbackSrc;
+        s2.onload = () => resolve();
+        s2.onerror = () => reject(new Error('script load failed: ' + fallbackSrc));
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s);
+    });
+    _loadedScripts.set(primarySrc, p);
+    return p;
+  }
+
+  async function ensurePdfLibs() {
+    await Promise.all([
+      loadScriptOnce(
+        'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
+      ),
+      loadScriptOnce(
+        'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+      ),
+      loadScriptOnce(
+        'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
+      ),
+    ]).catch(() => { /* هيتعامل معاها saveAsPDF نفسها بالـ alert لو الشرط مش متحقق */ });
+  }
+
+  async function ensureXlsxLib() {
+    await loadScriptOnce(
+      'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+    ).catch(() => { /* هيتعامل معاها exportToExcel نفسها بالـ alert */ });
+  }
+
   /* ════ PDF — html2pdf أولاً ثم html2canvas+jsPDF fallback (كود 1+2: أفضل تنفيذ) ════ */
   async function saveAsPDF(btn, targetId) {
     const orig = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin ml-1"></i> جاري التجهيز...';
     btn.disabled = true;
+
+    await ensurePdfLibs();
 
     const school  = _r.school || 'المدرسة';
     const isDark  = document.body.classList.contains('dark');
@@ -987,9 +1034,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   /* ════ Excel — header كامل تفصيلي (كود 1+2: الأشمل) ════ */
-  function exportToExcel() {
-    if (!window.XLSX) { alert('مكتبة Excel غير متاحة الآن.'); return; }
+  async function exportToExcel() {
     if (!_r.school)   { alert('احسب الرسوم أولاً.'); return; }
+    if (!window.XLSX) await ensureXlsxLib();
+    if (!window.XLSX) { alert('مكتبة Excel غير متاحة الآن.'); return; }
 
     const data = [
       ['بوابة الأدوات التعليمية 2026 — الإصدار الأمثل المدمج النهائي', '', ''],
@@ -1102,26 +1150,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
-  /* ════ Countdown — ثابت في localStorage لا يتجدد (كود 1+2: أفضل من كود 4) ════ */
-  const CD_KEY = 'sfCountdown_ULTIMATE';
-  const endDate = (() => {
-    const saved = localStorage.getItem(CD_KEY);
-    if (saved && !isNaN(parseInt(saved, 10))) return new Date(parseInt(saved, 10));
-    const d = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-    localStorage.setItem(CD_KEY, d.getTime().toString());
-    return d;
-  })();
-
-  function updateCountdown() {
-    const diff = endDate.getTime() - Date.now();
-    if (diff <= 0) { countdownEl.innerText = '⏳ انتهى العرض المجاني'; return; }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000)  / 60000);
-    const s = Math.floor((diff % 60000)    / 1000);
-    countdownEl.innerText = `⏳ العرض المجاني ينتهي خلال: ${d} يوم  ${h} ساعة  ${m} دقيقة  ${s} ثانية`;
-  }
-
   /* ════ Wire Events ════ */
   function wireEvents() {
     $('themeToggle').addEventListener('click', () => applyDark(!document.body.classList.contains('dark')));
@@ -1170,8 +1198,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     loadData();
     wireEvents();
     calculate(false);
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
   });
 
   /* ── Copy Page Link ── */
