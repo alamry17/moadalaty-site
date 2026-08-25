@@ -132,13 +132,27 @@ async function handleContact(request, env) {
       return Response.redirect(new URL("/contact.html?sent=1", request.url), 303);
     }
 
-    const name = (form.get("name") || "").toString().slice(0, 200);
-    const email = (form.get("email") || "").toString().slice(0, 200);
-    const phone = (form.get("phone") || "").toString().slice(0, 50);
-    const subject = (form.get("subject") || "").toString().slice(0, 100);
+    // بيشيل أي \r أو \n من القيمة — ده اللي بيمنع Header Injection (CRLF
+    // Injection): من غير التنضيف ده، حد ممكن يحط "attacker@x.com\r\nBcc:
+    // victim@y.com" في حقل الإيميل ويضيف هيدرز إيميل زيادة (Bcc/Cc/إلخ)
+    // ويستخدم فورم التواصل عشان يبعت سبام لناس تانية باسم الموقع.
+    const sanitizeHeaderField = (value) => value.replace(/[\r\n]+/g, " ").trim();
+
+    const name = sanitizeHeaderField((form.get("name") || "").toString().slice(0, 200));
+    const email = sanitizeHeaderField((form.get("email") || "").toString().slice(0, 200));
+    const phone = sanitizeHeaderField((form.get("phone") || "").toString().slice(0, 50));
+    const subject = sanitizeHeaderField((form.get("subject") || "").toString().slice(0, 100));
+    // الـ message مش بيتحط في أي هيدر — هو بس جوه الـ body بعد الهيدرز
+    // خالص، فمش محتاج نفس التنضيف (ممكن يفضل فيه أسطر جديدة عادية).
     const message = (form.get("message") || "").toString().slice(0, 5000);
 
     if (!name || !email || !message) {
+      return Response.redirect(new URL("/contact.html?error=1", request.url), 303);
+    }
+
+    // تحقق بسيط إن الإيميل معمول بشكل منطقي (مش تحقق كامل RFC، بس كافي
+    // عشان نمنع أي حاجة غريبة توصل لهيدر Reply-To)
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return Response.redirect(new URL("/contact.html?error=1", request.url), 303);
     }
 
