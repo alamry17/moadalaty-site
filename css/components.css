@@ -218,6 +218,8 @@ body.dark .comp-card { background: #1a2236; border-color: #2a3550; }
 .comp-card.success .comp-item::before { color: var(--success); }
 .comp-card.info .comp-item::before    { color: var(--primary-light); }
 .comp-item.con::before { content: '✗' !important; color: var(--danger) !important; }
+.comp-item.con { color: #9a3b3b; }
+body.dark .comp-item.con { color: #f0a8a8; }
 
 /* ── CTA Box ── */
 .cta-box {
@@ -997,3 +999,9 @@ body.dark .prose h2 { color: var(--primary-light); }
 .font-medium { font-weight: 500; }
 .gap-8 { gap: 2rem; }
 .transform { }
+
+/* ── Utility classes to replace repeated inline styles (index.html audit) ── */
+.ta-left { text-align: left; }
+.ta-left-bold { text-align: left; font-weight: 800; }
+.content-hub-title { font-size: 14px; font-weight: 800; color: var(--primary); margin: 20px 0 8px; }
+.content-hub-title.first { margin-top: 16px; }
