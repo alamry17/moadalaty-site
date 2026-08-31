@@ -95,10 +95,14 @@
     if (localStorage.getItem('darkMode') === 'on') {
       document.body.classList.add('dark');
       btn.textContent = '☀️';
+      btn.setAttribute('aria-pressed', 'true');
+    } else {
+      btn.setAttribute('aria-pressed', 'false');
     }
     btn.addEventListener('click', () => {
       const isDark = document.body.classList.toggle('dark');
       btn.textContent = isDark ? '☀️' : '🌙';
+      btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
       localStorage.setItem('darkMode', isDark ? 'on' : 'off');
     });
   }
@@ -154,6 +158,7 @@
     } catch (e) {
       // فشل الشبكة أو أي خطأ تاني — نسيب "—" الافتراضي، مفيش داعي نكسر الصفحة.
     }
+    return el.textContent.trim();
   }
 
   global.CoreUtils = {
