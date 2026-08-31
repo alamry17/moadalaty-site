@@ -46,11 +46,17 @@ body {
   background: var(--white); border-bottom: 1px solid var(--border);
   padding: 10px 0; font-size: 13px;
 }
-.breadcrumb ol {
-  display: flex; flex-wrap: wrap; align-items: center;
-  gap: 6px; list-style: none;
+.breadcrumb .container {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-.breadcrumb ol li { display: flex; align-items: center; gap: 6px; }
+.breadcrumb .container::-webkit-scrollbar { display: none; }
+.breadcrumb ol {
+  display: flex; flex-wrap: nowrap; align-items: center;
+  gap: 6px; list-style: none; white-space: nowrap;
+}
+.breadcrumb ol li { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.breadcrumb ol li:last-child { flex-shrink: 1; white-space: normal; }
 .breadcrumb ol li + li::before { content: '›'; color: var(--text-muted); font-size: 16px; }
 .breadcrumb a { color: var(--primary-light); text-decoration: none; }
 .breadcrumb a:hover { text-decoration: underline; }
@@ -260,8 +266,11 @@ body.dark #dark-toggle { background: #1a2236; border-color: #2a3550; }
 .print-btn:hover { border-color: var(--primary); color: var(--primary); }
 @media print {
   #reading-progress, .hero-cta, .print-btn, .cta-box,
-  .calc-widget, #dark-toggle, #scroll-top, .share-btns { display: none !important; }
-  body { font-size: 14px; }
+  .calc-widget, #dark-toggle, #scroll-top, .share-btns,
+  .breadcrumb, #site-search-bar, .toc { display: none !important; }
+  body { font-size: 14px; background: #fff !important; color: #000 !important; }
+  .article-body { width: 100% !important; margin: 0 !important; }
+  table, tr { page-break-inside: avoid; break-inside: avoid; }
 }
 
 /* ── Focus ── */
