@@ -39,27 +39,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#1a3c6e" />
-  <meta name="description" content="احسب الأقساط المدرسية والخصومات ورسوم التأخير فوريًا، واحفظ النتيجة كملف PDF أو Excel بضغطة واحدة." />
+  <meta name="description" content="احسب الأقساط المدرسية والخصومات والرسوم الإضافية فوريًا، واحفظ النتيجة كملف PDF أو Excel بضغطة واحدة." />
      <meta name="msvalidate.01" content="689FC28EFEC955C607AE37E9511CEB36" />
   <meta name="keywords" content="حاسبة رسوم مدرسية, تقسيط مصاريف, أقساط مدارس, PDF, Excel, واتساب, 2026" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://moadalaty.com/" />
+  <link rel="alternate" hreflang="ar" href="https://moadalaty.com/" />
+  <link rel="alternate" hreflang="en" href="https://moadalaty.com/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://moadalaty.com/" />
   <meta name="author" content="بوابة الأدوات التعليمية">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="ar_EG" />
   <meta property="og:url" content="https://moadalaty.com/" />
-  <meta property="og:site_name" content="بوابة الأدوات التعليمية" />
-  <meta property="og:title" content="بوابة الأدوات التعليمية 2026" />
+  <meta property="og:site_name" content="معدلاتي — بوابة الأدوات التعليمية" />
+  <meta property="og:title" content="معدلاتي | حاسبة الرسوم المدرسية والأقساط 2026" />
   <meta property="og:description" content="احسب الأقساط والخصومات، شارك الخطة مع ولي الأمر، واحفظها PDF أو Excel." />
   <meta property="og:image" content="https://moadalaty.com/assets/og-image.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <title>معدلاتي | حاسبة الرسوم المدرسية الذكية 2026 — احسب الأقساط والخصومات فوريًا</title>
+  <meta name="twitter:title" content="معدلاتي | حاسبة الرسوم المدرسية والأقساط 2026" />
+  <meta name="twitter:description" content="احسب الأقساط والخصومات، شارك الخطة مع ولي الأمر، واحفظها PDF أو Excel." />
+  <title>معدلاتي | حاسبة الرسوم المدرسية والأقساط 2026</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebApplication","name":"حاسبة الرسوم المدرسية الذكية","url":"https://moadalaty.com/","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"EGP"}}
+  {"@context":"https://schema.org","@type":"WebApplication","name":"حاسبة الرسوم المدرسية والأقساط","url":"https://moadalaty.com/","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"EGP"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"معدلاتي","alternateName":["بوابة الأدوات التعليمية","Moadalaty"],"url":"https://moadalaty.com/","logo":"https://moadalaty.com/assets/logo.png","sameAs":["https://twitter.com/moadalaty","https://facebook.com/moadalaty"]}
@@ -174,20 +179,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="space-y-4">
 
           <div>
-            <label class="block text-sm font-bold muted mb-2">🏫 اسم المدرسة / المؤسسة</label>
+            <label for="schoolNameInput" class="block text-sm font-bold muted mb-2">🏫 اسم المدرسة / المؤسسة</label>
             <input id="schoolNameInput" type="text" value="مدرسة النور النموذجية"
               class="input-field" oninput="liveCalculate()" />
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-bold muted mb-2">📊 إجمالي الرسوم السنوية (ج.م)</label>
+              <label for="total" class="block text-sm font-bold muted mb-2">📊 إجمالي الرسوم السنوية (ج.م)</label>
               <input id="total" type="number" value="30000" min="0" step="100" class="input-field"
                 oninput="clearErr('total'); liveCalculate()" />
               <p class="err-msg" id="err-total">برجاء إدخال قيمة أكبر من صفر</p>
             </div>
             <div>
-              <label class="block text-sm font-bold muted mb-2">🏷️ نسبة الخصم (%)</label>
+              <label for="discount" class="block text-sm font-bold muted mb-2">🏷️ نسبة الخصم (%)</label>
               <input id="discount" type="number" value="10" min="0" max="100" step="1" class="input-field"
                 oninput="clearErr('discount'); liveCalculate()" />
               <p class="err-msg" id="err-discount">القيمة يجب أن تكون بين 0 و100</p>
@@ -196,7 +201,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label class="block text-sm font-bold muted mb-2">📅 نظام التقسيط</label>
+              <label for="months" class="block text-sm font-bold muted mb-2">📅 نظام التقسيط</label>
               <select id="months" class="input-field" onchange="liveCalculate()">
                 <option value="1">دفع كاش (دفعة واحدة)</option>
                 <option value="2">2 شهران</option>
@@ -209,7 +214,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-bold muted mb-2 tip"
+              <label for="adminFees" class="block text-sm font-bold muted mb-2 tip"
                 data-tip="تُضاف مرة واحدة للإجمالي">
                 💼 مصاريف إدارية (ج.م) <i class="fas fa-info-circle text-xs opacity-50 mr-1"></i>
               </label>
@@ -218,9 +223,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <p class="text-[10px] muted mt-1">تُضاف مرة واحدة للإجمالي</p>
             </div>
             <div>
-              <label class="block text-sm font-bold muted mb-2 tip"
-                data-tip="تُضاف على كل قسط شهري">
-                ⏰ رسوم تأخير/شهر <i class="fas fa-info-circle text-xs opacity-50 mr-1"></i>
+              <label for="lateFee" class="block text-sm font-bold muted mb-2 tip"
+                data-tip="تُضاف على كل قسط شهري بغض النظر عن التأخير">
+                💰 رسوم إضافية/شهر <i class="fas fa-info-circle text-xs opacity-50 mr-1"></i>
               </label>
               <input id="lateFee" type="number" value="0" min="0" step="50" class="input-field"
                 oninput="liveCalculate()" placeholder="0 (اختياري)" />
@@ -308,14 +313,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p class="text-sm font-bold text-center mb-3 muted">📊 توزيع الأقساط الشهرية</p>
             <div class="flex flex-col md:flex-row gap-4 items-center">
               <div class="w-full md:w-2/5 flex justify-center">
-                <canvas id="feeChart" style="max-height:220px;"></canvas>
+                <canvas id="feeChart" role="img" aria-label="رسم بياني يوضح توزيع الأقساط الشهرية — نفس البيانات موجودة كاملة في الجدول جنبه" style="max-height:220px;"></canvas>
               </div>
               <div class="w-full md:w-3/5 overflow-x-auto rounded-xl">
                 <table class="tbl">
+                  <caption class="sr-only">جدول تفصيلي بمواعيد ومبالغ كل قسط شهري</caption>
                   <thead><tr>
                     <th>القسط</th>
                     <th>تاريخ الاستحقاق</th>
-                    <th style="text-align:left">المبلغ</th>
+                    <th class="ta-left">المبلغ</th>
                   </tr></thead>
                   <tbody id="tableBody"></tbody>
                 </table>
@@ -323,7 +329,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
           </div>
 
-          <!-- ملاحظة رسوم التأخير -->
+          <!-- ملاحظة الرسوم الإضافية -->
           <div id="lateNoteWrap" class="hidden bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-3 mb-2">
             <p id="lateNote" class="text-xs font-bold text-amber-700 dark:text-amber-300"></p>
           </div>
@@ -369,19 +375,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- ── نموذج التحويل (كود 4: أفضل تصميم lead form) ── -->
       <section class="rounded-[1.75rem] p-5 md:p-7 soft-card no-print">
         <div class="text-center mb-5">
-          <div class="badge mx-auto mb-3"><i class="fas fa-bolt"></i> نسخة مجانية للمدارس فقط</div>
-          <h2 class="section-title leading-tight">احصل على أداة إدارة الرسوم المجانية</h2>
-          <p class="text-xs muted mt-2">ملف Excel احترافي لمتابعة التحصيل المدرسي بالكامل.</p>
+          <div class="badge mx-auto mb-3"><i class="fas fa-school"></i> عرض مخصوص لإدارات المدارس فقط</div>
+          <h2 class="section-title leading-tight">ملف Excel مجاني لمتابعة تحصيل الرسوم</h2>
+          <p class="text-xs muted mt-2">الحاسبة اللي فوق مجانية لأي زائر لحساب قسطه هو. الملف ده مختلف — قالب Excel لإدارة المدرسة نفسها، يساعدك تتابع تحصيل الرسوم لكل الطلاب في مكان واحد بدل ملفات متفرقة.</p>
         </div>
         <div class="grid grid-cols-3 gap-2 mb-5">
           <div class="bg-white dark:bg-slate-900 rounded-xl p-3 text-center border border-emerald-100 dark:border-slate-700">
-            <p class="text-xs muted">حساب فوري</p><p class="font-bold text-sm mt-1">بضغطة واحدة</p>
+            <p class="text-xs muted">تتبّع</p><p class="font-bold text-sm mt-1">المدفوع والمتبقي</p>
           </div>
           <div class="bg-white dark:bg-slate-900 rounded-xl p-3 text-center border border-emerald-100 dark:border-slate-700">
-            <p class="text-xs muted">مشاركة</p><p class="font-bold text-sm mt-1">واتساب مباشر</p>
+            <p class="text-xs muted">لكل طالب</p><p class="font-bold text-sm mt-1">حالة السداد فورًا</p>
           </div>
           <div class="bg-white dark:bg-slate-900 rounded-xl p-3 text-center border border-emerald-100 dark:border-slate-700">
-            <p class="text-xs muted">مجانية</p><p class="font-bold text-sm mt-1">للتحميل</p>
+            <p class="text-xs muted">جاهز</p><p class="font-bold text-sm mt-1">للاستخدام فورًا</p>
           </div>
         </div>
         <form name="school-leads-2026" method="POST" data-netlify="true"
@@ -391,7 +397,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <input name="school_name" type="text" placeholder="🏫 اسم المدرسة" class="input-field" required />
           <input name="email" type="email" placeholder="📧 البريد الإلكتروني الرسمي" class="input-field" required />
           <input name="whatsapp" type="tel" placeholder="📱 رقم الواتساب (اختياري)" class="input-field" />
-          <button type="submit" id="leadSubmitBtn" class="btn-main">🚀 احصل على النسخة المجانية الآن</button>
+          <button type="submit" id="leadSubmitBtn" class="btn-main">🚀 أرسل لي ملف Excel المجاني</button>
         </form>
         <div id="leadSuccess" class="success-msg">✅ تم التسجيل بنجاح! سنتواصل معك قريباً.</div>
         <p class="text-xs muted mt-3 text-center">لن نشارك بياناتك مع أي طرف ثالث.</p>
@@ -426,10 +432,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </details>
           <details class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
             <summary class="font-bold text-sm flex items-center justify-between">
-              ما الفرق بين المصاريف الإدارية ورسوم التأخير؟
+              ما الفرق بين المصاريف الإدارية والرسوم الإضافية؟
               <i class="fas fa-chevron-down text-xs muted chevron"></i>
             </summary>
-            <p class="text-xs muted mt-2">المصاريف الإدارية تُضاف مرة واحدة للإجمالي الكلي. رسوم التأخير تُضاف على كل قسط شهري وتتراكم طوال مدة التقسيط.</p>
+            <p class="text-xs muted mt-2">المصاريف الإدارية تُضاف مرة واحدة للإجمالي الكلي. الرسوم الإضافية تُضاف على كل قسط شهري وتتراكم طوال مدة التقسيط — استخدمها لأي مبلغ ثابت بتحب تضيفه لكل قسط (مش شرط يكون غرامة تأخير فعلية).</p>
           </details>
           <details class="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
             <summary class="font-bold text-sm flex items-center justify-between">
@@ -503,7 +509,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span id="sideAdmin" class="font-black text-slate-700 dark:text-slate-200 text-xs">---</span>
           </div>
           <div class="summary-row">
-            <span class="muted text-xs">رسوم التأخير/شهر</span>
+            <span class="muted text-xs">رسوم إضافية/شهر</span>
             <span id="sideLateFee" class="font-black text-orange-500 text-xs">---</span>
           </div>
           <div class="summary-row highlight">
@@ -519,16 +525,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- رسم بياني مصغر -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-3 mb-4 border border-slate-100 dark:border-slate-700">
           <p class="text-xs font-bold text-center mb-2 muted">📊 توزيع الأقساط</p>
-          <canvas id="sideChart" style="max-height:160px;width:100%;"></canvas>
+          <canvas id="sideChart" role="img" aria-label="رسم بياني يوضح توزيع الأقساط الشهرية — نفس البيانات موجودة كاملة في الجدول تحته" style="max-height:160px;width:100%;"></canvas>
         </div>
 
         <!-- جدول الأقساط (sidebar) -->
         <div class="overflow-x-auto rounded-xl mb-4">
           <table class="tbl">
+            <caption class="sr-only">جدول تفصيلي بمواعيد ومبالغ كل قسط شهري</caption>
             <thead><tr>
               <th>القسط</th>
               <th>تاريخ الاستحقاق</th>
-              <th style="text-align:left">المبلغ</th>
+              <th class="ta-left">المبلغ</th>
             </tr></thead>
             <tbody id="sideTableBody">
               <tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:1.2rem;font-size:.82rem">سيظهر الجدول بعد الحساب</td></tr>
@@ -576,7 +583,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="glass-card rounded-2xl p-5 md:p-7 mb-5 mt-5 no-print">
     <h2 class="text-lg font-black mb-3">📚 مركز المحتوى — كل ما تحتاج معرفته</h2>
 
-    <h3 style="font-size:14px;font-weight:800;color:var(--primary);margin:16px 0 8px;">💰 الرسوم المدرسية</h3>
+    <h3 class="content-hub-title first">💰 الرسوم المدرسية</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
       <a href="/articles/school-fees-installments.html" class="related-link block p-3 rounded-lg border border-slate-200 transition text-sm font-bold">📅 كيفية تقسيط الرسوم المدرسية</a>
       <a href="/articles/school-fees-saving.html" class="related-link block p-3 rounded-lg border border-slate-200 transition text-sm font-bold">💰 10 طرق لتوفير المصاريف المدرسية</a>
@@ -584,7 +591,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="/articles/family-education-budget.html" class="related-link block p-3 rounded-lg border border-slate-200 transition text-sm font-bold">📊 ميزانية التعليم الأسرية</a>
     </div>
 
-    <h3 style="font-size:14px;font-weight:800;color:var(--primary);margin:20px 0 8px;">🎓 المعدل الجامعي GPA</h3>
+    <h3 class="content-hub-title">🎓 المعدل الجامعي GPA</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
       <a href="/articles/gpa-article.html" class="related-link block p-3 rounded-lg border border-slate-200 transition text-sm font-bold">🧮 حاسبة GPA مجانية 2026</a>
       <a href="/articles/raise-gpa-fast-2-5-to-3-5.html" class="related-link block p-3 rounded-lg border border-slate-200 transition text-sm font-bold">📈 رفع GPA من 2.5 إلى 3.5</a>
@@ -592,7 +599,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="/articles/gpa-requirements-scholarships.html" class="related-link block p-3 rounded-lg border border-slate-200 transition text-sm font-bold">🎓 GPA المطلوب للمنح الدراسية</a>
     </div>
 
-    <h3 style="font-size:14px;font-weight:800;color:var(--primary);margin:20px 0 8px;">📅 التخطيط الدراسي</h3>
+    <h3 class="content-hub-title">📅 التخطيط الدراسي</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
       <a href="/articles/build-study-schedule.html" class="related-link block p-3 rounded-lg border border-slate-200 transition text-sm font-bold">🗓️ بناء جدول دراسي بدون تعارض</a>
       <a href="/articles/midterm-review-schedule.html" class="related-link block p-3 rounded-lg border border-slate-200 transition text-sm font-bold">📖 جدول مراجعة لامتحانات منتصف الفصل</a>
@@ -754,14 +761,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (inp) { inp.classList.add('err'); inp.setAttribute('aria-invalid', 'true'); inp.setAttribute('aria-describedby', 'err-' + id); }
     if (msg) msg.classList.add('show');
   }
+  // بعض لوحات المفاتيح العربية على الموبايل بتكتب أرقام هندية (١٢٣) بدل
+  // الإنجليزية (123)، و parseFloat() بترجع NaN معاها. الدالة دي بتحوّل أي
+  // أرقام هندية لإنجليزية قبل أي parseFloat/parseInt في الحاسبة كلها.
+  const toEnglishNum = str => String(str || '').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+
   function getFormData() {
     return {
       school   : schoolNameInput.value.trim() || 'المدرسة',
-      total    : parseFloat(totalInput.value)     || 0,
-      discount : parseFloat(discountInput.value)   || 0,
-      months   : parseInt(monthsSelect.value, 10)  || 1,
-      adminFees: parseFloat(adminFeesInput.value)  || 0,
-      lateFee  : parseFloat(lateFeeInput.value)    || 0
+      total    : parseFloat(toEnglishNum(totalInput.value))     || 0,
+      discount : parseFloat(toEnglishNum(discountInput.value))   || 0,
+      months   : parseInt(toEnglishNum(monthsSelect.value), 10)  || 1,
+      adminFees: parseFloat(toEnglishNum(adminFeesInput.value))  || 0,
+      lateFee  : parseFloat(toEnglishNum(lateFeeInput.value))    || 0
     };
   }
   function validate(total, discount) {
@@ -781,10 +793,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const floatBtn = $('dark-toggle');
     if (floatBtn) floatBtn.textContent = on ? '☀️' : '🌙';
     updateChartTheme();
-    localStorage.setItem(DARK_KEY, on ? 'on' : 'off');
+    try { localStorage.setItem(DARK_KEY, on ? 'on' : 'off'); } catch (_) { /* بعض المتصفحات بترفض localStorage أحيانًا (وضع تصفح خاص مثلاً) */ }
   }
   function initTheme() {
-    if (localStorage.getItem(DARK_KEY) === 'on') applyDark(true);
+    let saved = null;
+    try { saved = localStorage.getItem(DARK_KEY); } catch (_) { /* تجاهل */ }
+
+    if (saved === 'on') {
+      applyDark(true);
+    } else if (saved === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // المستخدم لسه ما اختارش يدويًا، لكن جهازه مضبوط Dark Mode —
+      // نحترم اختيار النظام بدل ما نفرض الوضع الفاتح افتراضيًا.
+      applyDark(true);
+    }
+    // saved === 'off' → الوضع الفاتح، والمستخدم اختاره بنفسه فعلًا، فمنسيبوش.
   }
 
   /* ════ Charts ════ */
@@ -834,17 +856,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   }
 
-  /* ════ Build Table Rows ════ */
+  /* ════ تقريب مالي مركزي — يمنع ظهور أرقام مثل 2999.999999 ════ */
+  function roundMoney(value) {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  }
+
+  /* ════ إضافة أشهر بأمان — يتجنب مشكلة 31 يناير + شهر = 3 مارس ════
+     setMonth() العادية بتفيض لشهر تاني لو اليوم مش موجود في الشهر الجديد
+     (زي 31 في شهر فيه 28/30 يوم بس). الدالة دي بتثبّت على آخر يوم صحيح
+     في الشهر الجديد بدل ما تفيض. */
+  function addMonthsSafe(date, months) {
+    const d = new Date(date);
+    const day = d.getDate();
+    d.setDate(1);
+    d.setMonth(d.getMonth() + months);
+    const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    d.setDate(Math.min(day, lastDay));
+    return d;
+  }
+
+  /* ════ Build Table Rows ════
+     بيوزّع فرق القرش الناتج عن القسمة (زي 10,000 ÷ 3) على آخر قسط، عشان
+     مجموع الأقساط يساوي الإجمالي بالظبط — مش يفضل فرق قرش معلّق. */
   function buildTableRows(months, monthlyAmt, now) {
     let rows = '';
+    const baseAmt   = roundMoney(monthlyAmt);
+    const totalRounded = roundMoney(monthlyAmt * months);
+    const lastAmt   = roundMoney(totalRounded - baseAmt * (months - 1));
     for (let i = 1; i <= months; i++) {
-      const due = new Date(now);
-      due.setMonth(due.getMonth() + i);
+      const due = addMonthsSafe(now, i);
+      const amt = (i === months) ? lastAmt : baseAmt;
       const lbl = due.toLocaleDateString('ar-EG', { day: '2-digit', month: '2-digit', year: 'numeric' });
       rows += `<tr>
         <td>القسط ${i}</td>
         <td style="color:#64748b">${lbl}</td>
-        <td style="text-align:left;font-weight:800">${money(monthlyAmt)}</td>
+        <td class="ta-left-bold">${money(amt)}</td>
       </tr>`;
     }
     return rows;
@@ -853,16 +899,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   /* ════ Calculate ════ */
   function calculate(scrollToResults = true) {
     const { school, total, discount, months, adminFees, lateFee } = getFormData();
-    if (!validate(total, discount)) return;
+    if (!validate(total, discount)) {
+      // قبل كده كانت النتيجة القديمة بتفضل ظاهرة حتى لو المستخدم كتب
+      // بيانات غلط (زي خصم 150%)، وده كان بيلبّس. دلوقتي بنخفيها فورًا
+      // لحد ما يصلّح البيانات.
+      resultsEl.classList.add('hidden');
+      return;
+    }
 
-    const discountAmt = total * (discount / 100);
-    const afterDisc   = total - discountAmt;
-    const monthlyAmt  = (afterDisc / months) + lateFee;
-    const totalFinal  = afterDisc + (lateFee * months) + adminFees;
+    const discountAmt = roundMoney(total * (discount / 100));
+    const afterDisc   = roundMoney(total - discountAmt);
+    const monthlyAmt  = roundMoney((afterDisc / months) + lateFee);
+    const totalFinal  = roundMoney(afterDisc + (lateFee * months) + adminFees);
 
     const now = new Date();
-    const firstDue = new Date(now);
-    firstDue.setMonth(firstDue.getMonth() + 1);
+    const firstDue = addMonthsSafe(now, 1);
     const firstDueLbl = firstDue.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
 
     _r = { school, total, discount, months, adminFees, lateFee, discountAmt, afterDisc, monthlyAmt, totalFinal, firstDueLbl };
@@ -878,10 +929,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     totalWithLateEl.innerText    = money(totalFinal);
     firstDueDateEl.innerText     = `📅 ${firstDueLbl}`;
 
-    /* ملاحظة رسوم التأخير */
+    /* ملاحظة الرسوم الإضافية */
     if (lateFee > 0) {
       lateNoteWrap.classList.remove('hidden');
-      lateNoteEl.innerText = `⚠️ رسوم التأخير: ${money(lateFee)} × ${months} شهر = ${money(lateFee * months)} إجمالي`;
+      lateNoteEl.innerText = `⚠️ رسوم إضافية: ${money(lateFee)} × ${months} شهر = ${money(lateFee * months)} إجمالي`;
     } else {
       lateNoteWrap.classList.add('hidden');
     }
@@ -897,7 +948,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     /* الجداول */
     const rows     = buildTableRows(months, monthlyAmt, now);
-    const totalRow = `<tr class="total-row"><td colspan="2">الإجمالي الكلي (شامل المصاريف الإدارية)</td><td style="text-align:left">${money(totalFinal)}</td></tr>`;
+    const totalRow = `<tr class="total-row"><td colspan="2">الإجمالي الكلي (شامل المصاريف الإدارية)</td><td class="ta-left">${money(totalFinal)}</td></tr>`;
     tableBody.innerHTML     = rows + totalRow;
     sideTableBody.innerHTML = rows + totalRow;
 
@@ -952,11 +1003,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return p;
   }
 
+  // html2pdf.bundle.min.js أصلًا فيه jsPDF وhtml2canvas جوّاه (bundled)،
+  // لكن من غير ما يعرّضهم كـ globals منفصلة. الفانكشن دي بتحمّل html2pdf
+  // بس. أما النسخة "الاحتياطية" المنفصلة من jsPDF/html2canvas، فبتتحمّل
+  // بس لو html2pdf فشلت فعليًا (شوف ensureFallbackPdfLibs تحت) — مش مع
+  // كل ضغطة زرار، عشان منحملش نفس الحاجة 3 مرات من غير داعي.
   async function ensurePdfLibs() {
+    await loadScriptOnce(
+      'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
+    ).catch(() => { /* هيتعامل معاها saveAsPDF نفسها بمحاولة الـ fallback */ });
+  }
+
+  async function ensureFallbackPdfLibs() {
     await Promise.all([
-      loadScriptOnce(
-        'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
-      ),
       loadScriptOnce(
         'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
@@ -975,6 +1034,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     ).catch(() => { /* هيتعامل معاها exportToExcel نفسها بالـ alert */ });
   }
 
+  // اسم المدرسة بيتكتب حر من المستخدم، ولو فيه رموز زي / \ : * ? " < > |
+  // (أو طويل جدًا) ممكن يبوّظ اسم الملف أو يتعارض مع نظام تشغيل المستخدم.
+  // الدالة دي بتستبدل الرموز دي بـ "-" وتحوّل المسافات لـ "_" وتقصّر الاسم.
+  function safeFileName(name) {
+    return String(name || 'المدرسة')
+      .replace(/[\\/:*?"<>|]/g, '-')
+      .replace(/\s+/g, '_')
+      .slice(0, 80);
+  }
+
   /* ════ PDF — html2pdf أولاً ثم html2canvas+jsPDF fallback (كود 1+2: أفضل تنفيذ) ════ */
   async function saveAsPDF(btn, targetId) {
     const orig = btn.innerHTML;
@@ -983,7 +1052,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     await ensurePdfLibs();
 
-    const school  = _r.school || 'المدرسة';
+    const school  = safeFileName(_r.school || 'المدرسة');
     const isDark  = document.body.classList.contains('dark');
     const element = $(targetId);
 
@@ -1000,6 +1069,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         return;
       } catch (_) { /* fallback */ }
     }
+
+    // نوصل هنا بس لو html2pdf مكانتش متاحة أو فشلت فعليًا — دلوقتي بس
+    // نحمّل جسPDF/html2canvas كـ fallback حقيقي، مش مع كل محاولة.
+    await ensureFallbackPdfLibs();
 
     if (window.html2canvas && window.jspdf) {
       try {
@@ -1048,7 +1121,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ['قيمة الخصم', '- ' + money(_r.discountAmt), ''],
       ['الرسوم بعد الخصم', money(_r.afterDisc), ''],
       ['المصاريف الإدارية (مرة واحدة)', money(_r.adminFees), ''],
-      ['رسوم التأخير / شهر', _r.lateFee > 0 ? money(_r.lateFee) + '/شهر' : '---', ''],
+      ['رسوم إضافية / شهر', _r.lateFee > 0 ? money(_r.lateFee) + '/شهر' : '---', ''],
       ['القسط الشهري', money(_r.monthlyAmt), ''],
       ['الإجمالي الكلي النهائي', money(_r.totalFinal), ''],
       ['موعد أول قسط', _r.firstDueLbl, ''],
@@ -1065,7 +1138,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     ws['!cols'] = [{ wch: 30 }, { wch: 32 }, { wch: 24 }];
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'خطة التقسيط 2026');
-    XLSX.writeFile(wb, `خطة_رسوم_${_r.school}_2026.xlsx`);
+    XLSX.writeFile(wb, `خطة_رسوم_${safeFileName(_r.school)}_2026.xlsx`);
   }
 
   /* ════ WhatsApp — مشاركة عامة مع app_absent=0 (كود 1+2) ════ */
@@ -1084,8 +1157,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   /* ════ WhatsApp — إرسال لولي الأمر (رسالة احترافية كاملة — كود 1+2) ════ */
   function sendToParent(phoneInput) {
-    const phone = (phoneInput.value || '').trim().replace(/\D/g, '');
-    if (!phone || phone.length < 8) {
+    let phone = (phoneInput.value || '').trim().replace(/\D/g, '');
+    // تطبيع الرقم المصري المحلي (01012345678) لصيغة دولية (201012345678)
+    // بدل ما نرفضه أو نبعت بيه رسالة معطوبة على واتساب.
+    if (/^01[0125]\d{8}$/.test(phone)) phone = '2' + phone;
+    if (!/^\d{10,15}$/.test(phone)) {
       alert('أدخل رقم واتساب صحيح مع مفتاح الدولة (مثال: 201012345678)');
       return;
     }
@@ -1097,7 +1173,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       `• نسبة الخصم: ${_r.discount}%  |  قيمة الخصم: - ${money(_r.discountAmt)}\n` +
       `• الرسوم بعد الخصم: ${money(_r.afterDisc)}\n` +
       `• المصاريف الإدارية: ${money(_r.adminFees)}\n` +
-      `• رسوم التأخير الشهرية: ${_r.lateFee > 0 ? money(_r.lateFee) + '/شهر' : 'لا يوجد'}\n` +
+      `• رسوم إضافية شهرية: ${_r.lateFee > 0 ? money(_r.lateFee) + '/شهر' : 'لا يوجد'}\n` +
       `• عدد الأقساط: ${_r.months} شهراً\n` +
       `• *القسط الشهري: ${money(_r.monthlyAmt)}*\n` +
       `• الإجمالي الكلي النهائي: ${money(_r.totalFinal)}\n` +
@@ -1115,7 +1191,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       `الرسوم الأصلية: ${_r.total ? money(_r.total) : '---'}\n` +
       `الرسوم بعد الخصم: ${_r.afterDisc !== undefined ? money(_r.afterDisc) : '---'}\n` +
       `المصاريف الإدارية: ${_r.adminFees !== undefined ? money(_r.adminFees) : '---'}\n` +
-      `رسوم التأخير/شهر: ${_r.lateFee > 0 ? money(_r.lateFee) : 'لا يوجد'}\n` +
+      `رسوم إضافية/شهر: ${_r.lateFee > 0 ? money(_r.lateFee) : 'لا يوجد'}\n` +
       `القسط الشهري: ${_r.monthlyAmt !== undefined ? money(_r.monthlyAmt) : '---'}\n` +
       `الإجمالي الكلي: ${_r.totalFinal !== undefined ? money(_r.totalFinal) : '---'}\n` +
       `أول قسط: ${_r.firstDueLbl || '---'}`;
@@ -1139,12 +1215,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body   : new URLSearchParams(new FormData($('leadForm'))).toString()
       });
-      if (!res.ok) throw new Error();
-    } catch (_) { /* graceful fallback */ }
-    finally {
+      if (!res.ok) throw new Error('network response was not ok');
+
       $('leadForm').reset();
+      leadSuccess.className   = 'success-msg';
+      leadSuccess.textContent = '✅ تم التسجيل بنجاح! سنتواصل معك قريباً.';
       leadSuccess.style.display = 'block';
       setTimeout(() => { leadSuccess.style.display = 'none'; }, 5000);
+
+    } catch (err) {
+      // بالظبط هنا كانت المشكلة: finally القديمة كانت بتظهر "تم بنجاح"
+      // حتى لو fetch فشلت فعليًا. دلوقتي الفشل بيوريه رسالة خطأ واضحة
+      // بدل رسالة نجاح كاذبة.
+      leadSuccess.className   = 'err-msg show';
+      leadSuccess.textContent = '❌ تعذّر إرسال الطلب، تأكد من اتصال الإنترنت وحاول تاني.';
+      leadSuccess.style.display = 'block';
+      setTimeout(() => { leadSuccess.style.display = 'none'; }, 6000);
+
+    } finally {
       btn.disabled  = false;
       btn.innerHTML = orig;
     }
@@ -1185,11 +1273,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     $('leadForm').addEventListener('submit', handleLeadSubmit);
 
-    /* Auto-save on any field change */
-    [schoolNameInput, totalInput, discountInput, monthsSelect, adminFeesInput, lateFeeInput].forEach(el => {
-      el.addEventListener('input',  saveData);
-      el.addEventListener('change', saveData);
-    });
+    /* ملاحظة: مفيش داعي لـ listeners إضافية بتاعة saveData() هنا —
+       calculate() بترتبط بيها في الآخر أصلًا (شوف نهاية calculate())،
+       وliveCalculate() بتستدعي calculate() بعد 200ms من أي تغيير. إضافة
+       listeners تانية هنا كانت بتخلي saveData() تتنفذ مرتين لكل تغيير. */
   }
 
   /* ════ Init ════ */
