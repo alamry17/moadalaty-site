@@ -30,6 +30,14 @@
   const _fmt = new Intl.NumberFormat('ar-EG', { maximumFractionDigits: 2 });
   const money = v => `${_fmt.format(Number(v || 0))} ج.م`;
 
+  /* أي اسم أو وصف بيكتبه المستخدم بيتحط بعدين جوه innerHTML مباشرة (في
+     value="..." لحقول الإدخال، وجوه <option> لقائمة الدافع). من غير
+     تنضيف، لو حد كتب اسم فيه " أو < أو > ممكن يكسر الـ HTML أو يحقن
+     كود (XSS). الدالة دي بتستبدل الحروف الخطرة برموزها الآمنة. */
+  const escapeHtml = str => String(str || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
   const MAX_PEOPLE   = 20;
   const MAX_EXPENSES = 40;
   let nextPersonId  = 0;
@@ -105,7 +113,7 @@
     row.className = 'person-row';
     row.dataset.id = id;
     row.innerHTML = `
-      <input type="text" class="input-field person-name" placeholder="اسم المسافر" value="${name || ''}" />
+      <input type="text" class="input-field person-name" placeholder="اسم المسافر" value="${escapeHtml(name || '')}" />
       <button type="button" class="rm-remove" aria-label="حذف">
         <i class="fas fa-trash-alt"></i>
       </button>
@@ -132,7 +140,7 @@
     const people = getPeople();
     document.querySelectorAll('.exp-payer').forEach(select => {
       const current = select.value;
-      select.innerHTML = people.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+      select.innerHTML = people.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
       if (people.some(p => p.id === current)) select.value = current;
     });
     addExpenseBtn.disabled = people.length === 0;
@@ -162,8 +170,8 @@
     row.className = 'expense-row';
     row.dataset.id = id;
     row.innerHTML = `
-      <input type="text" class="input-field exp-desc" placeholder="وصف المصروف (عشاء، تذاكر...)" value="${desc || ''}" />
-      <input type="number" class="input-field exp-amount" placeholder="المبلغ" min="0" step="10" value="${amount || ''}" />
+      <input type="text" class="input-field exp-desc" placeholder="وصف المصروف (عشاء، تذاكر...)" value="${escapeHtml(desc || '')}" />
+      <input type="number" class="input-field exp-amount" placeholder="المبلغ" min="0" step="10" value="${escapeHtml(amount || '')}" />
       <select class="input-field exp-payer"></select>
       <button type="button" class="rm-remove" aria-label="حذف">
         <i class="fas fa-trash-alt"></i>
@@ -245,7 +253,7 @@
       else { cls = 'owes'; status = 'عليه للباقي'; amt = money(-b.balance); }
       return `
         <div class="balance-item ${cls}">
-          <span class="name">${b.name}</span>
+          <span class="name">${escapeHtml(b.name)}</span>
           <div style="text-align:left">
             <span class="status">${status}</span>
             <span class="amt">${amt}</span>
@@ -256,7 +264,7 @@
     if (settlements.length) {
       settleListEl.innerHTML = settlements.map(s =>
         `<div class="settle-line">
-           <span><strong>${s.from}</strong> يدفع لـ <strong>${s.to}</strong></span>
+           <span><strong>${escapeHtml(s.from)}</strong> يدفع لـ <strong>${escapeHtml(s.to)}</strong></span>
            <span class="amt">${money(s.amount)}</span>
          </div>`
       ).join('');
@@ -277,11 +285,58 @@
     calcDebounce = setTimeout(() => calculate(false), 200);
   };
 
+  /* ════ تحميل مكتبات PDF/Excel وقت الحاجة بس (Lazy Load) ════ */
+  const _loadedScripts = new Map();
+  function loadScriptOnce(primarySrc, fallbackSrc) {
+    if (_loadedScripts.has(primarySrc)) return _loadedScripts.get(primarySrc);
+    const p = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = primarySrc;
+      s.onload = () => resolve();
+      s.onerror = () => {
+        if (!fallbackSrc) { reject(new Error('script load failed: ' + primarySrc)); return; }
+        const s2 = document.createElement('script');
+        s2.src = fallbackSrc;
+        s2.onload = () => resolve();
+        s2.onerror = () => reject(new Error('script load failed: ' + fallbackSrc));
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s);
+    });
+    _loadedScripts.set(primarySrc, p);
+    return p;
+  }
+  async function ensurePdfLibs() {
+    await loadScriptOnce(
+      'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
+    ).catch(() => {});
+  }
+  async function ensureFallbackPdfLibs() {
+    await Promise.all([
+      loadScriptOnce(
+        'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+      ),
+      loadScriptOnce(
+        'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
+      ),
+    ]).catch(() => {});
+  }
+  async function ensureXlsxLib() {
+    await loadScriptOnce(
+      'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+    ).catch(() => {});
+  }
+
   /* ════ PDF ════ */
   async function saveAsPDF(btn, targetId) {
     const orig = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin ml-1"></i> جاري التجهيز...';
     btn.disabled = true;
+
+    await ensurePdfLibs();
 
     const isDark  = document.body.classList.contains('dark');
     const element = $(targetId);
@@ -299,6 +354,8 @@
         return;
       } catch (_) { /* fallback */ }
     }
+
+    await ensureFallbackPdfLibs();
 
     if (window.html2canvas && window.jspdf) {
       try {
@@ -324,28 +381,42 @@
   }
 
   /* ════ Excel ════ */
-  function exportToExcel() {
+  async function exportToExcel() {
+    if (!_r.balances) { alert('احسب النتيجة أولاً.'); return; }
+    if (!window.XLSX) await ensureXlsxLib();
     if (!window.XLSX) { alert('مكتبة Excel غير متاحة الآن.'); return; }
-    if (!_r.balances)  { alert('احسب النتيجة أولاً.'); return; }
 
     const data = [
-      ['معدلاتي — حاسبة تقسيم مصاريف الرحلة الجماعية', ''],
-      [''],
-      ['إجمالي مصاريف الرحلة', money(_r.total)],
-      ['عدد المسافرين', _r.people],
-      [''],
-      ['الاسم', 'الرصيد']
+      ['معدلاتي — حاسبة تقسيم مصاريف الرحلة الجماعية', '', ''],
+      ['', '', ''],
+      ['إجمالي مصاريف الرحلة', _r.total, ''],
+      ['عدد المسافرين', _r.people, ''],
+      ['', '', ''],
+      ['الاسم', 'الحالة', 'القيمة']
     ];
+    const balanceStartRow = data.length;
     _r.balances.forEach(b => {
-      const label = b.balance > 0.005 ? `له ${money(b.balance)}` : b.balance < -0.005 ? `عليه ${money(-b.balance)}` : 'متزون';
-      data.push([b.name, label]);
+      const status = b.balance > 0.005 ? 'له' : b.balance < -0.005 ? 'عليه' : 'متزون';
+      const value  = b.balance > 0.005 ? b.balance : b.balance < -0.005 ? -b.balance : 0;
+      data.push([b.name, status, value]);
     });
-    data.push(['']);
-    data.push(['التسوية', '']);
-    _r.settlements.forEach(s => data.push([`${s.from} → ${s.to}`, money(s.amount)]));
+    data.push(['', '', '']);
+    data.push(['من', 'إلى', 'المبلغ']);
+    const settlementStartRow = data.length;
+    _r.settlements.forEach(s => data.push([s.from, s.to, s.amount]));
 
     const ws = XLSX.utils.aoa_to_sheet(data);
-    ws['!cols'] = [{ wch: 32 }, { wch: 24 }];
+    ws['!cols'] = [{ wch: 28 }, { wch: 22 }, { wch: 18 }];
+    const currencyFmt = '#,##0.00" ج.م"';
+    if (ws['B3']) ws['B3'].z = currencyFmt;
+    for (let r = balanceStartRow; r < balanceStartRow + _r.balances.length; r++) {
+      const ref = 'C' + (r + 1);
+      if (ws[ref]) ws[ref].z = currencyFmt;
+    }
+    for (let r = settlementStartRow; r < settlementStartRow + _r.settlements.length; r++) {
+      const ref = 'C' + (r + 1);
+      if (ws[ref]) ws[ref].z = currencyFmt;
+    }
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'تقسيم الرحلة');
     XLSX.writeFile(wb, `تقسيم_مصاريف_الرحلة.xlsx`);
