@@ -24,6 +24,13 @@
   const _fmt = new Intl.NumberFormat('ar-EG', { maximumFractionDigits: 2 });
   const money = v => `${_fmt.format(Number(v || 0))} ج.م`;
 
+  /* نفس السبب في group-trip-cost-splitter.js: اسم الشريك بيتحط جوه
+     innerHTML مباشرة، فلازم نتخلص من أي حروف HTML خطرة فيه أولاً
+     (XSS / كسر الـ HTML). */
+  const escapeHtml = str => String(str || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
   const MAX_ROOMMATES = 20;
   let nextId = 0;
   let mode = 'equal'; // أو 'weighted'
@@ -89,7 +96,7 @@
     row.dataset.id = id;
 
     row.innerHTML = `
-      <input type="text" class="input-field rm-name" placeholder="اسم الشريك ${id}" value="${name || ''}" />
+      <input type="text" class="input-field rm-name" placeholder="اسم الشريك ${id}" value="${escapeHtml(name || '')}" />
       <input type="number" class="input-field rm-weight" min="0.1" step="0.1" value="${weight || 1}" />
       <button type="button" class="rm-remove" aria-label="حذف">
         <i class="fas fa-trash-alt"></i>
@@ -146,7 +153,7 @@
 
     splitList.innerHTML = shares.map(s => `
       <div class="split-item">
-        <span class="name">${s.name}</span>
+        <span class="name">${escapeHtml(s.name)}</span>
         <span class="amt">${money(s.share)}</span>
       </div>
     `).join('');
@@ -163,11 +170,58 @@
     calcDebounce = setTimeout(() => calculate(false), 200);
   };
 
+  /* ════ تحميل مكتبات PDF/Excel وقت الحاجة بس (Lazy Load) ════ */
+  const _loadedScripts = new Map();
+  function loadScriptOnce(primarySrc, fallbackSrc) {
+    if (_loadedScripts.has(primarySrc)) return _loadedScripts.get(primarySrc);
+    const p = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = primarySrc;
+      s.onload = () => resolve();
+      s.onerror = () => {
+        if (!fallbackSrc) { reject(new Error('script load failed: ' + primarySrc)); return; }
+        const s2 = document.createElement('script');
+        s2.src = fallbackSrc;
+        s2.onload = () => resolve();
+        s2.onerror = () => reject(new Error('script load failed: ' + fallbackSrc));
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s);
+    });
+    _loadedScripts.set(primarySrc, p);
+    return p;
+  }
+  async function ensurePdfLibs() {
+    await loadScriptOnce(
+      'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
+    ).catch(() => {});
+  }
+  async function ensureFallbackPdfLibs() {
+    await Promise.all([
+      loadScriptOnce(
+        'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+      ),
+      loadScriptOnce(
+        'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
+      ),
+    ]).catch(() => {});
+  }
+  async function ensureXlsxLib() {
+    await loadScriptOnce(
+      'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+    ).catch(() => {});
+  }
+
   /* ════ PDF ════ */
   async function saveAsPDF(btn, targetId) {
     const orig = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin ml-1"></i> جاري التجهيز...';
     btn.disabled = true;
+
+    await ensurePdfLibs();
 
     const isDark  = document.body.classList.contains('dark');
     const element = $(targetId);
@@ -185,6 +239,8 @@
         return;
       } catch (_) { /* fallback */ }
     }
+
+    await ensureFallbackPdfLibs();
 
     if (window.html2canvas && window.jspdf) {
       try {
@@ -210,23 +266,31 @@
   }
 
   /* ════ Excel ════ */
-  function exportToExcel() {
+  async function exportToExcel() {
+    if (!_r.shares) { alert('احسب النتيجة أولاً.'); return; }
+    if (!window.XLSX) await ensureXlsxLib();
     if (!window.XLSX) { alert('مكتبة Excel غير متاحة الآن.'); return; }
-    if (!_r.shares)    { alert('احسب النتيجة أولاً.'); return; }
 
     const data = [
       ['معدلاتي — حاسبة تقسيم مصاريف السكن', ''],
       [''],
-      ['الإيجار', money(_r.rent)],
-      ['الفواتير المشتركة', money(_r.bills)],
-      ['الإجمالي', money(_r.total)],
+      ['الإيجار', _r.rent],
+      ['الفواتير المشتركة', _r.bills],
+      ['الإجمالي', _r.total],
       ['طريقة التقسيم', _r.mode === 'weighted' ? 'بالوزن (حسب حجم الغرفة)' : 'متساوي'],
       ['']
     ];
-    _r.shares.forEach(s => data.push([s.name, money(s.share)]));
+    const shareStartRow = data.length;
+    _r.shares.forEach(s => data.push([s.name, s.share]));
 
     const ws = XLSX.utils.aoa_to_sheet(data);
     ws['!cols'] = [{ wch: 32 }, { wch: 24 }];
+    const currencyFmt = '#,##0.00" ج.م"';
+    ['B3', 'B4', 'B5'].forEach(ref => { if (ws[ref]) ws[ref].z = currencyFmt; });
+    for (let r = shareStartRow; r < data.length; r++) {
+      const ref = 'B' + (r + 1);
+      if (ws[ref]) ws[ref].z = currencyFmt;
+    }
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'تقسيم المصاريف');
     XLSX.writeFile(wb, `تقسيم_مصاريف_السكن.xlsx`);
