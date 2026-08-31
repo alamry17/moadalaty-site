@@ -9,6 +9,18 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ── 0. عداد المشاهدات الحقيقي ──
+     CoreUtils.initViewCounter() كانت معرّفة في core-utils.js من قبل لكن
+     مفيش أي مقال في الموقع كان بينادِيها فعليًا — فالعداد كان بيفضل
+     "—" دايمًا في كل صفحة. بنستنتج pageSlug تلقائيًا من مسار الصفحة
+     (اسم الملف بدون .html) عشان كل مقال يشتغل من غير ما يحتاج كود إضافي.
+     الـ promise دي بترجع النص النهائي بعد الـfetch، وبنستنى عليها قبل ما
+     نقرر نخفي .view-meta تحت (خطوة 7) — لأنها async، ولو فحصنا فورًا
+     هنلاقي "—" لسه موجودة ونخفي العداد غلط قبل ما يوصله الرقم الحقيقي. */
+  const viewCounterReady = (window.CoreUtils && typeof window.CoreUtils.initViewCounter === 'function')
+    ? window.CoreUtils.initViewCounter('view-count', location.pathname.replace(/\/+$/, '').split('/').pop().replace(/\.html$/, '') || 'home')
+    : Promise.resolve(null);
+
   /* ── 1. Reading Progress Bar ── */
   const bar = document.getElementById('reading-progress-bar');
   if (bar) {
@@ -31,10 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (!darkBtn.dataset.darkInit) {
       darkBtn.dataset.darkInit = '1';
       const saved = localStorage.getItem('darkMode');
-      if (saved === 'on') { document.body.classList.add('dark'); darkBtn.textContent = '☀️'; }
+      if (saved === 'on') { document.body.classList.add('dark'); darkBtn.textContent = '☀️'; darkBtn.setAttribute('aria-pressed', 'true'); }
+      else { darkBtn.setAttribute('aria-pressed', 'false'); }
       darkBtn.addEventListener('click', () => {
         const isDark = document.body.classList.toggle('dark');
         darkBtn.textContent = isDark ? '☀️' : '🌙';
+        darkBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
         localStorage.setItem('darkMode', isDark ? 'on' : 'off');
       });
     }
@@ -94,16 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  /* ── 7. Hide view-meta لما يكون العداد فاضي ── */
-  (function hideEmptyViewCounter() {
+  /* ── 7. Hide view-meta لما يكون العداد فاضي (بعد ما الـfetch يخلص) ── */
+  viewCounterReady.then((finalTxt) => {
     const vc = document.getElementById('view-count');
     if (!vc) return;
-    const txt = vc.textContent.trim();
+    const txt = (finalTxt === null ? vc.textContent : finalTxt).trim();
     if (txt === '—' || txt === '' || txt === '0') {
       const parent = vc.closest('.view-meta');
       if (parent) parent.style.display = 'none';
     }
-  })();
+  });
 
   /* ── 9. Copy Embed Code — لأي قسم "ضيف الحاسبة دي في موقعك" (widgets/*) ──
      نفس المنطق كان مكرر داخل كل مقال فيه ودجت قابل للتضمين (gpa-mistakes.html
