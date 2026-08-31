@@ -43,6 +43,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="keywords" content="حاسبة بقشيش, تقسيم فاتورة, حاسبة تقسيم الحساب, تقسيم مصاريف مطعم, 2026" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://moadalaty.com/tip-bill-split-calculator.html" />
+  <link rel="alternate" hreflang="ar" href="https://moadalaty.com/tip-bill-split-calculator.html" />
+  <link rel="alternate" hreflang="en" href="https://moadalaty.com/en/tip-bill-split-calculator.html" />
+  <link rel="alternate" hreflang="x-default" href="https://moadalaty.com/tip-bill-split-calculator.html" />
   <meta name="author" content="بوابة الأدوات التعليمية">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="ar_EG" />
@@ -67,14 +70,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   ]}
   </script>
 
-  <!-- CDNs مع Fallback كامل -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"
-          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
-          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
-          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'"></script>
+  <!-- مكتبات PDF/Excel (html2pdf, jsPDF, html2canvas, xlsx) بقت بتتحمّل
+       ديناميكيًا وقت الحاجة بس (زر "حفظ PDF"/"Excel") بدل ما تتحمّل مع
+       كل زيارة للصفحة من غير استخدام — راجع loadScriptOnce/ensurePdfLibs
+       في js/tip-bill-split-calculator.js -->
   <script src="/js/core-utils.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
@@ -181,7 +180,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <button type="button" class="tip-btn" data-pct="20">20%</button>
             </div>
             <input id="tipCustom" type="number" min="0" max="100" step="1" class="input-field"
-              placeholder="أو اكتب نسبة مخصّصة..." />
+              oninput="clearErr('tipCustom')" placeholder="أو اكتب نسبة مخصّصة..." />
+            <p class="err-msg" id="err-tipCustom">أدخل نسبة بين 0 و100</p>
           </div>
 
           <div>
@@ -340,10 +340,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <button id="scroll-top" aria-label="العودة للأعلى" title="العودة للأعلى">⬆</button>
-<button id="dark-toggle" aria-label="تبديل الوضع الليلي">🌙</button>
+<button id="dark-toggle" aria-label="تبديل الوضع الليلي" aria-pressed="false">🌙</button>
 
 <!-- Save Toast -->
-<div id="saveToast" class="save-toast">💾 تم الحفظ تلقائياً</div>
+<div id="saveToast" class="save-toast" role="status" aria-live="polite">💾 تم الحفظ تلقائياً</div>
 
 <script src="/js/tip-bill-split-calculator.min.js"></script>
 <script src="/js/cookie-consent.min.js" defer></script>
