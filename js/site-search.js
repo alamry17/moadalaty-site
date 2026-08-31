@@ -14,6 +14,12 @@
       .replace(/[ًٌٍَُِّْ]/g, '');
   }
 
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function highlight(text, query) {
     if (!query) return text;
     var nText = normalize(text);
@@ -66,7 +72,7 @@
       if (!matches.length) {
         resultsBox.innerHTML =
           '<div class="site-search-empty">😕 لا توجد نتائج مطابقة لـ «' +
-          query.replace(/</g, '&lt;') + '»</div>';
+          escapeHtml(query) + '»</div>';
         resultsBox.classList.add('show');
         return;
       }
