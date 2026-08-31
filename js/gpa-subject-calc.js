@@ -16,9 +16,18 @@
 
   const { toWesternDigits, toArabicIndicDigits, containsArabicIndicDigits, saveWithExpiry, loadWithExpiry } = global.CoreUtils;
 
+  /* اسم المادة اللي المستخدم بيكتبه بيتحط في مكانين: (1) جوه سمة
+     value="..." وقت بناء الصف، و(2) جوه نص عادي بين <span>...</span>
+     وقت عرض نتيجة الحساب. السياق التاني ده خطير فعليًا — لو الاسم فيه
+     "<img src=x onerror=...>" هيتنفذ كـ HTML حقيقي مش نص. escapeHtml
+     هنا بتغطي الحالتين مع بعض (مش بس علامة الاقتباس زي إصدار قديم). */
+  const escapeHtml = s => String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
   function buildRowHTML(gradeOptionsHtml, data) {
     data = data || { name: '', credits: '', grade: '' };
-    const esc = (s) => String(s || '').replace(/"/g, '&quot;');
+    const esc = escapeHtml;
     return `
     <div>
       <label>اسم المادة (اختياري)</label>
@@ -261,7 +270,7 @@
           passCredits += credits;
           const r = document.createElement('div');
           r.className = 'result-row';
-          r.innerHTML = `<span>${name} (${fmt(credits)} ساعة)</span><span class="result-val" style="color:var(--success);">Pass ✓</span>`;
+          r.innerHTML = `<span>${escapeHtml(name)} (${fmt(credits)} ساعة)</span><span class="result-val" style="color:var(--success);">Pass ✓</span>`;
           breakdown.appendChild(r);
           return;
         }
@@ -274,7 +283,7 @@
         const r = document.createElement('div');
         r.className = 'result-row';
         r.style.fontSize = '14px';
-        r.innerHTML = `<span>${name} (${fmt(credits)}س × ${fmt(pts)})</span><span class="result-val">${fmt(qualityPts.toFixed(2))}</span>`;
+        r.innerHTML = `<span>${escapeHtml(name)} (${fmt(credits)}س × ${fmt(pts)})</span><span class="result-val">${fmt(qualityPts.toFixed(2))}</span>`;
         breakdown.appendChild(r);
       });
 
