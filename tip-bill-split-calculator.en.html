@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<!-- Google Consent Mode v2 — must load before GTM so it actually
+     blocks tracking until the visitor consents (not just a banner).
+     See js/cookie-consent.js -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function () {
+    try {
+      var saved = localStorage.getItem('cookieConsent');
+      if (saved === 'accepted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WDKV7WH2');</script>
+<!-- End Google Tag Manager -->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a3c6e" />
+  <meta name="description" content="Split the bill and calculate the tip between any number of people instantly. Save the result as PDF or Excel, or share it on WhatsApp." />
+  <meta name="keywords" content="tip calculator, bill split calculator, split the bill, restaurant bill splitter, 2026" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://moadalaty.com/en/tip-bill-split-calculator.html" />
+  <link rel="alternate" hreflang="ar" href="https://moadalaty.com/tip-bill-split-calculator.html" />
+  <link rel="alternate" hreflang="en" href="https://moadalaty.com/en/tip-bill-split-calculator.html" />
+  <link rel="alternate" hreflang="x-default" href="https://moadalaty.com/tip-bill-split-calculator.html" />
+  <meta name="author" content="Moadalaty">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://moadalaty.com/en/tip-bill-split-calculator.html" />
+  <meta property="og:site_name" content="Moadalaty" />
+  <meta property="og:title" content="Tip & Bill Split Calculator | Moadalaty" />
+  <meta property="og:description" content="Split the bill and calculate the tip between friends instantly, then save or share the result on WhatsApp." />
+  <meta property="og:image" content="https://moadalaty.com/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>Tip & Bill Split Calculator | Moadalaty 2026</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Tip & Bill Split Calculator","url":"https://moadalaty.com/en/tip-bill-split-calculator.html","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"How much should I tip at a restaurant?","acceptedAnswer":{"@type":"Answer","text":"In the US, a standard tip is 15-20% of the bill before tax. 15% is typical for average service, 18-20% for great service. If a service charge or gratuity is already included, an extra tip is optional."}},
+    {"@type":"Question","name":"Should I calculate the tip before or after tax?","acceptedAnswer":{"@type":"Answer","text":"It's best to calculate the tip on the bill amount before tax, not after — since tax isn't part of the service the server is being rewarded for."}}
+  ]}
+  </script>
+
+  <!-- PDF/Excel libraries (html2pdf, jsPDF, html2canvas, xlsx) now load
+       dynamically only when needed (PDF/Excel button) instead of on
+       every page load — see loadScriptOnce/ensurePdfLibs in
+       js/tip-bill-split-calculator.en.js -->
+  <script src="/js/core-utils.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.min.css">
+  <link rel="stylesheet" href="/css/article.min.css">
+  <link rel="stylesheet" href="/css/components.min.css">
+  <link rel="stylesheet" href="/css/site-search.css">
+
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    /* ===== Page-specific: quick tip percentage buttons ===== */
+    .tip-btn-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .tip-btn {
+      border: 1.5px solid var(--border, #e2e8f0); background: var(--white, #fff);
+      border-radius: var(--radius-sm, 10px); padding: 10px 4px; font-weight: 800;
+      font-size: .95rem; cursor: pointer; transition: .15s ease;
+    }
+    .tip-btn:hover { border-color: var(--primary); }
+    .tip-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    body.dark .tip-btn { background: var(--card-dark, #16261F); color: #e7f0ea; border-color: #2a3d33; }
+  </style>
+</head>
+
+<body>
+<div id="site-search-bar" class="no-print" role="search">
+  <div id="site-search-inner">
+    <form id="site-search-form" role="search" autocomplete="off">
+      <span class="site-search-icon" aria-hidden="true">&#128269;</span>
+      <input id="site-search-input" type="text" name="q" placeholder="Search the site... (e.g. tip, GPA)" aria-label="Search the site" />
+      <button type="button" id="site-search-clear" aria-label="Clear search">&#10005;</button>
+    </form>
+    <div id="site-search-results" role="listbox" aria-label="Search results"></div>
+  </div>
+</div>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WDKV7WH2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<div class="max-w-5xl mx-auto px-4 py-5 md:py-8">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="flex justify-between items-center mb-5 no-print">
+    <div class="flex items-center gap-3">
+      <div class="w-14 h-14 rounded-3xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-3xl text-emerald-700 dark:text-emerald-300 shadow-inner">
+        <i class="fas fa-receipt"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-black text-emerald-700 dark:text-emerald-400 leading-tight">
+          Moadalaty — Tip & Bill Split Calculator
+        </h1>
+        <p class="text-xs muted font-bold flex items-center gap-2">
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+          PDF + Excel + WhatsApp
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+  <!-- ═══ INTRO ═══ -->
+  <div class="mb-6">
+    <div class="grid grid-cols-3 gap-3">
+      <div class="stat-box text-center">
+        <div class="text-xs muted">Export</div>
+        <div class="font-bold mt-1 text-sm">🧮 PDF + Excel</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xs muted">Great for</div>
+        <div class="font-bold mt-1 text-sm">🍽️ Restaurants & nights out</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xs muted">Instant share</div>
+        <div class="font-bold mt-1 text-sm">💬 Directly on WhatsApp</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-grid">
+    <div class="space-y-5">
+
+      <!-- ── Input card ── -->
+      <div class="glass-card rounded-[1.75rem] p-5 md:p-7 border-b-4 border-emerald-500 no-print">
+        <h2 class="font-black text-emerald-700 dark:text-emerald-400 text-lg mb-5">
+          <i class="fas fa-calculator ml-2"></i> Bill Details
+        </h2>
+        <div class="space-y-4">
+
+          <div>
+            <label class="block text-sm font-bold muted mb-2">🧾 Total Bill ($)</label>
+            <input id="bill" type="number" value="50" min="0" step="1" class="input-field"
+              oninput="clearErr('bill'); liveCalculate()" />
+            <p class="err-msg" id="err-bill">Please enter a value greater than zero</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold muted mb-2">💵 Tip Percentage</label>
+            <div class="tip-btn-row mb-2">
+              <button type="button" class="tip-btn" data-pct="10">10%</button>
+              <button type="button" class="tip-btn active" data-pct="15">15%</button>
+              <button type="button" class="tip-btn" data-pct="18">18%</button>
+              <button type="button" class="tip-btn" data-pct="20">20%</button>
+            </div>
+            <input id="tipCustom" type="number" min="0" max="100" step="1" class="input-field"
+              oninput="clearErr('tipCustom')" placeholder="Or enter a custom percentage..." />
+            <p class="err-msg" id="err-tipCustom">Enter a percentage between 0 and 100</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold muted mb-2">👥 Number of People</label>
+            <input id="people" type="number" value="2" min="1" step="1" class="input-field"
+              oninput="clearErr('people'); liveCalculate()" />
+            <p class="err-msg" id="err-people">Please enter at least one person</p>
+          </div>
+
+          <button id="clearSavedBtn" type="button" class="btn-outline mt-2" style="width:100%;">
+            🗑️ Clear data saved on this device
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Results section ── -->
+      <section id="results" class="hidden fade-in space-y-4" aria-live="polite" role="status">
+
+        <div id="pdf-content" class="glass-card rounded-[1.75rem] p-5 md:p-7 border-t-4 border-emerald-500">
+
+          <div class="flex items-start justify-between mb-5 pb-4 border-b border-slate-100 dark:border-slate-700 flex-wrap gap-3">
+            <div>
+              <h2 class="text-xl font-black text-emerald-700 dark:text-emerald-300">🧾 Bill Split</h2>
+              <p class="text-xs muted mt-1">Moadalaty — Tip & Bill Split Calculator</p>
+            </div>
+            <span class="bg-emerald-100 dark:bg-emerald-900/30 px-3 py-1 rounded-lg text-xs font-bold text-emerald-700 dark:text-emerald-300">
+              <span id="tipPctLabel"></span> tip
+            </span>
+          </div>
+
+          <!-- KPIs -->
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <div class="kpi-card">
+              <p class="text-[10px] muted">Total Bill</p>
+              <p id="displayBill" class="font-black mt-1 text-sm text-slate-800 dark:text-slate-100"></p>
+            </div>
+            <div class="kpi-card">
+              <p class="text-[10px] muted">Tip Amount</p>
+              <p id="tipAmount" class="font-black mt-1 text-sm text-emerald-700 dark:text-emerald-300"></p>
+            </div>
+            <div class="kpi-card">
+              <p class="text-[10px] muted">Total with Tip</p>
+              <p id="totalWithTip" class="font-black mt-1 text-sm text-slate-800 dark:text-slate-100"></p>
+            </div>
+          </div>
+
+          <!-- Per-person share -->
+          <div class="kpi-monthly mb-4">
+            <p class="text-sm opacity-90 font-semibold relative z-10">Per Person (incl. tip)</p>
+            <p id="perPersonTotal" class="text-4xl md:text-5xl font-black mt-1 relative z-10"></p>
+            <p class="text-xs opacity-70 mt-2 relative z-10">Including a tip of <span id="perPersonTip"></span></p>
+          </div>
+
+        </div><!-- /pdf-content -->
+
+        <!-- Export buttons -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 no-print">
+          <button id="pdfBtn" type="button" class="btn-outline">
+            <i class="fas fa-file-pdf text-red-500 ml-1"></i> Save PDF
+          </button>
+          <button id="excelBtn" type="button" class="btn-outline">
+            <i class="fas fa-file-excel text-emerald-600 ml-1"></i> Excel
+          </button>
+          <button id="shareBtn" type="button" class="btn-outline text-green-600 dark:text-green-400">
+            <i class="fab fa-whatsapp ml-1"></i> Share
+          </button>
+          <button id="copyBtn" type="button" class="btn-outline text-slate-600 dark:text-slate-300">
+            <i class="fas fa-copy ml-1"></i> Copy
+          </button>
+        </div>
+      </section>
+
+      <!-- ── FAQ ── -->
+      <section class="soft-card rounded-[1.75rem] p-5 md:p-6 no-print">
+        <h2 class="section-title mb-4">Frequently Asked Questions</h2>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">How much should I tip at a restaurant?</summary>
+          <p class="text-xs muted mt-2">In the US, a standard tip is 15-20% of the bill before tax. 15% is typical for average service, 18-20% for great service. If a service charge or gratuity is already included, an extra tip is optional.</p>
+        </details>
+        <details>
+          <summary class="font-bold cursor-pointer">Should I calculate the tip before or after tax?</summary>
+          <p class="text-xs muted mt-2">It's best to calculate the tip on the bill amount before tax, not after — since tax isn't part of the service the server is being rewarded for.</p>
+        </details>
+      </section>
+
+      <!-- ── Share page (same pattern as other pages) ── -->
+      <div class="share-btns no-print" role="group" aria-label="Share this page">
+        <span class="share-btns-label">Share:</span>
+        <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmoadalaty.com%2Fen%2Ftip-bill-split-calculator.html&text=Tip%20%26%20Bill%20Split%20Calculator"
+           class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter" title="Twitter">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmoadalaty.com%2Fen%2Ftip-bill-split-calculator.html"
+           class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" title="Facebook">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://wa.me/?text=Tip%20%26%20Bill%20Split%20Calculator%20%E2%86%92%20https%3A%2F%2Fmoadalaty.com%2Fen%2Ftip-bill-split-calculator.html"
+           class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" title="WhatsApp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <button class="share-btn" onclick="CoreUtils.copyPageLink()" aria-label="Copy page link" title="Copy link" id="copy-link-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </button>
+        <button class="share-btn" onclick="window.print()" aria-label="Print page" title="Print">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        </button>
+      </div>
+
+      <!-- ── Related tools ── -->
+      <section class="no-print">
+        <h2 class="section-title mb-4">Related Tools</h2>
+        <div class="flex flex-wrap gap-2">
+          <a href="/en/roommate-expense-splitter.html" class="related-link">🏠 Roommate Expense Splitter</a>
+          <a href="/en/group-trip-cost-splitter.html" class="related-link">✈️ Group Trip Cost Splitter</a>
+          <a href="/tip-bill-split-calculator.html" class="related-link">🇪🇬 النسخة العربية</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="article-footer no-print" role="contentinfo">
+    <div class="container">
+      <nav aria-label="Main site links">
+        <div class="footer-nav">
+          <a href="/"><span aria-hidden="true">🏠</span> Home</a>
+          <span aria-hidden="true">·</span>
+          <a href="/en/tip-bill-split-calculator.html">🧾 Tip & Bill Split</a>
+          <span aria-hidden="true">·</span>
+          <a href="/en/roommate-expense-splitter.html">🏠 Roommate Expenses</a>
+          <span aria-hidden="true">·</span>
+          <a href="/en/group-trip-cost-splitter.html">✈️ Group Trip Costs</a>
+          <span aria-hidden="true">·</span>
+          <a href="/about.html">About</a>
+          <span aria-hidden="true">·</span>
+          <a href="/contact.html">Contact</a>
+          <span aria-hidden="true">·</span>
+          <a href="/privacy.html">Privacy</a>
+          <span aria-hidden="true">·</span>
+          <a href="/terms.html">Terms</a>
+          <span aria-hidden="true">·</span>
+          <a href="/disclaimer.html">Disclaimer</a>
+        </div>
+      </nav>
+      <p>Last updated: August 2026 | Content Team</p>
+      <p style="margin-top:6px;">© 2026 Moadalaty — Free tools for students and parents</p>
+    </div>
+  </footer>
+</div>
+
+<button id="scroll-top" aria-label="Back to top" title="Back to top">⬆</button>
+<button id="dark-toggle" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
+
+<!-- Save Toast -->
+<div id="saveToast" class="save-toast" role="status" aria-live="polite">💾 Saved automatically</div>
+
+<script src="/js/tip-bill-split-calculator.en.js"></script>
+<script src="/js/cookie-consent.min.js" defer></script>
+<script src="/js/site-search-data.min.js"></script>
+<script src="/js/site-search.min.js"></script>
+</body>
+</html>
