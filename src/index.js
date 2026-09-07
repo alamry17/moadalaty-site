@@ -25,39 +25,84 @@ import { EmailMessage } from "cloudflare:email";
 // زي ما هم، لأن تاريخ "آخر تحديث" بيختلف من مقالة لمقالة ولازم يفضل كده.
 const FOOTER_NAV_LINKS = [
   { href: "/", label: "🏠 الأداة" },
-  { href: "/tip-bill-split-calculator.html", label: "🧾 تقسيم الفاتورة والبقشيش" },
-  { href: "/roommate-expense-splitter.html", label: "🏠 تقسيم مصاريف السكن" },
-  { href: "/group-trip-cost-splitter.html", label: "✈️ تقسيم مصاريف الرحلة" },
+  { href: "/tip-bill-split-calculator", label: "🧾 تقسيم الفاتورة والبقشيش" },
+  { href: "/roommate-expense-splitter", label: "🏠 تقسيم مصاريف السكن" },
+  { href: "/group-trip-cost-splitter", label: "✈️ تقسيم مصاريف الرحلة" },
   { href: "/articles/", label: "📚 المقالات" },
-  { href: "/articles/faq.html", label: "❓ الأسئلة الشائعة" },
-  { href: "/about.html", label: "من نحن" },
-  { href: "/contact.html", label: "اتصل بنا" },
-  { href: "/privacy.html", label: "الخصوصية" },
-  { href: "/terms.html", label: "الشروط" },
-  { href: "/disclaimer.html", label: "إخلاء المسؤولية" },
+  { href: "/articles/faq", label: "❓ الأسئلة الشائعة" },
+  { href: "/about", label: "من نحن" },
+  { href: "/contact", label: "اتصل بنا" },
+  { href: "/privacy", label: "الخصوصية" },
+  { href: "/terms", label: "الشروط" },
+  { href: "/disclaimer", label: "إخلاء المسؤولية" },
 ];
 
-function buildFooterNavHtml() {
-  return FOOTER_NAV_LINKS
+// ═══ النسخة الإنجليزية من نفس القائمة ═══
+// كانت الصفحات الإنجليزية (index.en.html وأخواتها) بتحتفظ بفوتر ثابت
+// مكتوب يدويًا جوه كل ملف، منفصل تمامًا عن FOOTER_NAV_LINKS فوق — يعني
+// أي لينك جديد كان لازم يتضاف يدويًا في كل صفحة إنجليزية على حدة، وده
+// سهل ينسى ويسيب الصفحات مش متزامنة. دلوقتي بقى فيه مصدر واحد هنا لكل
+// اللغتين، وأي صفحة إنجليزية فيها <nav aria-label="Main site links">
+// هتاخد الفوتر ده تلقائيًا زي ما العربي بياخد بالظبط.
+const FOOTER_NAV_LINKS_EN = [
+  { href: "/en/", label: "🏠 Home" },
+  { href: "/en/tip-bill-split-calculator", label: "🧾 Tip & Bill Split" },
+  { href: "/en/roommate-expense-splitter", label: "🏠 Roommate Expenses" },
+  { href: "/en/group-trip-cost-splitter", label: "✈️ Group Trip Costs" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/disclaimer", label: "Disclaimer" },
+];
+
+function buildFooterNavHtml(links, langSwitch) {
+  const allLinks = langSwitch ? [...links, langSwitch] : links;
+  return allLinks
     .map(({ href, label }) => `<a href="${href}">${label}</a>`)
     .join('\n        <span aria-hidden="true">·</span>\n        ');
 }
 
 class FooterNavHandler {
+  constructor(links, langSwitch) {
+    this.links = links;
+    this.langSwitch = langSwitch;
+  }
   element(el) {
-    el.setInnerContent(buildFooterNavHtml(), { html: true });
+    el.setInnerContent(buildFooterNavHtml(this.links, this.langSwitch), { html: true });
   }
 }
+
+// ═══ رابط تبديل اللغة (عربي ↔ إنجليزي) ═══
+// بيظهر بس في الصفحات اللي فعلاً ليها نسخة مقابلة باللغة التانية (الرئيسية
+// وحاسبات التقسيم التلاتة)، وبيودّي لنفس الصفحة بالظبط مش للرئيسية بس —
+// عشان يفيد الزائر فعليًا ويدعم علاقة hreflang اللي في <head> بلينك مرئي
+// وقابل للزحف بدل ما تفضل معلومة مخفية شايفها جوجل بس. الصفحات اللي مالهاش
+// ترجمة (المقالات، من نحن، اتصل بنا... إلخ) بتفضل من غيره تمامًا، عشان منربطش
+// لصفحة مش موجودة.
+const LANG_ALTERNATES = {
+  "/": { href: "/en/", label: "🇬🇧 English" },
+  "/tip-bill-split-calculator": { href: "/en/tip-bill-split-calculator", label: "🇬🇧 English" },
+  "/roommate-expense-splitter": { href: "/en/roommate-expense-splitter", label: "🇬🇧 English" },
+  "/group-trip-cost-splitter": { href: "/en/group-trip-cost-splitter", label: "🇬🇧 English" },
+  "/en/": { href: "/", label: "🇸🇦 العربية" },
+  "/en/tip-bill-split-calculator": { href: "/tip-bill-split-calculator", label: "🇸🇦 العربية" },
+  "/en/roommate-expense-splitter": { href: "/roommate-expense-splitter", label: "🇸🇦 العربية" },
+  "/en/group-trip-cost-splitter": { href: "/group-trip-cost-splitter", label: "🇸🇦 العربية" },
+};
 
 // بيتطبّق بس على استجابات HTML فعلية (مش CSS/JS/صور... إلخ) — بنتأكد من
 // الـ Content-Type قبل ما نحاول نعمل rewrite، تجنبًا لأي محاولة تعديل على
 // ملفات مش HTML أصلاً.
-function applyUnifiedFooter(response) {
+function applyUnifiedFooter(response, pathname) {
   const contentType = response.headers.get("Content-Type") || "";
   if (!contentType.includes("text/html")) return response;
 
+  const langSwitch = LANG_ALTERNATES[pathname] || null;
+
   return new HTMLRewriter()
-    .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler())
+    .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler(FOOTER_NAV_LINKS, langSwitch))
+    .on('nav[aria-label="Main site links"]', new FooterNavHandler(FOOTER_NAV_LINKS_EN, langSwitch))
     .transform(response);
 }
 
@@ -186,22 +231,22 @@ async function handleContact(request, env) {
 }
 
 // ═══ إعادة كتابة مسارات النسخة الإنجليزية (/en/*) للملفات الحقيقية ═══
-// الصفحات الإنجليزية بتستخدم روابط داخلية وhreflang/canonical بصيغة
-// "/en/..." (مثلاً /en/tip-bill-split-calculator.html)، لكن الملفات
-// الفعلية مسطّحة في جذر الموقع بامتداد ".en.html" (tip-bill-split-
-// calculator.en.html). من غير الدالة دي، أي رابط "/en/..." كان بيرجّع
-// 404 لأن مفيش مجلد /en/ فعلي ولا أي _redirects بيعمل التحويل.
-//
-// بنعمل rewrite داخلي (مش redirect) عشان الرابط اللي شايفه الزائر في
-// المتصفح وجوجل يفضل "/en/..." زي ما هو (متطابق مع canonical/hreflang)،
-// وبس اللي بيتغيّر هو المسار اللي بنطلبه فعليًا من env.ASSETS.
+// الموقع بيستخدم روابط نضيفة (Clean URLs) بشكل افتراضي — Cloudflare بيحذف
+// امتداد ".html" من أي رابط تلقائيًا (مثلاً /tip-bill-split-calculator.html
+// بيتحول لـ /tip-bill-split-calculator). يعني الـ pathname اللي بيوصل هنا
+// عادةً من غير ".html" خالص. الدالة دي بتبني مسار الملف الحقيقي "/foo.en"
+// (من غير .html هي كمان) وتسيب Cloudflare نفسه يلاقي "foo.en.html" ورا
+// الكواليس زي ما بيعمل مع أي رابط نضيف تاني في الموقع — عشان نتجنب أي
+// تحويل (redirect) إضافي مش محتاجينه. لسه بتفهم روابط ".html" القديمة
+// كمان (لو حد عنده لينك قديم محفوظ) عن طريق حذفها قبل ما نضيف ".en".
 function resolveEnglishAssetPath(pathname) {
   if (pathname === "/en" || pathname === "/en/") {
-    return "/index.en.html";
+    return "/index.en";
   }
-  if (pathname.startsWith("/en/") && pathname.endsWith(".html")) {
-    const rest = pathname.slice(4, -5); // من غير "/en/" في الأول و".html" في الآخر
-    return `/${rest}.en.html`;
+  if (pathname.startsWith("/en/")) {
+    let rest = pathname.slice(4); // بعد "/en/"
+    if (rest.endsWith(".html")) rest = rest.slice(0, -5);
+    if (rest) return `/${rest}.en`;
   }
   return null;
 }
@@ -230,6 +275,7 @@ export default {
     // الساكنة زي ما هي، وبعدين لو كانت الاستجابة HTML فعلاً، بيتعمل عليها
     // rewrite لفوتر موحّد قبل ما ترجع للزائر — راجع applyUnifiedFooter فوق.
     const assetResponse = await env.ASSETS.fetch(assetRequest);
-    return applyUnifiedFooter(assetResponse);
+    const langSwitchKey = url.pathname === "/en" ? "/en/" : url.pathname;
+    return applyUnifiedFooter(assetResponse, langSwitchKey);
   },
 };
