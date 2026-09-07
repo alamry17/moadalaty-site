@@ -25,16 +25,16 @@ import { EmailMessage } from "cloudflare:email";
 // زي ما هم، لأن تاريخ "آخر تحديث" بيختلف من مقالة لمقالة ولازم يفضل كده.
 const FOOTER_NAV_LINKS = [
   { href: "/", label: "🏠 الأداة" },
-  { href: "/tip-bill-split-calculator.html", label: "🧾 تقسيم الفاتورة والبقشيش" },
-  { href: "/roommate-expense-splitter.html", label: "🏠 تقسيم مصاريف السكن" },
-  { href: "/group-trip-cost-splitter.html", label: "✈️ تقسيم مصاريف الرحلة" },
+  { href: "/tip-bill-split-calculator", label: "🧾 تقسيم الفاتورة والبقشيش" },
+  { href: "/roommate-expense-splitter", label: "🏠 تقسيم مصاريف السكن" },
+  { href: "/group-trip-cost-splitter", label: "✈️ تقسيم مصاريف الرحلة" },
   { href: "/articles/", label: "📚 المقالات" },
-  { href: "/articles/faq.html", label: "❓ الأسئلة الشائعة" },
-  { href: "/about.html", label: "من نحن" },
-  { href: "/contact.html", label: "اتصل بنا" },
-  { href: "/privacy.html", label: "الخصوصية" },
-  { href: "/terms.html", label: "الشروط" },
-  { href: "/disclaimer.html", label: "إخلاء المسؤولية" },
+  { href: "/articles/faq", label: "❓ الأسئلة الشائعة" },
+  { href: "/about", label: "من نحن" },
+  { href: "/contact", label: "اتصل بنا" },
+  { href: "/privacy", label: "الخصوصية" },
+  { href: "/terms", label: "الشروط" },
+  { href: "/disclaimer", label: "إخلاء المسؤولية" },
 ];
 
 // ═══ النسخة الإنجليزية من نفس القائمة ═══
@@ -46,14 +46,14 @@ const FOOTER_NAV_LINKS = [
 // هتاخد الفوتر ده تلقائيًا زي ما العربي بياخد بالظبط.
 const FOOTER_NAV_LINKS_EN = [
   { href: "/en/", label: "🏠 Home" },
-  { href: "/en/tip-bill-split-calculator.html", label: "🧾 Tip & Bill Split" },
-  { href: "/en/roommate-expense-splitter.html", label: "🏠 Roommate Expenses" },
-  { href: "/en/group-trip-cost-splitter.html", label: "✈️ Group Trip Costs" },
-  { href: "/about.html", label: "About" },
-  { href: "/contact.html", label: "Contact" },
-  { href: "/privacy.html", label: "Privacy" },
-  { href: "/terms.html", label: "Terms" },
-  { href: "/disclaimer.html", label: "Disclaimer" },
+  { href: "/en/tip-bill-split-calculator", label: "🧾 Tip & Bill Split" },
+  { href: "/en/roommate-expense-splitter", label: "🏠 Roommate Expenses" },
+  { href: "/en/group-trip-cost-splitter", label: "✈️ Group Trip Costs" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/disclaimer", label: "Disclaimer" },
 ];
 
 function buildFooterNavHtml(links, langSwitch) {
@@ -82,13 +82,13 @@ class FooterNavHandler {
 // لصفحة مش موجودة.
 const LANG_ALTERNATES = {
   "/": { href: "/en/", label: "🇬🇧 English" },
-  "/tip-bill-split-calculator.html": { href: "/en/tip-bill-split-calculator.html", label: "🇬🇧 English" },
-  "/roommate-expense-splitter.html": { href: "/en/roommate-expense-splitter.html", label: "🇬🇧 English" },
-  "/group-trip-cost-splitter.html": { href: "/en/group-trip-cost-splitter.html", label: "🇬🇧 English" },
+  "/tip-bill-split-calculator": { href: "/en/tip-bill-split-calculator", label: "🇬🇧 English" },
+  "/roommate-expense-splitter": { href: "/en/roommate-expense-splitter", label: "🇬🇧 English" },
+  "/group-trip-cost-splitter": { href: "/en/group-trip-cost-splitter", label: "🇬🇧 English" },
   "/en/": { href: "/", label: "🇸🇦 العربية" },
-  "/en/tip-bill-split-calculator.html": { href: "/tip-bill-split-calculator.html", label: "🇸🇦 العربية" },
-  "/en/roommate-expense-splitter.html": { href: "/roommate-expense-splitter.html", label: "🇸🇦 العربية" },
-  "/en/group-trip-cost-splitter.html": { href: "/group-trip-cost-splitter.html", label: "🇸🇦 العربية" },
+  "/en/tip-bill-split-calculator": { href: "/tip-bill-split-calculator", label: "🇸🇦 العربية" },
+  "/en/roommate-expense-splitter": { href: "/roommate-expense-splitter", label: "🇸🇦 العربية" },
+  "/en/group-trip-cost-splitter": { href: "/group-trip-cost-splitter", label: "🇸🇦 العربية" },
 };
 
 // بيتطبّق بس على استجابات HTML فعلية (مش CSS/JS/صور... إلخ) — بنتأكد من
@@ -231,22 +231,22 @@ async function handleContact(request, env) {
 }
 
 // ═══ إعادة كتابة مسارات النسخة الإنجليزية (/en/*) للملفات الحقيقية ═══
-// الصفحات الإنجليزية بتستخدم روابط داخلية وhreflang/canonical بصيغة
-// "/en/..." (مثلاً /en/tip-bill-split-calculator.html)، لكن الملفات
-// الفعلية مسطّحة في جذر الموقع بامتداد ".en.html" (tip-bill-split-
-// calculator.en.html). من غير الدالة دي، أي رابط "/en/..." كان بيرجّع
-// 404 لأن مفيش مجلد /en/ فعلي ولا أي _redirects بيعمل التحويل.
-//
-// بنعمل rewrite داخلي (مش redirect) عشان الرابط اللي شايفه الزائر في
-// المتصفح وجوجل يفضل "/en/..." زي ما هو (متطابق مع canonical/hreflang)،
-// وبس اللي بيتغيّر هو المسار اللي بنطلبه فعليًا من env.ASSETS.
+// الموقع بيستخدم روابط نضيفة (Clean URLs) بشكل افتراضي — Cloudflare بيحذف
+// امتداد ".html" من أي رابط تلقائيًا (مثلاً /tip-bill-split-calculator.html
+// بيتحول لـ /tip-bill-split-calculator). يعني الـ pathname اللي بيوصل هنا
+// عادةً من غير ".html" خالص. الدالة دي بتبني مسار الملف الحقيقي "/foo.en"
+// (من غير .html هي كمان) وتسيب Cloudflare نفسه يلاقي "foo.en.html" ورا
+// الكواليس زي ما بيعمل مع أي رابط نضيف تاني في الموقع — عشان نتجنب أي
+// تحويل (redirect) إضافي مش محتاجينه. لسه بتفهم روابط ".html" القديمة
+// كمان (لو حد عنده لينك قديم محفوظ) عن طريق حذفها قبل ما نضيف ".en".
 function resolveEnglishAssetPath(pathname) {
   if (pathname === "/en" || pathname === "/en/") {
-    return "/index.en.html";
+    return "/index.en";
   }
-  if (pathname.startsWith("/en/") && pathname.endsWith(".html")) {
-    const rest = pathname.slice(4, -5); // من غير "/en/" في الأول و".html" في الآخر
-    return `/${rest}.en.html`;
+  if (pathname.startsWith("/en/")) {
+    let rest = pathname.slice(4); // بعد "/en/"
+    if (rest.endsWith(".html")) rest = rest.slice(0, -5);
+    if (rest) return `/${rest}.en`;
   }
   return null;
 }
