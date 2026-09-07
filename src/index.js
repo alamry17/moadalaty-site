@@ -185,6 +185,27 @@ async function handleContact(request, env) {
   }
 }
 
+// ═══ إعادة كتابة مسارات النسخة الإنجليزية (/en/*) للملفات الحقيقية ═══
+// الصفحات الإنجليزية بتستخدم روابط داخلية وhreflang/canonical بصيغة
+// "/en/..." (مثلاً /en/tip-bill-split-calculator.html)، لكن الملفات
+// الفعلية مسطّحة في جذر الموقع بامتداد ".en.html" (tip-bill-split-
+// calculator.en.html). من غير الدالة دي، أي رابط "/en/..." كان بيرجّع
+// 404 لأن مفيش مجلد /en/ فعلي ولا أي _redirects بيعمل التحويل.
+//
+// بنعمل rewrite داخلي (مش redirect) عشان الرابط اللي شايفه الزائر في
+// المتصفح وجوجل يفضل "/en/..." زي ما هو (متطابق مع canonical/hreflang)،
+// وبس اللي بيتغيّر هو المسار اللي بنطلبه فعليًا من env.ASSETS.
+function resolveEnglishAssetPath(pathname) {
+  if (pathname === "/en" || pathname === "/en/") {
+    return "/index.en.html";
+  }
+  if (pathname.startsWith("/en/") && pathname.endsWith(".html")) {
+    const rest = pathname.slice(4, -5); // من غير "/en/" في الأول و".html" في الآخر
+    return `/${rest}.en.html`;
+  }
+  return null;
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -197,10 +218,18 @@ export default {
       return handleViews(request, env);
     }
 
+    // لو المسار "/en/..." حوّله للملف الحقيقي المطابق قبل ما نطلبه.
+    let assetRequest = request;
+    const rewrittenPath = resolveEnglishAssetPath(url.pathname);
+    if (rewrittenPath) {
+      const rewrittenUrl = new URL(rewrittenPath, url.origin);
+      assetRequest = new Request(rewrittenUrl.toString(), request);
+    }
+
     // كل الطلبات التانية (صفحات HTML، CSS، JS، صور...) بتتقدّم من الملفات
     // الساكنة زي ما هي، وبعدين لو كانت الاستجابة HTML فعلاً، بيتعمل عليها
     // rewrite لفوتر موحّد قبل ما ترجع للزائر — راجع applyUnifiedFooter فوق.
-    const assetResponse = await env.ASSETS.fetch(request);
+    const assetResponse = await env.ASSETS.fetch(assetRequest);
     return applyUnifiedFooter(assetResponse);
   },
 };
