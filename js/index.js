@@ -37,15 +37,37 @@ const FOOTER_NAV_LINKS = [
   { href: "/disclaimer.html", label: "إخلاء المسؤولية" },
 ];
 
-function buildFooterNavHtml() {
-  return FOOTER_NAV_LINKS
+// ═══ النسخة الإنجليزية من نفس القائمة ═══
+// كانت الصفحات الإنجليزية (index.en.html وأخواتها) بتحتفظ بفوتر ثابت
+// مكتوب يدويًا جوه كل ملف، منفصل تمامًا عن FOOTER_NAV_LINKS فوق — يعني
+// أي لينك جديد كان لازم يتضاف يدويًا في كل صفحة إنجليزية على حدة، وده
+// سهل ينسى ويسيب الصفحات مش متزامنة. دلوقتي بقى فيه مصدر واحد هنا لكل
+// اللغتين، وأي صفحة إنجليزية فيها <nav aria-label="Main site links">
+// هتاخد الفوتر ده تلقائيًا زي ما العربي بياخد بالظبط.
+const FOOTER_NAV_LINKS_EN = [
+  { href: "/en/", label: "🏠 Home" },
+  { href: "/en/tip-bill-split-calculator.html", label: "🧾 Tip & Bill Split" },
+  { href: "/en/roommate-expense-splitter.html", label: "🏠 Roommate Expenses" },
+  { href: "/en/group-trip-cost-splitter.html", label: "✈️ Group Trip Costs" },
+  { href: "/about.html", label: "About" },
+  { href: "/contact.html", label: "Contact" },
+  { href: "/privacy.html", label: "Privacy" },
+  { href: "/terms.html", label: "Terms" },
+  { href: "/disclaimer.html", label: "Disclaimer" },
+];
+
+function buildFooterNavHtml(links) {
+  return links
     .map(({ href, label }) => `<a href="${href}">${label}</a>`)
     .join('\n        <span aria-hidden="true">·</span>\n        ');
 }
 
 class FooterNavHandler {
+  constructor(links) {
+    this.links = links;
+  }
   element(el) {
-    el.setInnerContent(buildFooterNavHtml(), { html: true });
+    el.setInnerContent(buildFooterNavHtml(this.links), { html: true });
   }
 }
 
@@ -57,7 +79,8 @@ function applyUnifiedFooter(response) {
   if (!contentType.includes("text/html")) return response;
 
   return new HTMLRewriter()
-    .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler())
+    .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler(FOOTER_NAV_LINKS))
+    .on('nav[aria-label="Main site links"]', new FooterNavHandler(FOOTER_NAV_LINKS_EN))
     .transform(response);
 }
 
