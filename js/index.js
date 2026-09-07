@@ -56,31 +56,53 @@ const FOOTER_NAV_LINKS_EN = [
   { href: "/disclaimer.html", label: "Disclaimer" },
 ];
 
-function buildFooterNavHtml(links) {
-  return links
+function buildFooterNavHtml(links, langSwitch) {
+  const allLinks = langSwitch ? [...links, langSwitch] : links;
+  return allLinks
     .map(({ href, label }) => `<a href="${href}">${label}</a>`)
     .join('\n        <span aria-hidden="true">·</span>\n        ');
 }
 
 class FooterNavHandler {
-  constructor(links) {
+  constructor(links, langSwitch) {
     this.links = links;
+    this.langSwitch = langSwitch;
   }
   element(el) {
-    el.setInnerContent(buildFooterNavHtml(this.links), { html: true });
+    el.setInnerContent(buildFooterNavHtml(this.links, this.langSwitch), { html: true });
   }
 }
+
+// ═══ رابط تبديل اللغة (عربي ↔ إنجليزي) ═══
+// بيظهر بس في الصفحات اللي فعلاً ليها نسخة مقابلة باللغة التانية (الرئيسية
+// وحاسبات التقسيم التلاتة)، وبيودّي لنفس الصفحة بالظبط مش للرئيسية بس —
+// عشان يفيد الزائر فعليًا ويدعم علاقة hreflang اللي في <head> بلينك مرئي
+// وقابل للزحف بدل ما تفضل معلومة مخفية شايفها جوجل بس. الصفحات اللي مالهاش
+// ترجمة (المقالات، من نحن، اتصل بنا... إلخ) بتفضل من غيره تمامًا، عشان منربطش
+// لصفحة مش موجودة.
+const LANG_ALTERNATES = {
+  "/": { href: "/en/", label: "🇬🇧 English" },
+  "/tip-bill-split-calculator.html": { href: "/en/tip-bill-split-calculator.html", label: "🇬🇧 English" },
+  "/roommate-expense-splitter.html": { href: "/en/roommate-expense-splitter.html", label: "🇬🇧 English" },
+  "/group-trip-cost-splitter.html": { href: "/en/group-trip-cost-splitter.html", label: "🇬🇧 English" },
+  "/en/": { href: "/", label: "🇸🇦 العربية" },
+  "/en/tip-bill-split-calculator.html": { href: "/tip-bill-split-calculator.html", label: "🇸🇦 العربية" },
+  "/en/roommate-expense-splitter.html": { href: "/roommate-expense-splitter.html", label: "🇸🇦 العربية" },
+  "/en/group-trip-cost-splitter.html": { href: "/group-trip-cost-splitter.html", label: "🇸🇦 العربية" },
+};
 
 // بيتطبّق بس على استجابات HTML فعلية (مش CSS/JS/صور... إلخ) — بنتأكد من
 // الـ Content-Type قبل ما نحاول نعمل rewrite، تجنبًا لأي محاولة تعديل على
 // ملفات مش HTML أصلاً.
-function applyUnifiedFooter(response) {
+function applyUnifiedFooter(response, pathname) {
   const contentType = response.headers.get("Content-Type") || "";
   if (!contentType.includes("text/html")) return response;
 
+  const langSwitch = LANG_ALTERNATES[pathname] || null;
+
   return new HTMLRewriter()
-    .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler(FOOTER_NAV_LINKS))
-    .on('nav[aria-label="Main site links"]', new FooterNavHandler(FOOTER_NAV_LINKS_EN))
+    .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler(FOOTER_NAV_LINKS, langSwitch))
+    .on('nav[aria-label="Main site links"]', new FooterNavHandler(FOOTER_NAV_LINKS_EN, langSwitch))
     .transform(response);
 }
 
@@ -253,6 +275,7 @@ export default {
     // الساكنة زي ما هي، وبعدين لو كانت الاستجابة HTML فعلاً، بيتعمل عليها
     // rewrite لفوتر موحّد قبل ما ترجع للزائر — راجع applyUnifiedFooter فوق.
     const assetResponse = await env.ASSETS.fetch(assetRequest);
-    return applyUnifiedFooter(assetResponse);
+    const langSwitchKey = url.pathname === "/en" ? "/en/" : url.pathname;
+    return applyUnifiedFooter(assetResponse, langSwitchKey);
   },
 };
