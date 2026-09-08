@@ -24,12 +24,12 @@ import { EmailMessage } from "cloudflare:email";
 // "آخر تحديث" ولا سطر حقوق النشر تحته — دول لسه بيتقروا من كل ملف HTML
 // زي ما هم، لأن تاريخ "آخر تحديث" بيختلف من مقالة لمقالة ولازم يفضل كده.
 const FOOTER_NAV_LINKS = [
-  { href: "/", label: "🏠 الأداة" },
-  { href: "/tip-bill-split-calculator", label: "🧾 تقسيم الفاتورة والبقشيش" },
-  { href: "/roommate-expense-splitter", label: "🏠 تقسيم مصاريف السكن" },
-  { href: "/group-trip-cost-splitter", label: "✈️ تقسيم مصاريف الرحلة" },
-  { href: "/articles/", label: "📚 المقالات" },
-  { href: "/articles/faq", label: "❓ الأسئلة الشائعة" },
+  { href: "/", label: "🏠 الأداة" },
+  { href: "/tip-bill-split-calculator", label: "🧾 تقسيم الفاتورة والبقشيش" },
+  { href: "/roommate-expense-splitter", label: "🏠 تقسيم مصاريف السكن" },
+  { href: "/group-trip-cost-splitter", label: "✈️ تقسيم مصاريف الرحلة" },
+  { href: "/articles/", label: "📚 المقالات" },
+  { href: "/articles/faq", label: "❓ الأسئلة الشائعة" },
   { href: "/about", label: "من نحن" },
   { href: "/contact", label: "اتصل بنا" },
   { href: "/privacy", label: "الخصوصية" },
@@ -45,10 +45,10 @@ const FOOTER_NAV_LINKS = [
 // اللغتين، وأي صفحة إنجليزية فيها <nav aria-label="Main site links">
 // هتاخد الفوتر ده تلقائيًا زي ما العربي بياخد بالظبط.
 const FOOTER_NAV_LINKS_EN = [
-  { href: "/en/", label: "🏠 Home" },
-  { href: "/en/tip-bill-split-calculator", label: "🧾 Tip & Bill Split" },
-  { href: "/en/roommate-expense-splitter", label: "🏠 Roommate Expenses" },
-  { href: "/en/group-trip-cost-splitter", label: "✈️ Group Trip Costs" },
+  { href: "/en/", label: "🏠 Home" },
+  { href: "/en/tip-bill-split-calculator", label: "🧾 Tip & Bill Split" },
+  { href: "/en/roommate-expense-splitter", label: "🏠 Roommate Expenses" },
+  { href: "/en/group-trip-cost-splitter", label: "✈️ Group Trip Costs" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
@@ -81,14 +81,14 @@ class FooterNavHandler {
 // ترجمة (المقالات، من نحن، اتصل بنا... إلخ) بتفضل من غيره تمامًا، عشان منربطش
 // لصفحة مش موجودة.
 const LANG_ALTERNATES = {
-  "/": { href: "/en/", label: "🇬🇧 English" },
-  "/tip-bill-split-calculator": { href: "/en/tip-bill-split-calculator", label: "🇬🇧 English" },
-  "/roommate-expense-splitter": { href: "/en/roommate-expense-splitter", label: "🇬🇧 English" },
-  "/group-trip-cost-splitter": { href: "/en/group-trip-cost-splitter", label: "🇬🇧 English" },
-  "/en/": { href: "/", label: "🇸🇦 العربية" },
-  "/en/tip-bill-split-calculator": { href: "/tip-bill-split-calculator", label: "🇸🇦 العربية" },
-  "/en/roommate-expense-splitter": { href: "/roommate-expense-splitter", label: "🇸🇦 العربية" },
-  "/en/group-trip-cost-splitter": { href: "/group-trip-cost-splitter", label: "🇸🇦 العربية" },
+  "/": { href: "/en/", label: "🇬🇧 English" },
+  "/tip-bill-split-calculator": { href: "/en/tip-bill-split-calculator", label: "🇬🇧 English" },
+  "/roommate-expense-splitter": { href: "/en/roommate-expense-splitter", label: "🇬🇧 English" },
+  "/group-trip-cost-splitter": { href: "/en/group-trip-cost-splitter", label: "🇬🇧 English" },
+  "/en/": { href: "/", label: "🇸🇦 العربية" },
+  "/en/tip-bill-split-calculator": { href: "/tip-bill-split-calculator", label: "🇸🇦 العربية" },
+  "/en/roommate-expense-splitter": { href: "/roommate-expense-splitter", label: "🇸🇦 العربية" },
+  "/en/group-trip-cost-splitter": { href: "/group-trip-cost-splitter", label: "🇸🇦 العربية" },
 };
 
 // بيتطبّق بس على استجابات HTML فعلية (مش CSS/JS/صور... إلخ) — بنتأكد من
