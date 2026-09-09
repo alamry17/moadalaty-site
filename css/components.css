@@ -1005,3 +1005,20 @@ body.dark .prose h2 { color: var(--primary-light); }
 .ta-left-bold { text-align: left; font-weight: 800; }
 .content-hub-title { font-size: 14px; font-weight: 800; color: var(--primary); margin: 20px 0 8px; }
 .content-hub-title.first { margin-top: 16px; }
+
+/* ═══ صندوق القسط الشهري (side-monthly-box) — الصفحة الرئيسية الجديدة ═══ */
+/* الكلاس ده كان مستخدم في index.html من غير أي تعريف CSS، فالنص كان بيتلوّن
+   بأزرق (text-brand-*) فوق خلفية زرقاء غامقة فمش بيبان. الحل: نص أبيض واضح
+   دايمًا فوق خلفية العلامة التجارية، بغض النظر عن أي كلاس لون متضارب جواه. */
+.side-monthly-box {
+  background: var(--primary);
+  border-radius: 1rem;
+  padding: 14px 16px;
+  text-align: center;
+}
+.side-monthly-box span {
+  color: #fff !important;
+}
+.side-monthly-box #sideMonthlyMeta {
+  color: rgba(255,255,255,.75) !important;
+}
