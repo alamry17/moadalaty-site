@@ -22,7 +22,7 @@
     <div class="calc-group">
       <label>الرسوم الدراسية الأساسية السنوية (جنيه)</label>
       <input type="text" inputmode="numeric" id="fees-basic" placeholder="مثال: 30000">
-      <p class="err-msg" id="err-fees-basic">يرجى إدخال الرسوم الدراسية الأساسية (رقم أكبر من صفر).</p>
+      <p class="err-msg" id="err-fees-basic" role="alert" aria-live="polite">يرجى إدخال الرسوم الدراسية الأساسية (رقم أكبر من صفر).</p>
     </div>
     <div class="calc-group">
       <label>مصاريف الأنشطة السنوية (جنيه)</label>
@@ -98,6 +98,13 @@ MoadalatyWidgetBridge.initAnalyticsBridge();
 /* ── نفس منطق compute() بالظبط من articles/school-fees-installments.html —
    عمداً منسوخ بدل ما يتغيّر، عشان نتيجة الودجت تفضل مطابقة لنتيجة
    المقال الكامل 100%. لو عدّلت معادلة الحاسبة هناك، حدّثها هنا كمان. ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('fees-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: null,
   analyticsId: 'fees-widget',
@@ -132,7 +139,7 @@ initFormCalculator({
     const totalYear = basicAfterDiscount + activitiesAfterDiscount + fixedTotal;
     const monthly = totalYear / months;
 
-    const fmt = n => CoreUtils.formatLikeInput(n.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' جنيه', v._arabicIndic);
+    const fmt = n => (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(n.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' جنيه', v._arabicIndic) : n.toLocaleString('ar-EG', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' جنيه');
 
     let badge;
     if (monthly < 2000)      badge = { text: '✅ في نطاق المدارس الاقتصادية', bg: '#d4f0e0', color: '#1e7e4a' };
@@ -163,6 +170,7 @@ initFormCalculator({
     };
   }
 });
+}
 
 /* ── إبلاغ الصفحة الحاضنة بارتفاع المحتوى تلقائيًا (نفس نمط widgets/gpa-calculator.html) ── */
 MoadalatyWidgetBridge.initAutoResize();
