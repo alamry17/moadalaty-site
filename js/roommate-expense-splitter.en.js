@@ -366,6 +366,7 @@
 
   window.addEventListener('load', () => {
     CoreUtils.initDarkMode('dark-toggle');
+    if (typeof CoreUtils.initViewCounter === 'function') CoreUtils.initViewCounter('view-count', 'roommate-expense-splitter-en');
     wireEvents();
     loadData();
     calculate(false);

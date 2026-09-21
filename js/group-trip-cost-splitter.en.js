@@ -490,6 +490,7 @@
 
   window.addEventListener('load', () => {
     CoreUtils.initDarkMode('dark-toggle');
+    if (typeof CoreUtils.initViewCounter === 'function') CoreUtils.initViewCounter('view-count', 'group-trip-cost-splitter-en');
     wireEvents();
     loadData();
     calculate(false);

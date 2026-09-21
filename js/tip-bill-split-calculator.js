@@ -376,6 +376,7 @@
   /* ════ Init ════ */
   window.addEventListener('load', () => {
     CoreUtils.initDarkMode('dark-toggle');
+    if (typeof CoreUtils.initViewCounter === 'function') CoreUtils.initViewCounter('view-count', 'tip-bill-split-calculator');
     loadData();
     wireEvents();
     calculate(false);
