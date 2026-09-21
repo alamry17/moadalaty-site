@@ -123,7 +123,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h1 class="text-xl font-black text-brand-700 dark:text-brand-400 leading-tight">
           Moadalaty
         </h1>
-        <p class="text-xs muted font-bold">Free splitting calculators — no signup</p>
+        <p class="text-xs muted font-bold flex items-center gap-2">
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+          <span class="view-meta"><span aria-hidden="true">👁</span> <span id="view-count">—</span> views</span>
+          Free splitting calculators — no signup
+        </p>
       </div>
     </div>
   </header>
@@ -201,6 +205,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   window.addEventListener('load', () => {
     if (window.CoreUtils && CoreUtils.initDarkMode) CoreUtils.initDarkMode('dark-toggle');
+    if (window.CoreUtils && CoreUtils.initViewCounter) CoreUtils.initViewCounter('view-count', 'index-en');
     const btn = document.getElementById('scroll-top');
     if (btn) {
       window.addEventListener('scroll', () => {
