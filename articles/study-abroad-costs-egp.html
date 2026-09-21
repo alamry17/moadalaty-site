@@ -805,7 +805,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
    DARK MODE TOGGLE
 ════════════════════════════════════════════ */
 (function () {
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ════════════════════════════════════════════

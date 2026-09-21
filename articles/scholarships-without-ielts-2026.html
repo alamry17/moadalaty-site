@@ -657,7 +657,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="calc-group">
           <label for="my-gpa">معدلك الأكاديمي</label>
           <input type="text" inputmode="decimal" id="my-gpa" placeholder="مثال: 3.2 أو 85 أو 78">
-          <p class="err-msg" id="err-my-gpa">هذا الحقل مطلوب.</p>
+          <p class="err-msg" id="err-my-gpa" role="alert" aria-live="polite">هذا الحقل مطلوب.</p>
         </div>
         <div class="calc-group">
           <label for="gpa-system">نظام التقييم</label>
@@ -1036,7 +1036,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 /* ── Dark Mode ── */
 (function() {
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Reading Progress ── */
@@ -1113,6 +1113,13 @@ function toGpa4(val, system) {
   return 0;
 }
 
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('eligibility-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:scholarships-without-ielts:v1',
   selectIds: ['gpa-system', 'study-lang', 'target-level'],
@@ -1149,6 +1156,7 @@ initFormCalculator({
       eligible.forEach(s => {
         listHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; margin-bottom:8px; background:var(--success-light); border-radius:8px; font-size:14px; gap:10px;"><span style="color:var(--primary); font-weight:700;">' + s.name + '</span><span style="font-size:12px; color:var(--text-muted); flex-shrink:0;">IELTS: ' + s.ielts + '</span></div>';
       });
+}
     }
 
     let langTipHtml = '';
@@ -1159,7 +1167,7 @@ initFormCalculator({
 
     return {
       outputs: {
-        'converted-gpa': CoreUtils.formatLikeInput(gpa4.toFixed(2) + ' / 4.0', v._arabicIndic),
+        'converted-gpa': (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(gpa4.toFixed(2) + ' / 4.0', v._arabicIndic) : gpa4.toFixed(2) + ' / 4.0'),
         'eligible-count': String(eligible.length)
       },
       innerHtmlOutputs: {

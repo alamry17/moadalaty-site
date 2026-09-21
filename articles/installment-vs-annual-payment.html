@@ -63,7 +63,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="article:published_time" content="2026-01-20T08:00:00+03:00">
 <meta property="article:modified_time" content="2026-07-17T09:58:00+03:00">
 <meta property="article:section" content="مقارنة مالية">
-<meta property="article:tag" content="دفع سنوي مقابل تقسيط, أفضل طريقة سداد رسوم">
+<meta property="article:tag" content="دفع سنوي مقابل تقسيط">
+<meta property="article:tag" content="أفضل طريقة سداد رسوم">
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="الدفع السنوي مقابل التقسيط في المصاريف المدرسية | أيهما أفضل؟">
 <meta name="twitter:description" content="مقارنة شاملة بين الدفع السنوي والتقسيط الشهري مع حاسبة تفاعلية توضح الفرق الحقيقي في التكلفة.">
@@ -346,22 +347,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="calc-group">
           <label for="total-fees">الرسوم السنوية الكاملة</label>
           <input type="text" inputmode="numeric" id="total-fees" placeholder="مثال: 50000">
-          <p class="err-msg" id="err-total-fees">يرجى إدخال الرسوم السنوية (رقم أكبر من صفر).</p>
+          <p class="err-msg" id="err-total-fees" role="alert" aria-live="polite">يرجى إدخال الرسوم السنوية (رقم أكبر من صفر).</p>
         </div>
         <div class="calc-group">
           <label for="annual-discount">خصم الدفع المقدم %</label>
           <input type="text" inputmode="numeric" id="annual-discount" placeholder="مثال: 7">
-          <p class="err-msg" id="err-annual-discount">النسبة يجب أن تكون بين 0 و100.</p>
+          <p class="err-msg" id="err-annual-discount" role="alert" aria-live="polite">النسبة يجب أن تكون بين 0 و100.</p>
         </div>
         <div class="calc-group">
           <label for="install-months">عدد أشهر التقسيط</label>
           <input type="text" inputmode="numeric" id="install-months" placeholder="مثال: 10">
-          <p class="err-msg" id="err-install-months">عدد الأشهر يجب أن يكون بين 1 و36.</p>
+          <p class="err-msg" id="err-install-months" role="alert" aria-live="polite">عدد الأشهر يجب أن يكون بين 1 و36.</p>
         </div>
         <div class="calc-group">
           <label for="install-fee">رسوم التقسيط %</label>
           <input type="text" inputmode="numeric" id="install-fee" placeholder="مثال: 8">
-          <p class="err-msg" id="err-install-fee">النسبة يجب أن تكون 0 أو أكبر.</p>
+          <p class="err-msg" id="err-install-fee" role="alert" aria-live="polite">النسبة يجب أن تكون 0 أو أكبر.</p>
         </div>
       </div>
 
@@ -523,7 +524,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 /* ── Dark Mode ── */
 (function() {
   const btn = document.getElementById('dark-toggle');
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Scroll-to-Top ── */
@@ -576,6 +577,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ── حاسبة مقارنة الدفع السنوي بالتقسيط — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('calc-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:installment-vs-annual:v1',
   fieldIds: ['total-fees', 'annual-discount', 'install-months', 'install-fee'],
@@ -613,7 +621,7 @@ initFormCalculator({
       };
     }
 
-    const fmt = n => CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-EG') + ' ج.م', v._arabicIndic);
+    const fmt = n => (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-EG') + ' ج.م', v._arabicIndic) : Math.round(n).toLocaleString('ar-EG') + ' ج.م');
     const annual  = fees * (1 - disc / 100);
     const install = fees * (1 + fee / 100);
     const monthly = install / months;
@@ -638,6 +646,7 @@ initFormCalculator({
     };
   }
 });
+}
 </script>
 
 <!-- ✅ السكربت الموحّد — ثابت، يأتي آخر شيء -->

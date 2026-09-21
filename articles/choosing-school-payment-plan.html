@@ -63,7 +63,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="article:published_time" content="2026-01-18T08:00:00+03:00">
 <meta property="article:modified_time" content="2026-07-17T09:58:00+03:00">
 <meta property="article:section" content="تخطيط مالي">
-<meta property="article:tag" content="خطة سداد مدرسية, تقسيط الرسوم, إدارة الدخل الشهري">
+<meta property="article:tag" content="خطة سداد مدرسية">
+<meta property="article:tag" content="تقسيط الرسوم">
+<meta property="article:tag" content="إدارة الدخل الشهري">
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="كيف تختار خطة سداد مدرسية تناسب دخلك الشهري؟">
 <meta name="twitter:description" content="دليل عملي لاختيار خطة سداد الرسوم المدرسية المناسبة لدخلك وتجنب الضغوط المالية.">
@@ -250,12 +252,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="calc-group">
           <label>💵 الدخل الشهري الصافي (بعد الالتزامات)</label>
           <input type="text" inputmode="numeric" id="monthly-income" value="3500">
-          <p class="err-msg" id="err-monthly-income">يرجى إدخال الدخل الشهري (رقم أكبر من صفر).</p>
+          <p class="err-msg" id="err-monthly-income" role="alert" aria-live="polite">يرجى إدخال الدخل الشهري (رقم أكبر من صفر).</p>
         </div>
         <div class="calc-group">
           <label>🏫 إجمالي الرسوم المدرسية السنوية</label>
           <input type="text" inputmode="numeric" id="annual-fees" value="20000">
-          <p class="err-msg" id="err-annual-fees">يرجى إدخال إجمالي الرسوم (رقم أكبر من صفر).</p>
+          <p class="err-msg" id="err-annual-fees" role="alert" aria-live="polite">يرجى إدخال إجمالي الرسوم (رقم أكبر من صفر).</p>
         </div>
         <div class="calc-group">
           <label>🎁 نسبة خصم الدفع السنوي (%)</label>
@@ -375,7 +377,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 /* ── Dark Mode ── */
 (function() {
   const btn = document.getElementById('dark-toggle');
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Scroll-to-Top ── */
@@ -428,6 +430,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ── حاسبة مقارنة خطط السداد — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('payment-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:choosing-school-payment-plan:v1',
   fieldIds: ['monthly-income', 'annual-fees', 'annual-discount', 'installment-months', 'admin-fee'],
@@ -450,7 +459,7 @@ initFormCalculator({
       return { invalid: true, message: 'برجاء مراجعة الحقول المظلّلة أدناه.', fields };
     }
 
-    const fmt = n => CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-SA'), v._arabicIndic);
+    const fmt = n => (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-SA'), v._arabicIndic) : Math.round(n).toLocaleString('ar-SA'));
 
     const annualIncome = income * 12;
     const safeLimit = annualIncome * 0.30;
@@ -500,6 +509,7 @@ initFormCalculator({
     return { html: html };
   }
 });
+}
 </script>
 
 <!-- ✅ السكربت الموحّد — ثابت، يأتي آخر شيء -->

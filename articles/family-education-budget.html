@@ -80,7 +80,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta property="article:published_time" content="2026-01-20T08:00:00+03:00">
   <meta property="article:modified_time" content="2026-07-17T09:58:00+03:00">
   <meta property="article:section" content="تخطيط مالي أسري">
-  <meta property="article:tag" content="ميزانية التعليم, مصاريف المدرسة, تخطيط مالي أسري, رسوم دراسية">
+  <meta property="article:tag" content="ميزانية التعليم">
+<meta property="article:tag" content="مصاريف المدرسة">
+<meta property="article:tag" content="تخطيط مالي أسري">
+<meta property="article:tag" content="رسوم دراسية">
 
   <!-- ✅ Twitter card ثابت + متغيّرات -->
   <meta name="twitter:card" content="summary_large_image">
@@ -626,7 +629,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="calc-group">
             <label for="avg-fees">الرسوم الدراسية السنوية للطفل الواحد</label>
             <input type="text" inputmode="numeric" id="avg-fees" placeholder="مثال: 35000" value="35000">
-            <p class="err-msg" id="err-avg-fees">يرجى إدخال الرسوم الدراسية (رقم أكبر من صفر).</p>
+            <p class="err-msg" id="err-avg-fees" role="alert" aria-live="polite">يرجى إدخال الرسوم الدراسية (رقم أكبر من صفر).</p>
           </div>
           <div class="calc-group">
             <label for="avg-transport">المواصلات شهرياً للطفل</label>
@@ -866,6 +869,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="/js/form-calc.min.js"></script>
 <script>
 /* ── حاسبة ميزانية التعليم — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('budget-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:family-education-budget:v1',
   fieldIds: ['sibling-discount', 'avg-fees', 'avg-transport', 'avg-books', 'avg-activities', 'avg-tutoring', 'avg-pocket', 'school-days-calc'],
@@ -892,7 +902,7 @@ initFormCalculator({
       return { invalid: true, message: 'برجاء إدخال الرسوم الدراسية.', fields: { 'avg-fees': 'يرجى إدخال الرسوم الدراسية (رقم أكبر من صفر).' } };
     }
 
-    function fmt(n) { return CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-EG') + ' جنيه', v._arabicIndic); }
+    function fmt(n) { return (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-EG') + ' جنيه', v._arabicIndic) : Math.round(n).toLocaleString('ar-EG') + ' جنيه'); }
 
     let totalFees = avgFees;
     for (let i = 2; i <= num; i++) totalFees += avgFees * (1 - siblingPct / 100);
@@ -933,9 +943,10 @@ initFormCalculator({
     };
   }
 });
+}
 
 /* زرار إعادة التعيين للقيم الافتراضية (يطلب تأكيد المستخدم) */
-document.getElementById('reset-budget').addEventListener('click', function() {
+var resetBtn_reset_budget = document.getElementById('reset-budget'); if (resetBtn_reset_budget) resetBtn_reset_budget.addEventListener('click', function() {
   if (!confirm('هل تريد إعادة تعيين الحاسبة إلى القيم الافتراضية؟')) return;
   document.getElementById('num-children').value = '2';
   document.getElementById('sibling-discount').value = '10';

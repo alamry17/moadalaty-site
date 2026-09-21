@@ -774,7 +774,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 /* ── Dark Mode ── */
 (function() {
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Reading Progress ── */

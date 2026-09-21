@@ -398,7 +398,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="calc-group">
           <label for="income">الدخل الشهري للأسرة</label>
           <input type="text" inputmode="numeric" id="income" placeholder="مثال: 18000">
-          <p class="err-msg" id="err-income">يرجى إدخال الدخل الشهري (رقم أكبر من صفر).</p>
+          <p class="err-msg" id="err-income" role="alert" aria-live="polite">يرجى إدخال الدخل الشهري (رقم أكبر من صفر).</p>
         </div>
         <div class="calc-group">
           <label for="fixed-exp">الالتزامات الثابتة (إيجار، قروض)</label>
@@ -979,6 +979,7 @@ document.querySelectorAll('.checklist li').forEach(li => {
 
 /* ── Installment Calculator ── */
 function calcInstallment() {
+  if (typeof CoreUtils === 'undefined') { alert('تعذّر تحميل أدوات الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.'); return; }
   const totalRaw = document.getElementById('total-fees').value;
   const downRaw  = document.getElementById('down-payment').value;
   const useArabicIndic = CoreUtils.containsArabicIndicDigits(totalRaw) || CoreUtils.containsArabicIndicDigits(downRaw);
@@ -1025,6 +1026,7 @@ const RATES_TO_USD = {
 };
 
 function convertCurrency() {
+  if (typeof CoreUtils === 'undefined') { alert('تعذّر تحميل أدوات الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.'); return; }
   const amountRaw = document.getElementById('conv-amount').value;
   const useArabicIndic = CoreUtils.containsArabicIndicDigits(amountRaw);
   const amount = parseFloat(CoreUtils.toWesternDigits(amountRaw));
@@ -1067,6 +1069,13 @@ function swapCurrencies() {
 
 /* ── Capacity Calculator ── */
 /* ── حاسبة القدرة الشهرية على السداد — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('capacity-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:school-fees-negotiation-capacity:v1',
   fieldIds: ['income', 'fixed-exp', 'living-exp', 'safety-buf'],
@@ -1092,7 +1101,7 @@ initFormCalculator({
     const balanced  = remaining > 0 && safe > 0;
 
     const curr = v['capacity-currency'] || 'جنيه';
-    const fmt  = n => CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-EG') + ' ' + curr, v._arabicIndic);
+    const fmt  = n => (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-EG') + ' ' + curr, v._arabicIndic) : Math.round(n).toLocaleString('ar-EG') + ' ' + curr);
 
     return {
       outputs: {
@@ -1108,9 +1117,11 @@ initFormCalculator({
     };
   }
 });
+}
 
 /* ── Unit Converter ── */
 function convertUnits() {
+  if (typeof CoreUtils === 'undefined') { alert('تعذّر تحميل أدوات الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.'); return; }
   const amountRaw = document.getElementById('unit-amount').value;
   const useArabicIndic = CoreUtils.containsArabicIndicDigits(amountRaw);
   const amount   = parseFloat(CoreUtils.toWesternDigits(amountRaw));

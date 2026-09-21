@@ -810,7 +810,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="calc-group">
         <label>إجمالي الرسوم الدراسية السنوية (جنيه)</label>
         <input type="text" inputmode="numeric" id="total-fees" placeholder="مثال: 30000">
-        <p class="err-msg" id="err-total-fees">أدخل إجمالي الرسوم أو رسوم الكتب أو المواصلات.</p>
+        <p class="err-msg" id="err-total-fees" role="alert" aria-live="polite">أدخل إجمالي الرسوم أو رسوم الكتب أو المواصلات.</p>
       </div>
       <div class="calc-group">
         <label>رسوم الكتب والمستلزمات (جنيه)</label>
@@ -927,7 +927,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 /* ── Dark Mode ── */
 (function() {
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Reading Progress ── */
@@ -943,7 +943,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 
 /* ── Compare Schools Calculator ── */
-document.getElementById('compare-schools-btn').addEventListener('click', function() {
+var compareSchoolsBtn = document.getElementById('compare-schools-btn');
+if (compareSchoolsBtn) compareSchoolsBtn.addEventListener('click', function() {
+  if (typeof CoreUtils === 'undefined') {
+    alert('تعذّر تحميل أدوات الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.');
+    return;
+  }
   const tw = CoreUtils.toWesternDigits;
   const ids = ['s1-fees','s1-bus','s1-other','s2-fees','s2-bus','s2-other'];
   const useArabicIndic = ids.some(id => CoreUtils.containsArabicIndicDigits(document.getElementById(id).value));
@@ -970,6 +975,13 @@ document.getElementById('compare-schools-btn').addEventListener('click', functio
 });
 
 /* ── Savings Calculator (checkbox-based) — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('saving-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:school-fees-saving:v1',
   fieldIds: ['total-fees', 'books-fees', 'transport-fees'],
@@ -1001,8 +1013,10 @@ initFormCalculator({
 
     let breakdownHtml = '';
     savings.forEach(s => {
-      breakdownHtml += '<div class="result-row" style="font-size:14px;"><span style="color:var(--text-muted);">' + s.label + '</span><span style="font-weight:700;color:var(--success);">− ' + CoreUtils.formatLikeInput(Math.round(s.amount).toLocaleString('ar-EG'), v._arabicIndic) + ' ج</span></div>';
+      var __fmtAmt = (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.round(s.amount).toLocaleString('ar-EG'), v._arabicIndic) : Math.round(s.amount).toLocaleString('ar-EG'));
+      breakdownHtml += '<div class="result-row" style="font-size:14px;"><span style="color:var(--text-muted);">' + s.label + '</span><span style="font-weight:700;color:var(--success);">− ' + __fmtAmt + ' ج</span></div>';
     });
+}
 
     const pct = currentTotal > 0 ? (totalSaving / currentTotal * 100) : 0;
     let badge;
@@ -1014,9 +1028,9 @@ initFormCalculator({
 
     return {
       outputs: {
-        'current-total-val': CoreUtils.formatLikeInput(currentTotal.toLocaleString('ar-EG'), v._arabicIndic) + ' جنيه',
-        'total-saving-val': CoreUtils.formatLikeInput(Math.round(totalSaving).toLocaleString('ar-EG'), v._arabicIndic) + ' جنيه',
-        'after-saving-val': CoreUtils.formatLikeInput(Math.max(0, Math.round(currentTotal - totalSaving)).toLocaleString('ar-EG'), v._arabicIndic) + ' جنيه'
+        'current-total-val': (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(currentTotal.toLocaleString('ar-EG'), v._arabicIndic) : currentTotal.toLocaleString('ar-EG')) + ' جنيه',
+        'total-saving-val': (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.round(totalSaving).toLocaleString('ar-EG'), v._arabicIndic) : Math.round(totalSaving).toLocaleString('ar-EG')) + ' جنيه',
+        'after-saving-val': (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.max(0, Math.round(currentTotal - totalSaving)).toLocaleString('ar-EG'), v._arabicIndic) : Math.max(0, Math.round(currentTotal - totalSaving)).toLocaleString('ar-EG')) + ' جنيه'
       },
       innerHtmlOutputs: {
         'saving-breakdown': breakdownHtml

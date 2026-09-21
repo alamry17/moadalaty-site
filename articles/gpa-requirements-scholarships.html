@@ -611,7 +611,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="calc-group">
           <label>معدلك الحالي</label>
           <input type="text" inputmode="decimal" id="my-gpa" placeholder="مثال: 3.2">
-          <p class="err-msg" id="err-my-gpa">يرجى إدخال معدلك (رقم أكبر من صفر).</p>
+          <p class="err-msg" id="err-my-gpa" role="alert" aria-live="polite">يرجى إدخال معدلك (رقم أكبر من صفر).</p>
         </div>
       </div>
 
@@ -778,7 +778,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 /* ── Dark Mode ── */
 (function() {
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Reading Progress ── */
@@ -804,6 +804,13 @@ document.querySelectorAll('details').forEach(d => {
 });
 
 /* ── حاسبة توافق المنح — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('scholarship-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:gpa-requirements-scholarships:v1',
   fieldIds: ['my-gpa'],
@@ -865,6 +872,7 @@ initFormCalculator({
 
       listHtml += '<div class="match-item ' + cls + '"><span class="match-icon">' + icon + '</span><span style="flex:1;font-weight:600;">' + s.name + '</span><span style="font-size:13px;opacity:0.8;">' + label + '</span></div>';
     });
+}
 
     let adviceHtml;
     if (gpa4 >= 3.5)      adviceHtml = '<div class="success-box" style="margin:0;"><strong>✅ ممتاز!</strong> معدلك تنافسي لمعظم المنح الكبرى. ركّز على جودة الملف والرسالة التحفيزية والتوصيات لتكمل صورة الطالب المثالي.</div>';
@@ -873,7 +881,7 @@ initFormCalculator({
     else                   adviceHtml = '<div class="danger-box" style="margin:0;"><strong>❌ معدل منخفض — الخيارات محدودة جداً.</strong> قبل التقديم على أي منحة، استثمر الفصل القادم في رفع معدلك.</div>';
 
     return {
-      outputs: { 'converted-gpa': CoreUtils.formatLikeInput(gpa4.toFixed(2) + ' / 4.0', v._arabicIndic) },
+      outputs: { 'converted-gpa': (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(gpa4.toFixed(2) + ' / 4.0', v._arabicIndic) : gpa4.toFixed(2) + ' / 4.0') },
       innerHtmlOutputs: { 'match-list': listHtml, 'advice-box': adviceHtml }
     };
   }

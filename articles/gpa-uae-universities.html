@@ -715,7 +715,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script>
 // View counter (حقيقي عبر Cloudflare KV — راجع CoreUtils.initViewCounter)
 document.addEventListener('DOMContentLoaded', function() {
-  CoreUtils.initViewCounter('view-count', 'gpa-uae-universities');
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initViewCounter === 'function') CoreUtils.initViewCounter('view-count', 'gpa-uae-universities');
 });
 
   /* ── Copy Formula ── */

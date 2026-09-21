@@ -608,6 +608,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 /* ── Budget Calculator ── */
 /* ── حاسبة ميزانية المدرسة — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('budget-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:school-budget-management:v1',
   fieldIds: ['fees', 'transport', 'books', 'uniform', 'activities', 'pocket'],
@@ -638,7 +645,7 @@ initFormCalculator({
     const sepBudget    = Math.round(grandTotal * 0.45);
     const monthlyTotal = Math.round(grandTotal / 10);
 
-    const fmt = n => CoreUtils.formatLikeInput(n.toLocaleString('ar-EG') + ' جنيه', v._arabicIndic);
+    const fmt = n => (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(n.toLocaleString('ar-EG') + ' جنيه', v._arabicIndic) : n.toLocaleString('ar-EG') + ' جنيه');
 
     let advice;
     if (monthlySave < 2000) {
@@ -662,6 +669,7 @@ initFormCalculator({
     };
   }
 });
+}
 </script>
 <!-- ████ الملفات الموحدة — لا تُعدّل ████ -->
 <script src="/js/article.min.js" defer></script>

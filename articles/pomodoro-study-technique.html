@@ -59,7 +59,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta property="article:published_time" content="2026-05-07T08:00:00+03:00">
   <meta property="article:modified_time" content="2026-07-17T09:58:00+03:00">
   <meta property="article:section" content="إنتاجية الطالب">
-  <meta property="article:tag" content="Pomodoro, بومودورو, مذاكرة, إنتاجية, جدول دراسي">
+  <meta property="article:tag" content="Pomodoro">
+<meta property="article:tag" content="بومودورو">
+<meta property="article:tag" content="مذاكرة">
+<meta property="article:tag" content="إنتاجية">
+<meta property="article:tag" content="جدول دراسي">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="تقنية Pomodoro للطلاب: كيف تضاعف إنتاجيتك في المذاكرة؟">
   <meta name="twitter:description" content="دليل عملي لتطبيق Pomodoro مع جدول يومي جاهز وتايمر مجاني وحاسبة جلسات.">
@@ -575,7 +579,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 /* ── Dark Mode ── */
 (function() {
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Scroll Top ── */
@@ -607,7 +611,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 /* ── View Counter (حقيقي عبر Cloudflare KV — راجع CoreUtils.initViewCounter) ── */
 document.addEventListener('DOMContentLoaded', function() {
-  CoreUtils.initViewCounter('view-count', 'pomodoro-study-technique');
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initViewCounter === 'function') CoreUtils.initViewCounter('view-count', 'pomodoro-study-technique');
 });
 
 /* ── Copy Link ── */

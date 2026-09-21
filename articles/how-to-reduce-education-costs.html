@@ -63,7 +63,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="article:published_time" content="2026-01-17T08:00:00+03:00">
 <meta property="article:modified_time" content="2026-07-17T09:58:00+03:00">
 <meta property="article:section" content="توفير مالي">
-<meta property="article:tag" content="تقليل تكاليف تعليم, نصائح اولياء امور, توفير مصاريف مدارس">
+<meta property="article:tag" content="تقليل تكاليف تعليم">
+<meta property="article:tag" content="نصائح اولياء امور">
+<meta property="article:tag" content="توفير مصاريف مدارس">
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="نصائح لأولياء الأمور لتقليل تكاليف التعليم">
 <meta name="twitter:description" content="5 استراتيجيات عملية لتقليل نفقات التعليم دون المساس بالجودة.">
@@ -279,7 +281,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="calc-group">
           <label>💰 إجمالي المصاريف السنوية للتعليم (ريال)</label>
           <input type="text" inputmode="numeric" id="total-cost" value="20000">
-          <p class="err-msg" id="err-total-cost">أدخل إجمالي المصاريف السنوية (رقم أكبر من صفر).</p>
+          <p class="err-msg" id="err-total-cost" role="alert" aria-live="polite">أدخل إجمالي المصاريف السنوية (رقم أكبر من صفر).</p>
         </div>
         <div class="calc-group">
           <label>👨‍👩‍👧‍👦 عدد الأطفال في المدرسة</label>
@@ -400,7 +402,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 /* ── Dark Mode ── */
 (function() {
   const btn = document.getElementById('dark-toggle');
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Scroll-to-Top ── */
@@ -454,6 +456,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ── Savings Calculator ── */
 /* ── حاسبة توفير مصاريف التعليم — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('savings-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:reduce-education-costs:v1',
   fieldIds: ['total-cost', 'num-children'],
@@ -494,7 +503,7 @@ initFormCalculator({
     const totalSavings = siblingSavings + paymentSavings + shoppingSavings;
     const finalCost = total - totalSavings;
     const savingsPercent = ((totalSavings / total) * 100).toFixed(1);
-    const fmt = n => CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-SA'), v._arabicIndic);
+    const fmt = n => (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-SA'), v._arabicIndic) : Math.round(n).toLocaleString('ar-SA'));
 
     const html =
       '<div class="result-row"><span>👨‍👩‍👧‍👦 ' + siblingLabel + '</span><span class="result-val">' + fmt(siblingSavings) + ' ريال</span></div>' +
@@ -506,6 +515,7 @@ initFormCalculator({
     return { html: html };
   }
 });
+}
 </script>
 
 <!-- ✅ السكربت الموحّد — ثابت، يأتي آخر شيء -->

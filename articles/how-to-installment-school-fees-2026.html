@@ -486,7 +486,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="calc-group">
             <label for="tuition">الرسوم الدراسية الأساسية (جنيه)</label>
             <input type="text" inputmode="numeric" id="tuition" placeholder="مثال: 30000">
-            <p class="err-msg" id="err-tuition">الرجاء إدخال الرسوم الدراسية الأساسية (رقم أكبر من صفر).</p>
+            <p class="err-msg" id="err-tuition" role="alert" aria-live="polite">الرجاء إدخال الرسوم الدراسية الأساسية (رقم أكبر من صفر).</p>
           </div>
           <div class="calc-group">
             <label for="registration">رسوم التسجيل / إعادة القيد (جنيه)</label>
@@ -678,6 +678,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 
 /* ── حاسبة القسط الشهري — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('calc-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:installment-2026:v1',
   fieldIds: ['tuition', 'registration', 'activities', 'transport', 'discount'],
@@ -701,7 +708,7 @@ initFormCalculator({
       return { invalid: true, message: 'الرجاء إدخال الرسوم الدراسية الأساسية على الأقل.', fields: { 'tuition': 'الرجاء إدخال الرسوم الدراسية الأساسية (رقم أكبر من صفر).' } };
     }
 
-    const fmt = n => CoreUtils.formatLikeInput(n.toLocaleString('ar-EG', { maximumFractionDigits: 0 }) + ' جنيه', v._arabicIndic);
+    const fmt = n => (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(n.toLocaleString('ar-EG', { maximumFractionDigits: 0 }) + ' جنيه', v._arabicIndic) : n.toLocaleString('ar-EG', { maximumFractionDigits: 0 }) + ' جنيه');
 
     const totalBeforeDisc = (tuition + reg + activities + transport) * students;
     const discBaseAmount  = discBase === 'tuition' ? tuition * students : totalBeforeDisc;
@@ -738,8 +745,9 @@ initFormCalculator({
     return { html: rows };
   }
 });
+}
 
-document.getElementById('reset-btn').addEventListener('click', function() {
+var resetBtn_reset_btn = document.getElementById('reset-btn'); if (resetBtn_reset_btn) resetBtn_reset_btn.addEventListener('click', function() {
   ['tuition', 'registration', 'activities', 'transport', 'discount'].forEach(id => {
     const el = document.getElementById(id);
     el.value = id === 'tuition' ? '' : '0';

@@ -326,7 +326,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="calc-group">
           <label for="g-total-fees">إجمالي الرسوم الدراسية السنوية</label>
           <input type="text" inputmode="numeric" id="g-total-fees" placeholder="مثال: 12000">
-          <p class="err-msg" id="err-g-total-fees">يرجى إدخال إجمالي الرسوم (رقم أكبر من صفر).</p>
+          <p class="err-msg" id="err-g-total-fees" role="alert" aria-live="polite">يرجى إدخال إجمالي الرسوم (رقم أكبر من صفر).</p>
         </div>
         <div class="calc-group">
           <label for="g-discount">نسبة الخصم % (مثلاً 5 تعني 5%)</label>
@@ -335,7 +335,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="calc-group">
           <label for="g-months">عدد أشهر التقسيط</label>
           <input type="text" inputmode="numeric" id="g-months" placeholder="مثال: 10" value="10">
-          <p class="err-msg" id="err-g-months">عدد الأشهر يجب أن يكون 1 على الأقل.</p>
+          <p class="err-msg" id="err-g-months" role="alert" aria-live="polite">عدد الأشهر يجب أن يكون 1 على الأقل.</p>
         </div>
         <div class="calc-group">
           <label for="g-admin">المصاريف الإدارية الشهرية</label>
@@ -509,7 +509,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 /* ── Dark Mode ── */
 (function() {
-  CoreUtils.initDarkMode();
+  if (typeof CoreUtils !== 'undefined' && typeof CoreUtils.initDarkMode === 'function') CoreUtils.initDarkMode();
 })();
 
 /* ── Scroll To Top ── */
@@ -548,6 +548,13 @@ document.querySelectorAll('details').forEach(d => {
 
 /* ── Installment Calculator ── */
 /* ── حاسبة القسط الحقيقي — عبر المحرك المشترك form-calc.js ── */
+if (typeof initFormCalculator !== 'function') {
+  var __calcFallbackBox = document.getElementById('g-result');
+  if (__calcFallbackBox) {
+    __calcFallbackBox.classList.add('show');
+    __calcFallbackBox.innerHTML = '<p style="padding:12px;text-align:center;">⚠️ تعذّر تحميل محرك الحاسبة. حدّث الصفحة أو جرّب متصفحًا آخر.</p>';
+  }
+} else {
 initFormCalculator({
   storageKey: 'moadalaty:parent-guide-school-fees:v1',
   fieldIds: ['g-total-fees', 'g-discount', 'g-months', 'g-admin'],
@@ -574,7 +581,7 @@ initFormCalculator({
     const base    = afterD / months;
     const final   = base + admin;
 
-    function fmt(n) { return CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-EG') + ' جنيه', v._arabicIndic); }
+    function fmt(n) { return (typeof CoreUtils !== 'undefined' && typeof CoreUtils.formatLikeInput === 'function' ? CoreUtils.formatLikeInput(Math.round(n).toLocaleString('ar-EG') + ' جنيه', v._arabicIndic) : Math.round(n).toLocaleString('ar-EG') + ' جنيه'); }
 
     const diff = total - afterD;
     const noteHtml = diff > 0
@@ -592,6 +599,7 @@ initFormCalculator({
     };
   }
 });
+}
 </script>
 <script src="/js/cookie-consent.min.js" defer></script>
 <script src="/js/site-search-data.min.js"></script>
