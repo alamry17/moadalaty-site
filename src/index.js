@@ -28,6 +28,7 @@ const FOOTER_NAV_LINKS = [
   { href: "/tip-bill-split-calculator", label: "🧾 تقسيم الفاتورة والبقشيش" },
   { href: "/roommate-expense-splitter", label: "🏠 تقسيم مصاريف السكن" },
   { href: "/group-trip-cost-splitter", label: "✈️ تقسيم مصاريف الرحلة" },
+  { href: "/articles/school-fees-dollar-impact-calculator", label: "💵 تأثير الدولار على المصروفات" },
   { href: "/articles/", label: "📚 المقالات" },
   { href: "/articles/faq", label: "❓ الأسئلة الشائعة" },
   { href: "/about", label: "من نحن" },
