@@ -107,6 +107,15 @@ function applyUnifiedFooter(response, pathname) {
     .transform(response);
 }
 
+// بيشيل أي \r أو \n من القيمة — ده اللي بيمنع Header Injection (CRLF
+// Injection): من غير التنضيف ده، حد ممكن يحط "attacker@x.com\r\nBcc:
+// victim@y.com" في حقل بيتحط في هيدر إيميل، ويضيف هيدرز زيادة (Bcc/Cc/إلخ)
+// ويستخدم النموذج عشان يبعت سبام لناس تانية باسم الموقع. مشتركة بين
+// /api/contact و /api/subscribe عشان مانكررش نفس المنطق مرتين.
+function sanitizeHeaderField(value) {
+  return value.replace(/[\r\n]+/g, " ").trim();
+}
+
 // تحويل نص UTF-8 (بما فيه عربي) إلى Base64 — الأسلوب المضمون في Workers
 function toBase64Utf8(str) {
   const bytes = new TextEncoder().encode(str);
@@ -178,12 +187,6 @@ async function handleContact(request, env) {
       return Response.redirect(new URL("/contact.html?sent=1", request.url), 303);
     }
 
-    // بيشيل أي \r أو \n من القيمة — ده اللي بيمنع Header Injection (CRLF
-    // Injection): من غير التنضيف ده، حد ممكن يحط "attacker@x.com\r\nBcc:
-    // victim@y.com" في حقل الإيميل ويضيف هيدرز إيميل زيادة (Bcc/Cc/إلخ)
-    // ويستخدم فورم التواصل عشان يبعت سبام لناس تانية باسم الموقع.
-    const sanitizeHeaderField = (value) => value.replace(/[\r\n]+/g, " ").trim();
-
     const name = sanitizeHeaderField((form.get("name") || "").toString().slice(0, 200));
     const email = sanitizeHeaderField((form.get("email") || "").toString().slice(0, 200));
     const phone = sanitizeHeaderField((form.get("phone") || "").toString().slice(0, 50));
@@ -231,6 +234,110 @@ async function handleContact(request, env) {
   }
 }
 
+// ═══ الاشتراك في النشرة البريدية (Cloudflare KV + إيميل فوري) ═══
+// POST /api/subscribe  { email, source, botField }
+//
+// بيعمل حاجتين مع بعض لكل اشتراك جديد:
+// 1) يخزّن الإيميل في KV بشكل دائم (مفتاح "sub:<email>") — ده أرشيف كامل
+//    لكل المشتركين، متاح تتصفحه وتصدّره وقت ما عايز من Cloudflare Dashboard
+//    (Storage & databases → Workers KV → SUBSCRIBERS_KV)، حتى لو فاتك
+//    إيميل التنبيه لأي سبب.
+// 2) يبعت إيميل فوري لصاحب الموقع (نفس آلية /api/contact بالظبط) — عشان
+//    تشوف كل اشتراك جديد في Gmail أول بأول من غير ما تفتح الـ Dashboard.
+//
+// لو نفس الإيميل اشترك تاني من صفحة تانية، بنحدّث "آخر صفحة شافها" بس
+// من غير ما نبعت إيميل تنبيه تاني (تجنبًا لإزعاجك بتنبيه لكل زيارة).
+async function handleSubscribe(request, env) {
+  try {
+    let body;
+    try {
+      body = await request.json();
+    } catch (err) {
+      return new Response(JSON.stringify({ error: "invalid request" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Honeypot — لو الحقل ده اتملى، ده بوت. بنرجّع نجاح وهمي عشان مانورّيش
+    // للبوت إن في حماية (نفس فلسفة honeypot في /api/contact).
+    if (body.botField) {
+      return new Response(JSON.stringify({ ok: true }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const email = sanitizeHeaderField((body.email || "").toString().slice(0, 200)).toLowerCase();
+    const source = sanitizeHeaderField((body.source || "").toString().slice(0, 200)) || "/";
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return new Response(JSON.stringify({ error: "invalid email" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const key = `sub:${email}`;
+    const now = new Date().toISOString();
+
+    let already = null;
+    try { already = await env.SUBSCRIBERS_KV.get(key); } catch (_) {}
+
+    if (already) {
+      try {
+        const prev = JSON.parse(already);
+        await env.SUBSCRIBERS_KV.put(key, JSON.stringify({ ...prev, lastSeen: now, lastSource: source }));
+      } catch (_) {}
+      return new Response(JSON.stringify({ ok: true, alreadySubscribed: true }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    try {
+      await env.SUBSCRIBERS_KV.put(key, JSON.stringify({ email, subscribedAt: now, source }));
+    } catch (err) {
+      // فشل تخزين KV (مثلاً تخطينا حد الكتابة المجاني اليومي) — لسه
+      // هنحاول نبعت إيميل التنبيه تحت عشان الاشتراك على الأقل يوصلك،
+      // حتى لو الأرشيف الدائم في KV ماتسجّلش المرة دي.
+    }
+
+    // إيميل تنبيه فوري لصاحب الموقع — نفس آلية /api/contact بالظبط، وبرضو
+    // محاط بـ try/catch عشان لو الإيميل فشل لأي سبب، مانكسرش الاستجابة
+    // للزائر طالما الاشتراك نفسه اتخزن في KV فوق بنجاح.
+    try {
+      const toAddr = env.CONTACT_TO_EMAIL || "alamry17@gmail.com";
+      const bodyText =
+        `بريد إلكتروني جديد اشترك في النشرة البريدية:\r\n\r\n` +
+        `الإيميل: ${email}\r\n` +
+        `الصفحة: https://moadalaty.com${source}\r\n` +
+        `التاريخ: ${now}\r\n`;
+      const subjectLine = `[اشتراك جديد] ${email}`;
+      const raw =
+        `From: "نشرة معدلاتي" <no-reply@moadalaty.com>\r\n` +
+        `To: ${toAddr}\r\n` +
+        `Subject: =?UTF-8?B?${toBase64Utf8(subjectLine)}?=\r\n` +
+        `MIME-Version: 1.0\r\n` +
+        `Content-Type: text/plain; charset="UTF-8"\r\n` +
+        `Content-Transfer-Encoding: base64\r\n\r\n` +
+        toBase64Utf8(bodyText);
+      const email_message = new EmailMessage("no-reply@moadalaty.com", toAddr, raw);
+      await env.SEND_EMAIL.send(email_message);
+    } catch (err) {
+      // فشل بعت الإيميل — الاشتراك اتخزن في KV بالفعل (لو نجح فوق)، وده
+      // الأهم. منسيبش فشل الإيميل يرجّع خطأ للزائر أو يمنع تسجيل الاشتراك.
+    }
+
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: "server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
+
 // ═══ إعادة كتابة مسارات النسخة الإنجليزية (/en/*) للملفات الحقيقية ═══
 // الموقع بيستخدم روابط نضيفة (Clean URLs) بشكل افتراضي — Cloudflare بيحذف
 // امتداد ".html" من أي رابط تلقائيًا (مثلاً /tip-bill-split-calculator.html
@@ -262,6 +369,10 @@ export default {
 
     if (url.pathname === "/api/views") {
       return handleViews(request, env);
+    }
+
+    if (url.pathname === "/api/subscribe" && request.method === "POST") {
+      return handleSubscribe(request, env);
     }
 
     // لو المسار "/en/..." حوّله للملف الحقيقي المطابق قبل ما نطلبه.
