@@ -22,3 +22,13 @@ destination_address = "alamry17@gmail.com"
 [[kv_namespaces]]
 binding = "VIEWS_KV"
 id = "1c50f9910eba4707ad76b8dbaa0f9f1e"
+
+# أرشيف المشتركين في النشرة البريدية — راجع handleSubscribe في src/index.js.
+# لازم تعمل namespace جديد بنفس الطريقة اللي عملت بيها VIEWS_KV بالظبط:
+# Cloudflare Dashboard → Storage & databases → Workers KV → Create →
+# سمّيه مثلاً "SUBSCRIBERS_KV" → بعد ما يتعمل، انسخ الـ Namespace ID وحطه
+# مكان القيمة تحت بدل الـ placeholder. الموقع مش هيشتغل صح (الـ deploy
+# هيفشل) إلا لو الـ id ده حقيقي.
+[[kv_namespaces]]
+binding = "SUBSCRIBERS_KV"
+id = "PUT_YOUR_SUBSCRIBERS_KV_NAMESPACE_ID_HERE"
