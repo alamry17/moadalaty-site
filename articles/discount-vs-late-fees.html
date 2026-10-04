@@ -458,6 +458,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </main>
 
 <!-- ✅ FOOTER — ثابت 100% -->
+<!-- EMAIL CAPTURE -->
+<section style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); padding: 48px 24px; text-align: center;" aria-label="الاشتراك في النشرة الأكاديمية" class="no-print">
+  <div style="max-width:520px; margin:0 auto;">
+    <div style="font-size:36px; margin-bottom:12px;" aria-hidden="true">🎓</div>
+    <h2 style="color:#fff; font-family:'Tajawal',sans-serif; font-size:22px; font-weight:800; margin-bottom:10px; border:none; padding:0;">احصل على أدوات أكاديمية مجانية</h2>
+    <p style="color:rgba(255,255,255,0.85); font-size:15px; margin-bottom:24px;">نصائح وأدوات مجانية عن المصروفات الدراسية والتخطيط — مباشرة في بريدك</p>
+    <form id="newsletter-form" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+      <input type="email" id="email-input" placeholder="اكتب بريدك الإلكتروني" required
+        style="flex:1; min-width:240px; padding:13px 18px; border-radius:10px; border:none; font-family:'Cairo',sans-serif; font-size:15px; direction:rtl; outline:none;">
+      <input type="text" name="bot-field" id="newsletter-bot-field" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;" aria-hidden="true">
+      <button type="submit"
+        style="background:var(--accent); color:var(--primary); border:none; padding:13px 28px; border-radius:10px; font-family:'Tajawal',sans-serif; font-weight:800; font-size:15px; cursor:pointer; white-space:nowrap; transition:all 0.2s;">
+        اشترك مجاناً ←
+      </button>
+    </form>
+    <p id="email-success" style="display:none; color:var(--accent); font-weight:700; margin-top:12px; font-size:15px;">✅ تم الاشتراك بنجاح! سيصلك الجديد قريباً.</p>
+    <p id="email-error" style="display:none; color:#ffdfdf; font-weight:700; margin-top:12px; font-size:15px;"></p>
+    <p style="color:rgba(255,255,255,0.5); font-size:12px; margin-top:12px;">لا رسائل مزعجة · إلغاء الاشتراك بضغطة واحدة</p>
+  </div>
+</section>
+
 <footer class="article-footer" role="contentinfo">
   <div class="container">
     <nav aria-label="روابط الموقع الرئيسية">
@@ -497,5 +518,48 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="/js/cookie-consent.min.js" defer></script>
 <script src="/js/site-search-data.min.js"></script>
 <script src="/js/site-search.min.js"></script>
+<script>
+// ── الاشتراك في النشرة البريدية — حقيقي عبر /api/subscribe (راجع handleSubscribe في src/index.js) ──
+(function () {
+  var form = document.getElementById('newsletter-form');
+  if (!form) return;
+  var emailInput = document.getElementById('email-input');
+  var successMsg = document.getElementById('email-success');
+  var errorMsg = document.getElementById('email-error');
+  var botField = document.getElementById('newsletter-bot-field');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (errorMsg) { errorMsg.style.display = 'none'; errorMsg.textContent = ''; }
+    var email = emailInput ? emailInput.value.trim() : '';
+    if (!email) return;
+    var btn = form.querySelector('button');
+    var originalText = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = '... جارٍ الإرسال'; }
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, source: location.pathname, botField: botField ? botField.value : '' })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, data: data }; });
+      })
+      .then(function (result) {
+        if (result.ok) {
+          if (successMsg) successMsg.style.display = 'block';
+          if (emailInput) emailInput.value = '';
+          if (btn) btn.style.display = 'none';
+        } else {
+          if (errorMsg) { errorMsg.textContent = '⚠️ حصل خطأ، حاول تاني لاحقًا.'; errorMsg.style.display = 'block'; }
+          if (btn) { btn.disabled = false; btn.textContent = originalText; }
+        }
+      })
+      .catch(function () {
+        if (errorMsg) { errorMsg.textContent = '⚠️ تعذّر الاتصال. تأكد من الإنترنت وحاول تاني.'; errorMsg.style.display = 'block'; }
+        if (btn) { btn.disabled = false; btn.textContent = originalText; }
+      });
+  });
+})();
+</script>
+
 </body>
 </html>
