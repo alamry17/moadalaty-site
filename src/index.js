@@ -480,6 +480,50 @@ async function handleUnsubscribe(request, env) {
   return unsubscribePage("إلغاء الاشتراك", `اضغط الزر لإيقاف الرسائل عن <strong dir="ltr">${escapeHtml(email)}</strong>.`, form);
 }
 
+// ═══ فحص أسبوعي لمفتاح Brevo (Cron Trigger) ═══
+// بيستدعي /v3/account بالمفتاح مرة في الأسبوع عشان يفضل "مستخدم" (Brevo بيعطّل
+// المفتاح بعد 90 يوم من غير استخدام). ولو الرد 401/403 (المفتاح اتعطّل أو اتحذف)
+// بيبعتلك إيميل تنبيه عبر Email Routing، بدل ما تكتشف المشكلة من اشتراك فاشل.
+async function pingBrevo(env) {
+  if (!env.BREVO_API_KEY) {
+    console.error("cron: BREVO_API_KEY غير موجود في بيئة التشغيل");
+    return;
+  }
+  let status = 0;
+  try {
+    const res = await fetch("https://api.brevo.com/v3/account", {
+      headers: { "api-key": env.BREVO_API_KEY, Accept: "application/json" },
+    });
+    status = res.status;
+    await res.text();
+  } catch (err) {
+    console.error("cron: Brevo ping failed", String(err));
+    return;
+  }
+  console.log("cron: Brevo ping status", status);
+  if (status === 401 || status === 403) {
+    try {
+      const toAddr = env.CONTACT_TO_EMAIL || "alamry17@gmail.com";
+      const subjectLine = "[تنبيه] مفتاح Brevo لا يعمل";
+      const bodyText =
+        `الفحص الأسبوعي رجّع الحالة ${status}.\r\n` +
+        `غالباً المفتاح اتعطّل أو اتحذف، فرسائل الترحيب لن تُرسل.\r\n` +
+        `أنشئ مفتاحاً جديداً من Brevo (SMTP & API) وضعه في Cloudflare كـ Secret باسم BREVO_API_KEY.\r\n`;
+      const raw =
+        `From: "نشرة معدلاتي" <no-reply@moadalaty.com>\r\n` +
+        `To: ${toAddr}\r\n` +
+        `Subject: =?UTF-8?B?${toBase64Utf8(subjectLine)}?=\r\n` +
+        `MIME-Version: 1.0\r\n` +
+        `Content-Type: text/plain; charset="UTF-8"\r\n` +
+        `Content-Transfer-Encoding: base64\r\n\r\n` +
+        toBase64Utf8(bodyText);
+      await env.SEND_EMAIL.send(new EmailMessage("no-reply@moadalaty.com", toAddr, raw));
+    } catch (err) {
+      console.error("cron: alert email failed", String(err));
+    }
+  }
+}
+
 // ═══ إعادة كتابة مسارات النسخة الإنجليزية (/en/*) للملفات الحقيقية ═══
 // الموقع بيستخدم روابط نضيفة (Clean URLs) بشكل افتراضي — Cloudflare بيحذف
 // امتداد ".html" من أي رابط تلقائيًا (مثلاً /tip-bill-split-calculator.html
@@ -502,6 +546,10 @@ function resolveEnglishAssetPath(pathname) {
 }
 
 export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(pingBrevo(env));
+  },
+
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
