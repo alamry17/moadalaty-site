@@ -32,3 +32,15 @@ id = "1c50f9910eba4707ad76b8dbaa0f9f1e"
 [[kv_namespaces]]
 binding = "SUBSCRIBERS_KV"
 id = "01ee659caeb946538f809e659f27a2dc"
+
+
+# تثبيت إعدادات المراقبة (Logs) عشان ما تتصفّرش عند النشر من GitHub.
+# ممكن نشوف من خلالها أخطاء إرسال الإيميل عبر Brevo في تبويب Observability.
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
