@@ -48,7 +48,7 @@
     bar.setAttribute('aria-label', 'إشعار ملفات الارتباط');
     bar.innerHTML =
       '<p>🍪 نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتحليل استخدام الموقع. ' +
-      'التفاصيل في <a href="/privacy.html">سياسة الخصوصية</a>.</p>' +
+      'التفاصيل في <a href="/privacy">سياسة الخصوصية</a>.</p>' +
       '<div class="cc-actions">' +
       '<button id="cc-decline" type="button">رفض</button>' +
       '<button id="cc-accept" type="button">موافق</button>' +
