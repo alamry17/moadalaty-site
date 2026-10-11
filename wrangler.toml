@@ -44,3 +44,7 @@ enabled = true
 head_sampling_rate = 1
 invocation_logs = true
 persist = true
+
+# فحص أسبوعي لمفتاح Brevo (كل اثنين 06:00 UTC) — راجع pingBrevo في src/index.js.
+[triggers]
+crons = ["0 6 * * 1"]
