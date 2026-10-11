@@ -234,108 +234,250 @@ async function handleContact(request, env) {
   }
 }
 
-// ═══ الاشتراك في النشرة البريدية (Cloudflare KV + إيميل فوري) ═══
+// ═══ إعدادات الإرسال عبر Brevo ═══
+// المفتاح BREVO_API_KEY لازم يكون Secret في إعدادات الـ Worker (Runtime) مش في Builds.
+// عنوان المرسل لازم يكون على نطاق موثّق في Brevo (moadalaty.com). تقدر تغيّره من
+// متغير BREVO_SENDER_EMAIL من غير ما تعدّل الكود.
+const SITE_ORIGIN = "https://moadalaty.com";
+const PDF_URL = `${SITE_ORIGIN}/assets/moadalaty-study-planner.pdf`;
+const DEFAULT_SENDER_EMAIL = "info@moadalaty.com";
+const SENDER_NAME = "معدلاتي";
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function generateToken() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function safeEqual(a, b) {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+function buildUnsubscribeUrl(email, token) {
+  return `${SITE_ORIGIN}/unsubscribe?e=${encodeURIComponent(email)}&t=${token}`;
+}
+
+// إرسال رسالة عبر Brevo Transactional API. بترجّع true/false ومابترميش خطأ،
+// عشان فشل الإرسال مايكسرش الاشتراك نفسه.
+async function sendBrevoEmail(env, { to, subject, html, text, headers }) {
+  if (!env.BREVO_API_KEY) {
+    console.error("BREVO_API_KEY غير موجود في بيئة التشغيل (Runtime)");
+    return false;
+  }
+  try {
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": env.BREVO_API_KEY,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        sender: { email: env.BREVO_SENDER_EMAIL || DEFAULT_SENDER_EMAIL, name: SENDER_NAME },
+        replyTo: { email: env.CONTACT_TO_EMAIL || "alamry17@gmail.com" },
+        to: [{ email: to }],
+        subject,
+        htmlContent: html,
+        textContent: text,
+        headers,
+      }),
+    });
+    if (!res.ok) {
+      console.error("Brevo error", res.status, (await res.text()).slice(0, 500));
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Brevo request failed", String(err));
+    return false;
+  }
+}
+
+async function sendWelcomeEmail(env, email, token) {
+  const unsubUrl = buildUnsubscribeUrl(email, token);
+  const html = `<!doctype html><html lang="ar" dir="rtl"><body style="margin:0;background:#f4f6fb;font-family:Tahoma,Arial,sans-serif;">
+<div style="max-width:560px;margin:0 auto;padding:24px;">
+  <div style="background:#fff;border-radius:14px;padding:28px;line-height:1.9;color:#1c2b4a;">
+    <h2 style="margin:0 0 12px;">أهلاً بك في معدلاتي 🎓</h2>
+    <p style="margin:0 0 16px;">شكراً لاشتراكك. هذا دليلك المجاني للتخطيط للمصروفات الدراسية:</p>
+    <p style="text-align:center;margin:24px 0;"><a href="${PDF_URL}" style="background:#f0a030;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:bold;display:inline-block;">📥 حمّل الملف الآن (PDF)</a></p>
+    <p style="margin:0;color:#5a6a85;font-size:14px;">لا نرسل رسائل مزعجة، ويمكنك إلغاء الاشتراك في أي وقت.</p>
+  </div>
+  <p style="text-align:center;color:#8a96ad;font-size:12px;margin:16px 0 0;">
+    وصلتك هذه الرسالة لأنك اشتركت في نشرة moadalaty.com<br>
+    <a href="${unsubUrl}" style="color:#8a96ad;">إلغاء الاشتراك</a>
+  </p>
+</div></body></html>`;
+  const text =
+    `أهلاً بك في معدلاتي\n\nحمّل دليلك المجاني من هنا:\n${PDF_URL}\n\n` +
+    `لإلغاء الاشتراك في أي وقت:\n${unsubUrl}\n`;
+  return sendBrevoEmail(env, {
+    to: email,
+    subject: "دليلك المجاني من معدلاتي 🎓",
+    html,
+    text,
+    // الترويستان دول بيظهروا زر "إلغاء الاشتراك" جوه Gmail وبيشتغل بضغطة واحدة.
+    headers: {
+      "List-Unsubscribe": `<${unsubUrl}>`,
+      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+    },
+  });
+}
+
+// ═══ الاشتراك في النشرة البريدية (Cloudflare KV + إيميل ترحيب + تنبيه لصاحب الموقع) ═══
 // POST /api/subscribe  { email, source, botField }
 //
-// بيعمل حاجتين مع بعض لكل اشتراك جديد:
-// 1) يخزّن الإيميل في KV بشكل دائم (مفتاح "sub:<email>") — ده أرشيف كامل
-//    لكل المشتركين، متاح تتصفحه وتصدّره وقت ما عايز من Cloudflare Dashboard
-//    (Storage & databases → Workers KV → SUBSCRIBERS_KV)، حتى لو فاتك
-//    إيميل التنبيه لأي سبب.
-// 2) يبعت إيميل فوري لصاحب الموقع (نفس آلية /api/contact بالظبط) — عشان
-//    تشوف كل اشتراك جديد في Gmail أول بأول من غير ما تفتح الـ Dashboard.
-//
-// لو نفس الإيميل اشترك تاني من صفحة تانية، بنحدّث "آخر صفحة شافها" بس
-// من غير ما نبعت إيميل تنبيه تاني (تجنبًا لإزعاجك بتنبيه لكل زيارة).
-async function handleSubscribe(request, env) {
+// شكل السجل في KV (مفتاح "sub:<email>"):
+//   { email, subscribedAt, source, token, unsubscribedAt? }
+// الـ token بيتولّد مرة واحدة لكل مشترك وبيتحط في رابط إلغاء الاشتراك.
+async function handleSubscribe(request, env, ctx) {
+  const json = (obj, status = 200) =>
+    new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json" } });
+
   try {
     let body;
     try {
       body = await request.json();
     } catch (err) {
-      return new Response(JSON.stringify({ error: "invalid request" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ error: "invalid request" }, 400);
     }
 
-    // Honeypot — لو الحقل ده اتملى، ده بوت. بنرجّع نجاح وهمي عشان مانورّيش
-    // للبوت إن في حماية (نفس فلسفة honeypot في /api/contact).
-    if (body.botField) {
-      return new Response(JSON.stringify({ ok: true }), {
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    // Honeypot — بوت. نرجّع نجاح وهمي.
+    if (body.botField) return json({ ok: true });
 
     const email = sanitizeHeaderField((body.email || "").toString().slice(0, 200)).toLowerCase();
     const source = sanitizeHeaderField((body.source || "").toString().slice(0, 200)) || "/";
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return new Response(JSON.stringify({ error: "invalid email" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ error: "invalid email" }, 400);
     }
 
     const key = `sub:${email}`;
     const now = new Date().toISOString();
 
-    let already = null;
-    try { already = await env.SUBSCRIBERS_KV.get(key); } catch (_) {}
+    let prev = null;
+    try {
+      const raw = await env.SUBSCRIBERS_KV.get(key);
+      if (raw) prev = JSON.parse(raw);
+    } catch (_) {}
 
-    if (already) {
+    // مشترك حالي ونشط: نحدّث آخر زيارة بس، من غير أي إيميل.
+    if (prev && !prev.unsubscribedAt) {
       try {
-        const prev = JSON.parse(already);
         await env.SUBSCRIBERS_KV.put(key, JSON.stringify({ ...prev, lastSeen: now, lastSource: source }));
       } catch (_) {}
-      return new Response(JSON.stringify({ ok: true, alreadySubscribed: true }), {
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ ok: true, alreadySubscribed: true });
     }
+
+    // اشتراك جديد، أو واحد ألغى قبل كده وبيشترك تاني.
+    const resubscribe = !!prev;
+    const token = (prev && prev.token) || generateToken();
+    const record = { email, subscribedAt: prev ? prev.subscribedAt : now, source: prev ? prev.source : source, token };
+    if (resubscribe) record.resubscribedAt = now;
 
     try {
-      await env.SUBSCRIBERS_KV.put(key, JSON.stringify({ email, subscribedAt: now, source }));
+      await env.SUBSCRIBERS_KV.put(key, JSON.stringify(record));
     } catch (err) {
-      // فشل تخزين KV (مثلاً تخطينا حد الكتابة المجاني اليومي) — لسه
-      // هنحاول نبعت إيميل التنبيه تحت عشان الاشتراك على الأقل يوصلك،
-      // حتى لو الأرشيف الدائم في KV ماتسجّلش المرة دي.
+      // فشل KV (غالباً حد الكتابة اليومي) — نكمّل ونحاول نبعت الإيميلات برضو.
     }
 
-    // إيميل تنبيه فوري لصاحب الموقع — نفس آلية /api/contact بالظبط، وبرضو
-    // محاط بـ try/catch عشان لو الإيميل فشل لأي سبب، مانكسرش الاستجابة
-    // للزائر طالما الاشتراك نفسه اتخزن في KV فوق بنجاح.
-    try {
-      const toAddr = env.CONTACT_TO_EMAIL || "alamry17@gmail.com";
-      const bodyText =
-        `بريد إلكتروني جديد اشترك في النشرة البريدية:\r\n\r\n` +
-        `الإيميل: ${email}\r\n` +
-        `الصفحة: https://moadalaty.com${source}\r\n` +
-        `التاريخ: ${now}\r\n`;
-      const subjectLine = `[اشتراك جديد] ${email}`;
-      const raw =
-        `From: "نشرة معدلاتي" <no-reply@moadalaty.com>\r\n` +
-        `To: ${toAddr}\r\n` +
-        `Subject: =?UTF-8?B?${toBase64Utf8(subjectLine)}?=\r\n` +
-        `MIME-Version: 1.0\r\n` +
-        `Content-Type: text/plain; charset="UTF-8"\r\n` +
-        `Content-Transfer-Encoding: base64\r\n\r\n` +
-        toBase64Utf8(bodyText);
-      const email_message = new EmailMessage("no-reply@moadalaty.com", toAddr, raw);
-      await env.SEND_EMAIL.send(email_message);
-    } catch (err) {
-      // فشل بعت الإيميل — الاشتراك اتخزن في KV بالفعل (لو نجح فوق)، وده
-      // الأهم. منسيبش فشل الإيميل يرجّع خطأ للزائر أو يمنع تسجيل الاشتراك.
-    }
+    // الإيميلات بتتبعت في الخلفية عشان الزائر ماينتظرش.
+    ctx.waitUntil(
+      (async () => {
+        // إيميل ترحيب للمشترك مع رابط الـ PDF (مش بنبعته لو بيشترك تاني بعد إلغاء).
+        if (!resubscribe) await sendWelcomeEmail(env, email, token);
 
-    return new Response(JSON.stringify({ ok: true }), {
-      headers: { "Content-Type": "application/json" },
-    });
+        // تنبيه فوري لصاحب الموقع (Email Routing).
+        try {
+          const toAddr = env.CONTACT_TO_EMAIL || "alamry17@gmail.com";
+          const bodyText =
+            `${resubscribe ? "مشترك عاد للاشتراك" : "بريد إلكتروني جديد اشترك"} في النشرة البريدية:\r\n\r\n` +
+            `الإيميل: ${email}\r\n` +
+            `الصفحة: https://moadalaty.com${source}\r\n` +
+            `التاريخ: ${now}\r\n`;
+          const subjectLine = `[${resubscribe ? "عودة للاشتراك" : "اشتراك جديد"}] ${email}`;
+          const raw =
+            `From: "نشرة معدلاتي" <no-reply@moadalaty.com>\r\n` +
+            `To: ${toAddr}\r\n` +
+            `Subject: =?UTF-8?B?${toBase64Utf8(subjectLine)}?=\r\n` +
+            `MIME-Version: 1.0\r\n` +
+            `Content-Type: text/plain; charset="UTF-8"\r\n` +
+            `Content-Transfer-Encoding: base64\r\n\r\n` +
+            toBase64Utf8(bodyText);
+          await env.SEND_EMAIL.send(new EmailMessage("no-reply@moadalaty.com", toAddr, raw));
+        } catch (err) {
+          console.error("owner notification failed", String(err));
+        }
+      })()
+    );
+
+    return json({ ok: true });
   } catch (err) {
-    return new Response(JSON.stringify({ error: "server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return json({ error: "server error" }, 500);
   }
+}
+
+// ═══ إلغاء الاشتراك ═══
+// GET  /unsubscribe?e=<email>&t=<token>  → صفحة فيها زر تأكيد واحد
+// POST /unsubscribe?e=<email>&t=<token>  → ينفّذ الإلغاء فوراً (الزر + زر Gmail "إلغاء الاشتراك")
+// السبب في الـ GET بزر: بعض برامج فحص الروابط بتفتح كل رابط في الإيميل، ولو الإلغاء
+// بيحصل على GET هتلغي اشتراك الناس من غير ما يقصدوا.
+// السجل بيفضل في KV بعلامة unsubscribedAt عشان أي إرسال جماعي لاحق يتخطّاه.
+function unsubscribePage(title, message, extraHtml = "", status = 200) {
+  const html = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>${escapeHtml(title)} | معدلاتي</title>
+<style>body{margin:0;background:#f4f6fb;font-family:Tahoma,Arial,sans-serif;color:#1c2b4a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:16px}
+.card{background:#fff;border-radius:14px;padding:32px;max-width:440px;text-align:center;line-height:1.9;box-shadow:0 4px 18px rgba(0,0,0,.06)}
+button{background:#1e3a8a;color:#fff;border:0;border-radius:10px;padding:12px 28px;font-size:16px;font-weight:bold;cursor:pointer;font-family:inherit}
+a{color:#1e3a8a}</style></head><body><div class="card"><h2 style="margin-top:0">${escapeHtml(title)}</h2>
+<p>${message}</p>${extraHtml}<p style="margin-bottom:0"><a href="/">العودة إلى معدلاتي</a></p></div></body></html>`;
+  return new Response(html, {
+    status,
+    headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" },
+  });
+}
+
+async function handleUnsubscribe(request, env) {
+  const url = new URL(request.url);
+  const email = (url.searchParams.get("e") || "").trim().toLowerCase().slice(0, 200);
+  const token = (url.searchParams.get("t") || "").trim().slice(0, 64);
+
+  const invalid = () =>
+    unsubscribePage("الرابط غير صالح", "تعذّر التحقق من هذا الرابط. استخدم رابط إلغاء الاشتراك من آخر رسالة وصلتك، أو راسلنا من صفحة اتصل بنا.", "", 400);
+
+  if (!email || !token || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return invalid();
+
+  let rec = null;
+  try {
+    const raw = await env.SUBSCRIBERS_KV.get(`sub:${email}`);
+    if (raw) rec = JSON.parse(raw);
+  } catch (_) {}
+  if (!rec || !safeEqual(rec.token || "", token)) return invalid();
+
+  if (request.method === "POST") {
+    if (!rec.unsubscribedAt) {
+      try {
+        await env.SUBSCRIBERS_KV.put(`sub:${email}`, JSON.stringify({ ...rec, unsubscribedAt: new Date().toISOString() }));
+      } catch (err) {
+        return unsubscribePage("حدث خطأ", "تعذّر حفظ الطلب الآن. حاول مرة أخرى بعد قليل.", "", 500);
+      }
+    }
+    return unsubscribePage("تم إلغاء اشتراكك", `لن تصلك رسائل جديدة على <strong dir="ltr">${escapeHtml(email)}</strong>.`);
+  }
+
+  if (rec.unsubscribedAt) {
+    return unsubscribePage("اشتراكك ملغى بالفعل", `لا توجد رسائل قادمة إلى <strong dir="ltr">${escapeHtml(email)}</strong>.`);
+  }
+
+  const form = `<form method="POST" action="${escapeHtml(url.pathname + url.search)}"><button type="submit">تأكيد إلغاء الاشتراك</button></form><br>`;
+  return unsubscribePage("إلغاء الاشتراك", `اضغط الزر لإيقاف الرسائل عن <strong dir="ltr">${escapeHtml(email)}</strong>.`, form);
 }
 
 // ═══ إعادة كتابة مسارات النسخة الإنجليزية (/en/*) للملفات الحقيقية ═══
@@ -372,7 +514,11 @@ export default {
     }
 
     if (url.pathname === "/api/subscribe" && request.method === "POST") {
-      return handleSubscribe(request, env);
+      return handleSubscribe(request, env, ctx);
+    }
+
+    if (url.pathname === "/unsubscribe" && (request.method === "GET" || request.method === "POST")) {
+      return handleUnsubscribe(request, env);
     }
 
     // لو المسار "/en/..." حوّله للملف الحقيقي المطابق قبل ما نطلبه.
