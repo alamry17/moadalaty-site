@@ -184,7 +184,7 @@ async function handleContact(request, env) {
 
     // Honeypot — لو الحقل ده اتملى، ده بوت
     if (form.get("bot-field")) {
-      return Response.redirect(new URL("/contact.html?sent=1", request.url), 303);
+      return Response.redirect(new URL("/contact?sent=1", request.url), 303);
     }
 
     const name = sanitizeHeaderField((form.get("name") || "").toString().slice(0, 200));
@@ -196,13 +196,13 @@ async function handleContact(request, env) {
     const message = (form.get("message") || "").toString().slice(0, 5000);
 
     if (!name || !email || !message) {
-      return Response.redirect(new URL("/contact.html?error=1", request.url), 303);
+      return Response.redirect(new URL("/contact?error=1", request.url), 303);
     }
 
     // تحقق بسيط إن الإيميل معمول بشكل منطقي (مش تحقق كامل RFC، بس كافي
     // عشان نمنع أي حاجة غريبة توصل لهيدر Reply-To)
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return Response.redirect(new URL("/contact.html?error=1", request.url), 303);
+      return Response.redirect(new URL("/contact?error=1", request.url), 303);
     }
 
     const toAddr = env.CONTACT_TO_EMAIL || "alamry17@gmail.com";
@@ -228,9 +228,9 @@ async function handleContact(request, env) {
     const email_message = new EmailMessage("no-reply@moadalaty.com", toAddr, raw);
     await env.SEND_EMAIL.send(email_message);
 
-    return Response.redirect(new URL("/contact.html?sent=1", request.url), 303);
+    return Response.redirect(new URL("/contact?sent=1", request.url), 303);
   } catch (err) {
-    return Response.redirect(new URL("/contact.html?error=1", request.url), 303);
+    return Response.redirect(new URL("/contact?error=1", request.url), 303);
   }
 }
 
