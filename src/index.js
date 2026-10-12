@@ -551,13 +551,21 @@ a{color:#1e3a8a}</style></head><body><div class="card"><h2 style="margin-top:0">
   });
 }
 
+// زر "احذف بريدي نهائياً" — بيظهر في صفحة "تم إلغاء اشتراكك". بيمسح سجل المشترك من KV فوراً
+// من غير أي تدخل منك. (POST على مسار منفصل /unsubscribe/delete عشان طلب Gmail
+// "إلغاء الاشتراك بنقرة" ما يمسحش السجل بالغلط.)
+function deleteForm(email, token) {
+  const action = `/unsubscribe/delete?e=${encodeURIComponent(email)}&t=${encodeURIComponent(token)}`;
+  return `<form method="POST" action="${escapeHtml(action)}" style="margin:18px 0 8px;border-top:1px solid #e3e8f2;padding-top:16px"><p style="margin:0 0 10px;font-size:14px;color:#5a6a85">تريد حذف بريدك نهائياً من سجلاتنا؟ لا يمكن التراجع عن ذلك.</p><button type="submit" style="background:#b42318">🗑️ احذف بريدي نهائياً</button></form>`;
+}
+
 async function handleUnsubscribe(request, env) {
   const url = new URL(request.url);
   const email = (url.searchParams.get("e") || "").trim().toLowerCase().slice(0, 200);
   const token = (url.searchParams.get("t") || "").trim().slice(0, 64);
 
   const invalid = () =>
-    unsubscribePage("الرابط غير صالح", "تعذّر التحقق من هذا الرابط. استخدم رابط إلغاء الاشتراك من آخر رسالة وصلتك، أو راسلنا من صفحة اتصل بنا.", "", 400);
+    unsubscribePage("الرابط غير صالح", "تعذّر التحقق من هذا الرابط، أو أن البريد حُذف من سجلاتنا مسبقاً. إن كنت تريد إيقاف الرسائل فاستخدم رابط إلغاء الاشتراك من آخر رسالة وصلتك.", "", 400);
 
   if (!email || !token || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return invalid();
 
@@ -576,11 +584,11 @@ async function handleUnsubscribe(request, env) {
         return unsubscribePage("حدث خطأ", "تعذّر حفظ الطلب الآن. حاول مرة أخرى بعد قليل.", "", 500);
       }
     }
-    return unsubscribePage("تم إلغاء اشتراكك", `لن تصلك رسائل جديدة على <strong dir="ltr">${escapeHtml(email)}</strong>.`);
+    return unsubscribePage("تم إلغاء اشتراكك", `لن تصلك رسائل جديدة على <strong dir="ltr">${escapeHtml(email)}</strong>.`, deleteForm(email, token));
   }
 
   if (rec.unsubscribedAt) {
-    return unsubscribePage("اشتراكك ملغى بالفعل", `لا توجد رسائل قادمة إلى <strong dir="ltr">${escapeHtml(email)}</strong>.`);
+    return unsubscribePage("اشتراكك ملغى بالفعل", `لا توجد رسائل قادمة إلى <strong dir="ltr">${escapeHtml(email)}</strong>.`, deleteForm(email, token));
   }
 
   const form = `<form method="POST" action="${escapeHtml(url.pathname + url.search)}"><button type="submit">تأكيد إلغاء الاشتراك</button></form><br>`;
@@ -631,6 +639,33 @@ async function pingBrevo(env) {
   }
 }
 
+// POST /unsubscribe/delete?e=<email>&t=<token> — حذف سجل المشترك نهائياً من KV.
+// لو اشترك تاني بعد كده بيعدّي على تأكيد البريد من جديد زي أي مشترك جديد.
+async function handleDeleteSubscriber(request, env) {
+  const url = new URL(request.url);
+  const email = (url.searchParams.get("e") || "").trim().toLowerCase().slice(0, 200);
+  const token = (url.searchParams.get("t") || "").trim().slice(0, 64);
+
+  const invalid = () =>
+    unsubscribePage("الرابط غير صالح", "تعذّر التحقق من هذا الرابط، أو أن البريد حُذف من سجلاتنا مسبقاً.", "", 400);
+
+  if (!email || !token || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return invalid();
+
+  let rec = null;
+  try {
+    const raw = await env.SUBSCRIBERS_KV.get(`sub:${email}`);
+    if (raw) rec = JSON.parse(raw);
+  } catch (_) {}
+  if (!rec || !safeEqual(rec.token || "", token)) return invalid();
+
+  try {
+    await env.SUBSCRIBERS_KV.delete(`sub:${email}`);
+  } catch (err) {
+    return unsubscribePage("حدث خطأ", "تعذّر الحذف الآن. حاول مرة أخرى بعد قليل.", "", 500);
+  }
+  return unsubscribePage("تم حذف بريدك نهائياً", `حذفنا <strong dir="ltr">${escapeHtml(email)}</strong> من سجلاتنا، ولن نراسلك بعد الآن.`);
+}
+
 // ═══ إعادة كتابة مسارات النسخة الإنجليزية (/en/*) للملفات الحقيقية ═══
 // الموقع بيستخدم روابط نضيفة (Clean URLs) بشكل افتراضي — Cloudflare بيحذف
 // امتداد ".html" من أي رابط تلقائيًا (مثلاً /tip-bill-split-calculator.html
@@ -674,6 +709,10 @@ export default {
 
     if (url.pathname === "/confirm" && request.method === "GET") {
       return handleConfirm(request, env, ctx);
+    }
+
+    if (url.pathname === "/unsubscribe/delete" && request.method === "POST") {
+      return handleDeleteSubscriber(request, env);
     }
 
     if (url.pathname === "/unsubscribe" && (request.method === "GET" || request.method === "POST")) {
