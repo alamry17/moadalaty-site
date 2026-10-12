@@ -57,6 +57,17 @@ const FOOTER_NAV_LINKS_EN = [
   { href: "/disclaimer", label: "Disclaimer" },
 ];
 
+// رسالة نجاح الاشتراك مكتوبة بنفس النص في 37 صفحة. بدل تعديلها يدوياً، الـ Worker بيستبدلها
+// هنا لتناسب خطوة تأكيد البريد. (رابط الـ PDF تحتها بيفضل ظاهر زي ما هو.)
+const JOIN_SUCCESS_TEXT =
+  "✅ تم استلام طلبك! لو اشتراكك جديد فستصلك رسالة تأكيد، افتحها واضغط الرابط لإكمال الاشتراك (تفقّد مجلد الترويجية أو السبام). وهذا دليلك المجاني من الزر التالي:";
+
+class JoinSuccessHandler {
+  element(el) {
+    el.setInnerContent(JOIN_SUCCESS_TEXT);
+  }
+}
+
 function buildFooterNavHtml(links, langSwitch) {
   const allLinks = langSwitch ? [...links, langSwitch] : links;
   return allLinks
@@ -104,6 +115,7 @@ function applyUnifiedFooter(response, pathname) {
   return new HTMLRewriter()
     .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler(FOOTER_NAV_LINKS, langSwitch))
     .on('nav[aria-label="Main site links"]', new FooterNavHandler(FOOTER_NAV_LINKS_EN, langSwitch))
+    .on('#join-success p', new JoinSuccessHandler())
     .transform(response);
 }
 
@@ -330,12 +342,75 @@ async function sendWelcomeEmail(env, email, token) {
   });
 }
 
-// ═══ الاشتراك في النشرة البريدية (Cloudflare KV + إيميل ترحيب + تنبيه لصاحب الموقع) ═══
-// POST /api/subscribe  { email, source, botField }
+// ═══ تأكيد البريد (Double Opt-in) ═══
+// الاشتراك الجديد بيتسجّل في KV بحالة pending (معلّق)، وبيوصل للمشترك إيميل فيه
+// رابط تأكيد. مفيش إيميل ترحيب ولا أي رسائل تانية قبل الضغط على الرابط. ده بيمنع
+// إن حد يسجّل إيميل غيره ويبعتله سبام باسم الموقع.
 //
 // شكل السجل في KV (مفتاح "sub:<email>"):
-//   { email, subscribedAt, source, token, unsubscribedAt? }
-// الـ token بيتولّد مرة واحدة لكل مشترك وبيتحط في رابط إلغاء الاشتراك.
+//   { email, subscribedAt, source, token, pending?, confirmSentAt?, confirmedAt?, unsubscribedAt? }
+// السجل اللي مفيهوش pending ولا unsubscribedAt = مشترك نشط (بما فيهم اللي اشتركوا قبل التأكيد).
+const CONFIRM_RESEND_MS = 10 * 60 * 1000; // أقل فاصل بين إعادة إرسال رسالة التأكيد لنفس الإيميل
+
+function buildConfirmUrl(email, token) {
+  return `${SITE_ORIGIN}/confirm?e=${encodeURIComponent(email)}&t=${token}`;
+}
+
+async function sendConfirmationEmail(env, email, token) {
+  const confirmUrl = buildConfirmUrl(email, token);
+  const unsubUrl = buildUnsubscribeUrl(email, token);
+  const html = `<!doctype html><html lang="ar" dir="rtl"><body style="margin:0;background:#f4f6fb;font-family:Tahoma,Arial,sans-serif;">
+<div style="max-width:560px;margin:0 auto;padding:24px;">
+  <div style="background:#fff;border-radius:14px;padding:28px;line-height:1.9;color:#1c2b4a;">
+    <h2 style="margin:0 0 12px;">أكّد اشتراكك في معدلاتي</h2>
+    <p style="margin:0 0 16px;">وصلنا طلب اشتراك بهذا البريد. اضغط الزر التالي لتأكيده، وسنرسل لك دليلك المجاني فور التأكيد:</p>
+    <p style="text-align:center;margin:24px 0;"><a href="${confirmUrl}" style="background:#f0a030;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:bold;display:inline-block;">✅ تأكيد الاشتراك</a></p>
+    <p style="margin:0;color:#5a6a85;font-size:14px;">إن لم تطلب هذا الاشتراك فتجاهل الرسالة، ولن يُضاف بريدك.</p>
+  </div>
+  <p style="text-align:center;color:#8a96ad;font-size:12px;margin:16px 0 0;">
+    <a href="${unsubUrl}" style="color:#8a96ad;">لا أريد رسائل من معدلاتي</a>
+  </p>
+</div></body></html>`;
+  const text =
+    `أكّد اشتراكك في معدلاتي\n\nاضغط الرابط التالي لتأكيد الاشتراك:\n${confirmUrl}\n\n` +
+    `إن لم تطلب هذا الاشتراك فتجاهل الرسالة.\nلإيقاف الرسائل: ${unsubUrl}\n`;
+  return sendBrevoEmail(env, {
+    to: email,
+    subject: "أكّد اشتراكك في معدلاتي",
+    html,
+    text,
+    headers: {
+      "List-Unsubscribe": `<${unsubUrl}>`,
+      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+    },
+  });
+}
+
+// تنبيه لصاحب الموقع (Email Routing) — بيتبعت عند تأكيد المشترك مش عند التسجيل.
+async function notifyOwner(env, email, source, now) {
+  try {
+    const toAddr = env.CONTACT_TO_EMAIL || "alamry17@gmail.com";
+    const bodyText =
+      `مشترك جديد أكّد اشتراكه في النشرة البريدية:\r\n\r\n` +
+      `الإيميل: ${email}\r\n` +
+      `الصفحة: https://moadalaty.com${source}\r\n` +
+      `التاريخ: ${now}\r\n`;
+    const subjectLine = `[اشتراك مؤكَّد] ${email}`;
+    const raw =
+      `From: "نشرة معدلاتي" <no-reply@moadalaty.com>\r\n` +
+      `To: ${toAddr}\r\n` +
+      `Subject: =?UTF-8?B?${toBase64Utf8(subjectLine)}?=\r\n` +
+      `MIME-Version: 1.0\r\n` +
+      `Content-Type: text/plain; charset="UTF-8"\r\n` +
+      `Content-Transfer-Encoding: base64\r\n\r\n` +
+      toBase64Utf8(bodyText);
+    await env.SEND_EMAIL.send(new EmailMessage("no-reply@moadalaty.com", toAddr, raw));
+  } catch (err) {
+    console.error("owner notification failed", String(err));
+  }
+}
+
+// POST /api/subscribe  { email, source, botField }
 async function handleSubscribe(request, env, ctx) {
   const json = (obj, status = 200) =>
     new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json" } });
@@ -367,60 +442,92 @@ async function handleSubscribe(request, env, ctx) {
       if (raw) prev = JSON.parse(raw);
     } catch (_) {}
 
-    // مشترك حالي ونشط: نحدّث آخر زيارة بس، من غير أي إيميل.
-    if (prev && !prev.unsubscribedAt) {
+    // مشترك نشط ومؤكَّد: نحدّث آخر زيارة بس، من غير أي إيميل.
+    if (prev && !prev.pending && !prev.unsubscribedAt) {
       try {
         await env.SUBSCRIBERS_KV.put(key, JSON.stringify({ ...prev, lastSeen: now, lastSource: source }));
       } catch (_) {}
       return json({ ok: true, alreadySubscribed: true });
     }
 
-    // اشتراك جديد، أو واحد ألغى قبل كده وبيشترك تاني.
-    const resubscribe = !!prev;
-    const token = (prev && prev.token) || generateToken();
-    const record = { email, subscribedAt: prev ? prev.subscribedAt : now, source: prev ? prev.source : source, token };
-    if (resubscribe) record.resubscribedAt = now;
+    let record;
+    if (prev && prev.pending && !prev.unsubscribedAt) {
+      // معلّق لسه مأكّدش: نعيد إرسال رسالة التأكيد بس لو عدّى وقت كفاية (حماية من الإزعاج).
+      const last = prev.confirmSentAt ? Date.parse(prev.confirmSentAt) : 0;
+      if (Date.now() - last < CONFIRM_RESEND_MS) return json({ ok: true, pending: true });
+      record = { ...prev, confirmSentAt: now };
+    } else {
+      // اشتراك جديد، أو واحد ألغى قبل كده — بيحتاج تأكيد من جديد في الحالتين.
+      record = {
+        email,
+        subscribedAt: prev ? prev.subscribedAt : now,
+        source: prev ? prev.source : source,
+        token: (prev && prev.token) || generateToken(),
+        pending: true,
+        confirmSentAt: now,
+      };
+      if (prev) record.resubscribeRequestedAt = now;
+    }
 
+    // لازم السجل يتخزّن، لأن رابط التأكيد بيعتمد عليه. لو KV فشل نرجّع خطأ والزائر يحاول تاني.
     try {
       await env.SUBSCRIBERS_KV.put(key, JSON.stringify(record));
     } catch (err) {
-      // فشل KV (غالباً حد الكتابة اليومي) — نكمّل ونحاول نبعت الإيميلات برضو.
+      console.error("KV put failed", String(err));
+      return json({ error: "server error" }, 500);
     }
 
-    // الإيميلات بتتبعت في الخلفية عشان الزائر ماينتظرش.
-    ctx.waitUntil(
-      (async () => {
-        // إيميل ترحيب للمشترك مع رابط الـ PDF (مش بنبعته لو بيشترك تاني بعد إلغاء).
-        if (!resubscribe) await sendWelcomeEmail(env, email, token);
-
-        // تنبيه فوري لصاحب الموقع (Email Routing).
-        try {
-          const toAddr = env.CONTACT_TO_EMAIL || "alamry17@gmail.com";
-          const bodyText =
-            `${resubscribe ? "مشترك عاد للاشتراك" : "بريد إلكتروني جديد اشترك"} في النشرة البريدية:\r\n\r\n` +
-            `الإيميل: ${email}\r\n` +
-            `الصفحة: https://moadalaty.com${source}\r\n` +
-            `التاريخ: ${now}\r\n`;
-          const subjectLine = `[${resubscribe ? "عودة للاشتراك" : "اشتراك جديد"}] ${email}`;
-          const raw =
-            `From: "نشرة معدلاتي" <no-reply@moadalaty.com>\r\n` +
-            `To: ${toAddr}\r\n` +
-            `Subject: =?UTF-8?B?${toBase64Utf8(subjectLine)}?=\r\n` +
-            `MIME-Version: 1.0\r\n` +
-            `Content-Type: text/plain; charset="UTF-8"\r\n` +
-            `Content-Transfer-Encoding: base64\r\n\r\n` +
-            toBase64Utf8(bodyText);
-          await env.SEND_EMAIL.send(new EmailMessage("no-reply@moadalaty.com", toAddr, raw));
-        } catch (err) {
-          console.error("owner notification failed", String(err));
-        }
-      })()
-    );
-
-    return json({ ok: true });
+    ctx.waitUntil(sendConfirmationEmail(env, email, record.token));
+    return json({ ok: true, pending: true });
   } catch (err) {
     return json({ error: "server error" }, 500);
   }
+}
+
+// GET /confirm?e=<email>&t=<token> — بيأكّد الاشتراك فوراً (من غير زر تاني، عشان التجربة أسهل).
+async function handleConfirm(request, env, ctx) {
+  const url = new URL(request.url);
+  const email = (url.searchParams.get("e") || "").trim().toLowerCase().slice(0, 200);
+  const token = (url.searchParams.get("t") || "").trim().slice(0, 64);
+
+  const invalid = () =>
+    unsubscribePage("الرابط غير صالح", "تعذّر التحقق من رابط التأكيد. اشترك من الموقع مرة أخرى لتصلك رسالة تأكيد جديدة.", "", 400);
+
+  if (!email || !token || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return invalid();
+
+  let rec = null;
+  try {
+    const raw = await env.SUBSCRIBERS_KV.get(`sub:${email}`);
+    if (raw) rec = JSON.parse(raw);
+  } catch (_) {}
+  if (!rec || !safeEqual(rec.token || "", token)) return invalid();
+
+  if (rec.unsubscribedAt) {
+    return unsubscribePage("الاشتراك ملغى", "ألغيتَ اشتراكك سابقاً. إن أردت العودة فاشترك من الموقع مرة أخرى.");
+  }
+
+  const pdfButton = `<p><a href="${PDF_URL}" download style="display:inline-block;background:#1e3a8a;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:bold;">📥 حمّل الملف الآن (PDF)</a></p>`;
+
+  if (!rec.pending) {
+    return unsubscribePage("اشتراكك مؤكَّد", "تم تأكيد اشتراكك سابقاً.", pdfButton);
+  }
+
+  const now = new Date().toISOString();
+  const { pending, confirmSentAt, ...rest } = rec;
+  try {
+    await env.SUBSCRIBERS_KV.put(`sub:${email}`, JSON.stringify({ ...rest, confirmedAt: now }));
+  } catch (err) {
+    return unsubscribePage("حدث خطأ", "تعذّر حفظ التأكيد الآن. اضغط الرابط مرة أخرى بعد قليل.", "", 500);
+  }
+
+  ctx.waitUntil(
+    (async () => {
+      await sendWelcomeEmail(env, email, rec.token);
+      await notifyOwner(env, email, rec.source || "/", now);
+    })()
+  );
+
+  return unsubscribePage("تم تأكيد اشتراكك 🎉", `شكراً لك. أرسلنا دليلك المجاني إلى <strong dir="ltr">${escapeHtml(email)}</strong>، ويمكنك تحميله الآن:`, pdfButton);
 }
 
 // ═══ إلغاء الاشتراك ═══
@@ -563,6 +670,10 @@ export default {
 
     if (url.pathname === "/api/subscribe" && request.method === "POST") {
       return handleSubscribe(request, env, ctx);
+    }
+
+    if (url.pathname === "/confirm" && request.method === "GET") {
+      return handleConfirm(request, env, ctx);
     }
 
     if (url.pathname === "/unsubscribe" && (request.method === "GET" || request.method === "POST")) {
