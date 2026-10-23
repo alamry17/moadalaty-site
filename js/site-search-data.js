@@ -6,6 +6,11 @@ window.SITE_SEARCH_INDEX = [
     "category": "الأداة"
   },
   {
+    "title": "حاسبة المعدل التراكمي GPA",
+    "url": "/gpa-calculator",
+    "category": "الأداة"
+  },
+  {
     "title": "حاسبة تقسيم الفاتورة والبقشيش",
     "url": "/tip-bill-split-calculator",
     "category": "الأداة"
