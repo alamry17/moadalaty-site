@@ -176,6 +176,11 @@ window.SITE_SEARCH_INDEX = [
     "category": "التخطيط الدراسي"
   },
   {
+    "title": "تمارين الكرسي أثناء المذاكرة",
+    "url": "/articles/chair-exercises-while-studying",
+    "category": "التخطيط الدراسي"
+  },
+  {
     "title": "رفع GPA من 2.5 إلى 3.5 في فصل واحد",
     "url": "/articles/raise-gpa-fast-2-5-to-3-5",
     "category": "المعدل الجامعي GPA"
