@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- Google Consent Mode v2 — لازم يتحمّل قبل GTM عشان يوقف التتبّع فعليًا
+     لحد ما الزائر يوافق (مش بس لافتة شكلية). راجع js/cookie-consent.js -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'granted',
+    'security_storage': 'granted',
+    'wait_for_update': 500
+  });
+  (function () {
+    try {
+      var saved = localStorage.getItem('cookieConsent');
+      if (saved === 'accepted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WDKV7WH2');</script>
+<!-- End Google Tag Manager -->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a3c6e" />
+  <meta name="description" content="معدلاتي: احسب معدلك التراكمي GPA مجاناً بنظام 4.0 أو 4.3 أو 5.0 بإدخال موادك وساعاتها ودرجاتها، وتعرّف على تقديرك فوراً." />
+  <meta name="keywords" content="معدلاتي, حاسبة المعدل التراكمي, حاسبة GPA, حساب المعدل, معدل فصلي, نظام 4.0, نظام 5.0, 2026" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://moadalaty.com/gpa-calculator" />
+  <meta name="author" content="بوابة الأدوات التعليمية">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ar_EG" />
+  <meta property="og:url" content="https://moadalaty.com/gpa-calculator" />
+  <meta property="og:site_name" content="معدلاتي — بوابة الأدوات التعليمية" />
+  <meta property="og:title" content="معدلاتي | حاسبة المعدل التراكمي GPA (نظام 4.0 و4.3 و5.0) 2026" />
+  <meta property="og:description" content="معدلاتي: احسب معدلك التراكمي GPA مجاناً بنظام 4.0 أو 4.3 أو 5.0 بإدخال موادك وساعاتها ودرجاتها، وتعرّف على تقديرك فوراً." />
+  <meta property="og:image" content="https://moadalaty.com/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="معدلاتي | حاسبة المعدل التراكمي GPA (نظام 4.0 و4.3 و5.0) 2026" />
+  <meta name="twitter:description" content="معدلاتي: احسب معدلك التراكمي GPA مجاناً بنظام 4.0 أو 4.3 أو 5.0 بإدخال موادك وساعاتها ودرجاتها، وتعرّف على تقديرك فوراً." />
+  <title>معدلاتي | حاسبة المعدل التراكمي GPA (نظام 4.0 و4.3 و5.0) 2026</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "حاسبة المعدل التراكمي GPA", "url": "https://moadalaty.com/gpa-calculator", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "inLanguage": "ar", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EGP"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "كيف يُحسب المعدل التراكمي GPA؟", "acceptedAnswer": {"@type": "Answer", "text": "يُضرب رقم كل درجة بعدد الساعات المعتمدة للمادة، ثم تُجمع النواتج وتُقسم على مجموع الساعات. مثال: مادة 3 ساعات بتقدير A (4.0) تعطي 12 نقطة، ومادة 4 ساعات بتقدير B (3.0) تعطي 12 نقطة، فيكون المعدل (12 + 12) ÷ 7 = 3.43."}}, {"@type": "Question", "name": "ما الفرق بين نظام 4.0 و4.3 و5.0؟", "acceptedAnswer": {"@type": "Answer", "text": "في نظام 4.0 أعلى نقطة 4.0 حتى لو كان التقدير A+. في نظام 4.3 يحصل A+ على 4.3. أما نظام 5.0 فتستخدمه جامعات سعودية مثل جامعة الملك سعود، وفيه A+ بخمس نقاط وA بـ 4.75. اختر النظام الذي تعتمده جامعتك من القائمة أعلى الحاسبة."}}, {"@type": "Question", "name": "هل أحسب المعدل الفصلي أم التراكمي؟", "acceptedAnswer": {"@type": "Answer", "text": "الحاسبة تقبل أي عدد من المواد. أدخل مواد فصل واحد لتحصل على المعدل الفصلي، أو أدخل مواد جميع الفصول معاً لتحصل على المعدل التراكمي."}}, {"@type": "Question", "name": "كيف أتعامل مع المواد الناجح/الراسب Pass/Fail؟", "acceptedAnswer": {"@type": "Answer", "text": "اختر الدرجة P للمادة التي تُقيَّم بالنجاح فقط. تظهر في التفاصيل لكنها لا تدخل في حساب المعدل ولا في مجموع الساعات."}}, {"@type": "Question", "name": "هل تُحفظ بياناتي؟", "acceptedAnswer": {"@type": "Answer", "text": "تُحفظ موادك على جهازك أنت فقط لمدة محدودة لتعود إليها لاحقاً، ولا تُرسل إلى أي خادم. يمكنك مسحها في أي وقت بزر \"مسح البيانات المحفوظة\"."}}, {"@type": "Question", "name": "هل النتيجة رسمية؟", "acceptedAnswer": {"@type": "Answer", "text": "لا، النتيجة تقديرية. بعض الجامعات تستخدم جدول نقاط مختلفاً قليلاً أو تقرّب الأرقام بطريقة خاصة، فارجع إلى لائحة جامعتك للمعدل المعتمد."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "معدلاتي", "item": "https://moadalaty.com/"}, {"@type": "ListItem", "position": 2, "name": "حاسبة المعدل التراكمي GPA", "item": "https://moadalaty.com/gpa-calculator"}]}</script>
+  <script src="/js/core-utils.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/variables.min.css">
+  <link rel="stylesheet" href="/css/article.min.css">
+  <link rel="stylesheet" href="/css/components.min.css">
+  <link rel="stylesheet" href="/css/site-search.css">
+  <style>
+    /* ===== خاص بصفحة حاسبة المعدل ===== */
+    .scale-select { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border, #e2e8f0); border-radius: var(--radius-sm, 10px);
+      background: var(--white, #fff); font-family: inherit; font-size: 1rem; font-weight: 700; }
+    .subject-row label { display: block; font-size: .8rem; font-weight: 700; margin-bottom: 4px; color: var(--text-muted, #64748b); }
+    .subject-row input, .subject-row select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border, #e2e8f0);
+      border-radius: var(--radius-sm, 10px); background: var(--white, #fff); font-family: inherit; font-size: .95rem; }
+    .subject-row input:focus, .subject-row select:focus, .scale-select:focus { outline: 2px solid var(--primary, #1a3c6e); outline-offset: 1px; }
+    .subject-row input.err, .subject-row select.err { border-color: var(--danger, #c0392b); }
+    .subject-row .row-err-msg { flex-basis: 100%; }
+    .gpa-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .gpa-actions .add-btn, .gpa-actions .btn-outline { width: 100%; padding: 12px; }
+    .restore-note { display: none; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+      background: rgba(26,60,110,.08); border-radius: 10px; padding: 10px 14px; font-size: .85rem; font-weight: 700; margin-bottom: 14px; }
+    .gpa-final { text-align: center; padding: 18px 0 6px; }
+    .gpa-final .num { font-size: 3.4rem; font-weight: 900; color: var(--primary, #1a3c6e); line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .gpa-final .label { font-size: .9rem; font-weight: 700; color: var(--text-muted, #64748b); margin: 4px 0 10px; }
+    .result-badge { display: inline-block; padding: 6px 16px; border-radius: 999px; font-weight: 800; font-size: .9rem; }
+    .pass-note { display: none; margin-top: 12px; font-size: .85rem; }
+    .gpa-table { width: 100%; border-collapse: collapse; font-size: .9rem; text-align: center; }
+    .gpa-table th, .gpa-table td { padding: 8px 10px; border-bottom: 1px solid var(--border, #e2e8f0); }
+    .gpa-table th { background: rgba(26,60,110,.08); font-weight: 800; }
+    .formula { background: rgba(26,60,110,.06); border-radius: 12px; padding: 14px 16px; font-weight: 800; text-align: center; line-height: 1.9; }
+    body.dark .scale-select, body.dark .subject-row input, body.dark .subject-row select { background: #16261F; color: #e7f0ea; border-color: #2a3d33; }
+    body.dark .restore-note, body.dark .formula { background: rgba(255,255,255,.07); }
+    body.dark .gpa-final .num { color: #9cc0f2; }
+    body.dark .gpa-table th { background: rgba(255,255,255,.08); }
+    body.dark .gpa-table th, body.dark .gpa-table td { border-color: #2a3d33; }
+  </style>
+</head>
+<body>
+<div id="site-search-bar" class="no-print" role="search">
+  <div id="site-search-inner">
+    <form id="site-search-form" role="search" autocomplete="off">
+      <span class="site-search-icon" aria-hidden="true">&#128269;</span>
+      <input id="site-search-input" type="text" name="q" placeholder="ابحث في الموقع... (مثال: تقسيط، GPA، بقشيش)" aria-label="ابحث في الموقع" />
+      <button type="button" id="site-search-clear" aria-label="مسح البحث">&#10005;</button>
+    </form>
+    <div id="site-search-results" role="listbox" aria-label="نتائج البحث"></div>
+  </div>
+</div>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WDKV7WH2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<a href="#main-content" class="skip-link">تخطى إلى المحتوى الرئيسي</a>
+
+<div class="max-w-5xl mx-auto px-4 py-5 md:py-8">
+  <!-- ═══ HEADER ═══ -->
+  <header class="flex justify-between items-center mb-5 no-print">
+    <div class="flex items-center gap-3">
+      <div class="w-14 h-14 rounded-3xl bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-3xl text-brand-700 dark:text-brand-300 shadow-inner">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-black text-brand-700 dark:text-brand-400 leading-tight">
+          معدلاتي — حاسبة المعدل التراكمي GPA
+        </h1>
+        <p class="text-xs muted font-bold flex items-center gap-2">
+          <span class="live-badge"><span class="live-dot"></span>مباشر</span>
+          <span class="view-meta"><span aria-hidden="true">👁</span> <span id="view-count">—</span> مشاهدة</span>
+          نظام 4.0 · 4.3 · 5.0
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+  <p class="muted text-sm mb-5">أدخل موادك وساعاتها المعتمدة ودرجاتها، واختر نظام التقدير الذي تعتمده جامعتك، وستظهر لك النتيجة فوراً. تصلح لحساب المعدل الفصلي والتراكمي.</p>
+
+  <div class="layout-grid">
+    <div class="space-y-5">
+      <!-- ── بطاقة الحاسبة ── -->
+      <div class="glass-card rounded-[1.75rem] p-5 md:p-7 border-b-4 border-brand-500 no-print">
+        <h2 class="font-black text-brand-700 dark:text-brand-400 text-lg mb-5">
+          <i class="fas fa-calculator ml-2"></i> أدخل موادك
+        </h2>
+
+        <div class="mb-4">
+          <label class="block text-sm font-bold muted mb-2" for="scale-select">نظام التقدير</label>
+          <select id="scale-select" class="scale-select">
+            <option value="4">نظام 4.0 (الأكثر شيوعاً)</option>
+            <option value="4.3">نظام 4.3 (A+ = 4.3)</option>
+            <option value="5">نظام 5.0 (جامعات سعودية مثل جامعة الملك سعود)</option>
+          </select>
+        </div>
+
+        <div class="restore-note" id="restore-note">
+          <span>💾 استرجعنا موادك المحفوظة على هذا الجهاز.</span>
+          <button id="clearSavedBtn" type="button" class="btn-outline" style="padding:6px 12px;">🗑️ مسح البيانات المحفوظة</button>
+        </div>
+
+        <div id="subjects-container">
+          <div class="subject-row">
+            <div><label>اسم المادة (اختياري)</label><input type="text" placeholder="مثال: فيزياء" class="subj-name" value=""></div>
+            <div><label>الساعات المعتمدة</label><input type="text" inputmode="numeric" placeholder="3" class="subj-credits" value=""></div>
+            <div><label>الدرجة</label><select class="subj-grade"><option value="">الدرجة</option><option value="A+">A+ (4.0)</option><option value="A">A (4.0)</option><option value="A-">A− (3.7)</option><option value="B+">B+ (3.3)</option><option value="B">B (3.0)</option><option value="B-">B− (2.7)</option><option value="C+">C+ (2.3)</option><option value="C">C (2.0)</option><option value="C-">C− (1.7)</option><option value="D+">D+ (1.3)</option><option value="D">D (1.0)</option><option value="F">F (0.0)</option><option value="P">P (ناجح — خارج الحساب)</option></select></div>
+            <button class="remove-btn" type="button" aria-label="حذف المادة">×</button>
+            <p class="err-msg row-err-msg" role="alert"></p>
+          </div>
+          <div class="subject-row">
+            <div><label>اسم المادة (اختياري)</label><input type="text" placeholder="مثال: فيزياء" class="subj-name" value=""></div>
+            <div><label>الساعات المعتمدة</label><input type="text" inputmode="numeric" placeholder="3" class="subj-credits" value=""></div>
+            <div><label>الدرجة</label><select class="subj-grade"><option value="">الدرجة</option><option value="A+">A+ (4.0)</option><option value="A">A (4.0)</option><option value="A-">A− (3.7)</option><option value="B+">B+ (3.3)</option><option value="B">B (3.0)</option><option value="B-">B− (2.7)</option><option value="C+">C+ (2.3)</option><option value="C">C (2.0)</option><option value="C-">C− (1.7)</option><option value="D+">D+ (1.3)</option><option value="D">D (1.0)</option><option value="F">F (0.0)</option><option value="P">P (ناجح — خارج الحساب)</option></select></div>
+            <button class="remove-btn" type="button" aria-label="حذف المادة">×</button>
+            <p class="err-msg row-err-msg" role="alert"></p>
+          </div>
+          <div class="subject-row">
+            <div><label>اسم المادة (اختياري)</label><input type="text" placeholder="مثال: فيزياء" class="subj-name" value=""></div>
+            <div><label>الساعات المعتمدة</label><input type="text" inputmode="numeric" placeholder="3" class="subj-credits" value=""></div>
+            <div><label>الدرجة</label><select class="subj-grade"><option value="">الدرجة</option><option value="A+">A+ (4.0)</option><option value="A">A (4.0)</option><option value="A-">A− (3.7)</option><option value="B+">B+ (3.3)</option><option value="B">B (3.0)</option><option value="B-">B− (2.7)</option><option value="C+">C+ (2.3)</option><option value="C">C (2.0)</option><option value="C-">C− (1.7)</option><option value="D+">D+ (1.3)</option><option value="D">D (1.0)</option><option value="F">F (0.0)</option><option value="P">P (ناجح — خارج الحساب)</option></select></div>
+            <button class="remove-btn" type="button" aria-label="حذف المادة">×</button>
+            <p class="err-msg row-err-msg" role="alert"></p>
+          </div>
+          <div class="subject-row">
+            <div><label>اسم المادة (اختياري)</label><input type="text" placeholder="مثال: فيزياء" class="subj-name" value=""></div>
+            <div><label>الساعات المعتمدة</label><input type="text" inputmode="numeric" placeholder="3" class="subj-credits" value=""></div>
+            <div><label>الدرجة</label><select class="subj-grade"><option value="">الدرجة</option><option value="A+">A+ (4.0)</option><option value="A">A (4.0)</option><option value="A-">A− (3.7)</option><option value="B+">B+ (3.3)</option><option value="B">B (3.0)</option><option value="B-">B− (2.7)</option><option value="C+">C+ (2.3)</option><option value="C">C (2.0)</option><option value="C-">C− (1.7)</option><option value="D+">D+ (1.3)</option><option value="D">D (1.0)</option><option value="F">F (0.0)</option><option value="P">P (ناجح — خارج الحساب)</option></select></div>
+            <button class="remove-btn" type="button" aria-label="حذف المادة">×</button>
+            <p class="err-msg row-err-msg" role="alert"></p>
+          </div>
+        </div>
+
+        <div class="gpa-actions">
+          <button class="add-btn" id="add-subj-btn" type="button">+ أضف مادة</button>
+        </div>
+        <button class="calc-btn" id="calc-btn" type="button">احسب معدلي</button>
+
+        <div class="calc-result" id="calc-result">
+          <div id="subject-breakdown"></div>
+          <div class="result-row"><span>إجمالي الساعات</span><span class="result-val" id="total-credits-val">—</span></div>
+          <div class="result-row"><span>إجمالي النقاط</span><span class="result-val" id="total-points-val">—</span></div>
+          <div class="gpa-final">
+            <div class="num" id="gpa-val-result">0.00</div>
+            <div class="label">معدلك التراكمي (GPA)</div>
+            <span class="result-badge" id="gpa-badge-result"></span>
+          </div>
+          <div class="pass-note" id="pass-note"></div>
+        </div>
+      </div>
+
+      <!-- ── كيف يُحسب المعدل ── -->
+      <section class="soft-card rounded-[1.75rem] p-5 md:p-6 no-print">
+        <h2 class="section-title mb-4">كيف يُحسب المعدل التراكمي؟</h2>
+        <div class="formula">المعدل = مجموع (نقاط الدرجة × الساعات) ÷ مجموع الساعات المعتمدة</div>
+        <p class="text-sm muted mt-4">مثال: مادة 3 ساعات بتقدير A تعطي 12 نقطة، ومادة 4 ساعات بتقدير B تعطي 12 نقطة. المجموع 24 نقطة على 7 ساعات، فالمعدل 3.43 في نظام 4.0. تتجاهل الحاسبة المواد المقيّمة بـ P لأنها لا تدخل في المعدل.</p>
+      </section>
+
+      <!-- ── جدول النقاط ── -->
+      <section class="soft-card rounded-[1.75rem] p-5 md:p-6 no-print">
+        <h2 class="section-title mb-4">نقاط كل تقدير في الأنظمة الثلاثة</h2>
+        <div style="overflow-x:auto"><table class="gpa-table"><thead><tr><th>التقدير</th><th>نظام 4.0</th><th>نظام 4.3</th><th>نظام 5.0</th></tr></thead><tbody><tr><td>A+</td><td>4.0</td><td>4.3</td><td>5.0</td></tr><tr><td>A</td><td>4.0</td><td>4.0</td><td>4.75</td></tr><tr><td>A−</td><td>3.7</td><td>3.7</td><td>—</td></tr><tr><td>B+</td><td>3.3</td><td>3.3</td><td>4.5</td></tr><tr><td>B</td><td>3.0</td><td>3.0</td><td>4.0</td></tr><tr><td>B−</td><td>2.7</td><td>2.7</td><td>—</td></tr><tr><td>C+</td><td>2.3</td><td>2.3</td><td>3.5</td></tr><tr><td>C</td><td>2.0</td><td>2.0</td><td>3.0</td></tr><tr><td>C−</td><td>1.7</td><td>1.7</td><td>—</td></tr><tr><td>D+</td><td>1.3</td><td>1.3</td><td>2.5</td></tr><tr><td>D</td><td>1.0</td><td>1.0</td><td>2.0</td></tr><tr><td>F</td><td>0.0</td><td>0.0</td><td>1.0</td></tr></tbody></table></div>
+        <p class="text-xs muted mt-3">نظام 5.0 المعروض هو المعمول به في جامعة الملك سعود. إذا كانت جامعتك تستخدم نقاطاً مختلفة فتحقق من لائحتها.</p>
+      </section>
+
+      <!-- ── الأسئلة الشائعة ── -->
+      <section class="soft-card rounded-[1.75rem] p-5 md:p-6 no-print">
+        <h2 class="section-title mb-4">الأسئلة الشائعة</h2>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">كيف يُحسب المعدل التراكمي GPA؟</summary>
+          <p class="text-xs muted mt-2">يُضرب رقم كل درجة بعدد الساعات المعتمدة للمادة، ثم تُجمع النواتج وتُقسم على مجموع الساعات. مثال: مادة 3 ساعات بتقدير A (4.0) تعطي 12 نقطة، ومادة 4 ساعات بتقدير B (3.0) تعطي 12 نقطة، فيكون المعدل (12 + 12) ÷ 7 = 3.43.</p>
+        </details>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">ما الفرق بين نظام 4.0 و4.3 و5.0؟</summary>
+          <p class="text-xs muted mt-2">في نظام 4.0 أعلى نقطة 4.0 حتى لو كان التقدير A+. في نظام 4.3 يحصل A+ على 4.3. أما نظام 5.0 فتستخدمه جامعات سعودية مثل جامعة الملك سعود، وفيه A+ بخمس نقاط وA بـ 4.75. اختر النظام الذي تعتمده جامعتك من القائمة أعلى الحاسبة.</p>
+        </details>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">هل أحسب المعدل الفصلي أم التراكمي؟</summary>
+          <p class="text-xs muted mt-2">الحاسبة تقبل أي عدد من المواد. أدخل مواد فصل واحد لتحصل على المعدل الفصلي، أو أدخل مواد جميع الفصول معاً لتحصل على المعدل التراكمي.</p>
+        </details>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">كيف أتعامل مع المواد الناجح/الراسب Pass/Fail؟</summary>
+          <p class="text-xs muted mt-2">اختر الدرجة P للمادة التي تُقيَّم بالنجاح فقط. تظهر في التفاصيل لكنها لا تدخل في حساب المعدل ولا في مجموع الساعات.</p>
+        </details>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">هل تُحفظ بياناتي؟</summary>
+          <p class="text-xs muted mt-2">تُحفظ موادك على جهازك أنت فقط لمدة محدودة لتعود إليها لاحقاً، ولا تُرسل إلى أي خادم. يمكنك مسحها في أي وقت بزر "مسح البيانات المحفوظة".</p>
+        </details>
+        <details class="mb-3">
+          <summary class="font-bold cursor-pointer">هل النتيجة رسمية؟</summary>
+          <p class="text-xs muted mt-2">لا، النتيجة تقديرية. بعض الجامعات تستخدم جدول نقاط مختلفاً قليلاً أو تقرّب الأرقام بطريقة خاصة، فارجع إلى لائحة جامعتك للمعدل المعتمد.</p>
+        </details>
+      </section>
+
+      <!-- ── مشاركة ── -->
+      <div class="share-btns no-print" role="group" aria-label="مشاركة الصفحة">
+        <span class="share-btns-label">شارك الأداة:</span>
+        <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fmoadalaty.com%2Fgpa-calculator&text=%D8%AD%D8%A7%D8%B3%D8%A8%D8%A9%20%D8%A7%D9%84%D9%85%D8%B9%D8%AF%D9%84%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D9%83%D9%85%D9%8A%20GPA%20%7C%20%D9%85%D8%B9%D8%AF%D9%84%D8%A7%D8%AA%D9%8A"
+           class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="مشاركة على تويتر" title="تويتر">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmoadalaty.com%2Fgpa-calculator"
+           class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="مشاركة على فيسبوك" title="فيسبوك">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://wa.me/?text=%D8%AD%D8%A7%D8%B3%D8%A8%D8%A9%20%D8%A7%D9%84%D9%85%D8%B9%D8%AF%D9%84%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D9%83%D9%85%D9%8A%20GPA%20%7C%20%D9%85%D8%B9%D8%AF%D9%84%D8%A7%D8%AA%D9%8A%20https%3A%2F%2Fmoadalaty.com%2Fgpa-calculator"
+           class="share-btn" target="_blank" rel="noopener noreferrer" aria-label="مشاركة على واتساب" title="واتساب">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <button class="share-btn" onclick="CoreUtils.copyPageLink()" aria-label="نسخ رابط الصفحة" title="نسخ الرابط" id="copy-link-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </button>
+        <button class="share-btn" onclick="window.print()" aria-label="طباعة الصفحة" title="طباعة">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        </button>
+      </div>
+
+      <!-- ── مقالات وأدوات ذات صلة ── -->
+      <section class="no-print">
+        <h2 class="section-title mb-4">مقالات عن المعدل التراكمي</h2>
+        <div class="flex flex-wrap gap-2">
+          <a href="/articles/gpa-article" class="related-link">📘 دليل حساب GPA</a>
+          <a href="/articles/gpa-egyptian-universities" class="related-link">🇪🇬 المعدل في الجامعات المصرية</a>
+          <a href="/articles/gpa-king-saud-5-scale" class="related-link">🇸🇦 نظام 5.0 في جامعة الملك سعود</a>
+          <a href="/articles/gpa-uae-universities" class="related-link">🇦🇪 المعدل في جامعات الإمارات</a>
+          <a href="/articles/percentage-to-gpa-conversion" class="related-link">🔁 تحويل النسبة المئوية إلى GPA</a>
+          <a href="/articles/raise-gpa-fast-2-5-to-3-5" class="related-link">📈 كيف ترفع معدلك</a>
+          <a href="/articles/gpa-mistakes" class="related-link">⚠️ أخطاء شائعة في حساب GPA</a>
+        </div>
+        <h2 class="section-title mb-4 mt-6">أدوات ذات صلة</h2>
+        <div class="flex flex-wrap gap-2">
+          <a href="/" class="related-link">🏫 حاسبة الرسوم المدرسية</a>
+          <a href="/tip-bill-split-calculator" class="related-link">🧾 تقسيم الفاتورة والبقشيش</a>
+        </div>
+      </section>
+    </div>
+  </div>
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="article-footer no-print" role="contentinfo">
+    <div class="container">
+      <nav aria-label="روابط الموقع الرئيسية">
+        <div class="footer-nav">
+          <a href="/"><span aria-hidden="true">🏠</span> الأداة</a>
+          <span aria-hidden="true">·</span>
+          <a href="/tip-bill-split-calculator">🧾 تقسيم الفاتورة والبقشيش</a>
+          <span aria-hidden="true">·</span>
+          <a href="/roommate-expense-splitter">🏠 تقسيم مصاريف السكن</a>
+          <span aria-hidden="true">·</span>
+          <a href="/group-trip-cost-splitter">✈️ تقسيم مصاريف الرحلة</a>
+          <span aria-hidden="true">·</span>
+          <a href="/articles/">📚 المقالات</a>
+          <span aria-hidden="true">·</span>
+          <a href="/articles/faq">❓ الأسئلة الشائعة</a>
+          <span aria-hidden="true">·</span>
+          <a href="/about">من نحن</a>
+          <span aria-hidden="true">·</span>
+          <a href="/contact">اتصل بنا</a>
+          <span aria-hidden="true">·</span>
+          <a href="/privacy">الخصوصية</a>
+          <span aria-hidden="true">·</span>
+          <a href="/terms">الشروط</a>
+          <span aria-hidden="true">·</span>
+          <a href="/disclaimer">إخلاء المسؤولية</a>
+        </div>
+      </nav>
+      <p>آخر تحديث: أكتوبر 2026 | فريق المحتوى التعليمي</p>
+      <p style="margin-top:6px;">© 2026 معدلاتي — بوابة الأدوات التعليمية — أداة مجانية للطلاب وأولياء الأمور</p>
+    </div>
+  </footer>
+</div>
+<button id="scroll-top" aria-label="العودة للأعلى" title="العودة للأعلى">⬆</button>
+<button id="dark-toggle" aria-label="تبديل الوضع الليلي" aria-pressed="false">🌙</button>
+
+<script src="/js/gpa-subject-calc.min.js"></script>
+<script>
+initSubjectGpaCalculator({
+  storageKey: 'moadalaty-gpa-calc',
+  storageMaxDays: 30,
+  analyticsId: 'gpa-calculator-page',
+  containerId: 'subjects-container',
+  addBtnId: 'add-subj-btn',
+  calcBtnId: 'calc-btn',
+  breakdownId: 'subject-breakdown',
+  resultBoxId: 'calc-result',
+  scaleSelectId: 'scale-select',
+  scales: {
+    '4':   { gradePoints: {"A+": 4.0, "A": 4.0, "A-": 3.7, "B+": 3.3, "B": 3.0, "B-": 2.7, "C+": 2.3, "C": 2.0, "C-": 1.7, "D+": 1.3, "D": 1.0, "F": 0.0, "P": null}, gradeOptionsHtml: `<option value="">الدرجة</option><option value="A+">A+ (4.0)</option><option value="A">A (4.0)</option><option value="A-">A− (3.7)</option><option value="B+">B+ (3.3)</option><option value="B">B (3.0)</option><option value="B-">B− (2.7)</option><option value="C+">C+ (2.3)</option><option value="C">C (2.0)</option><option value="C-">C− (1.7)</option><option value="D+">D+ (1.3)</option><option value="D">D (1.0)</option><option value="F">F (0.0)</option><option value="P">P (ناجح — خارج الحساب)</option>`, max: 4.0 },
+    '4.3': { gradePoints: {"A+": 4.3, "A": 4.0, "A-": 3.7, "B+": 3.3, "B": 3.0, "B-": 2.7, "C+": 2.3, "C": 2.0, "C-": 1.7, "D+": 1.3, "D": 1.0, "F": 0.0, "P": null}, gradeOptionsHtml: `<option value="">الدرجة</option><option value="A+">A+ (4.3)</option><option value="A">A (4.0)</option><option value="A-">A− (3.7)</option><option value="B+">B+ (3.3)</option><option value="B">B (3.0)</option><option value="B-">B− (2.7)</option><option value="C+">C+ (2.3)</option><option value="C">C (2.0)</option><option value="C-">C− (1.7)</option><option value="D+">D+ (1.3)</option><option value="D">D (1.0)</option><option value="F">F (0.0)</option><option value="P">P (ناجح — خارج الحساب)</option>`, max: 4.3 },
+    '5':   { gradePoints: {"A+": 5.0, "A": 4.75, "B+": 4.5, "B": 4.0, "C+": 3.5, "C": 3.0, "D+": 2.5, "D": 2.0, "F": 1.0, "P": null}, gradeOptionsHtml: `<option value="">الدرجة</option><option value="A+">A+ (5.0)</option><option value="A">A (4.75)</option><option value="B+">B+ (4.5)</option><option value="B">B (4.0)</option><option value="C+">C+ (3.5)</option><option value="C">C (3.0)</option><option value="D+">D+ (2.5)</option><option value="D">D (2.0)</option><option value="F">F (1.0)</option><option value="P">P (ناجح — خارج الحساب)</option>`, max: 5.0 }
+  },
+  restoreNoteId: 'restore-note',
+  clearBtnId: 'clearSavedBtn',
+  outputs: {
+    totalCredits: 'total-credits-val',
+    totalPoints: 'total-points-val',
+    gpa: 'gpa-val-result',
+    badge: 'gpa-badge-result',
+    passNote: 'pass-note'
+  }
+});
+CoreUtils.initDarkMode('dark-toggle');
+CoreUtils.initViewCounter('view-count', 'gpa-calculator');
+(function () {
+  var btn = document.getElementById('scroll-top');
+  if (!btn) return;
+  window.addEventListener('scroll', function () { btn.classList.toggle('visible', window.scrollY > 400); }, { passive: true });
+  btn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+</script>
+<script src="/js/cookie-consent.min.js" defer></script>
+<script src="/js/site-search-data.min.js"></script>
+<script src="/js/site-search.min.js"></script>
+</body>
+</html>
