@@ -25,6 +25,7 @@ import { EmailMessage } from "cloudflare:email";
 // زي ما هم، لأن تاريخ "آخر تحديث" بيختلف من مقالة لمقالة ولازم يفضل كده.
 const FOOTER_NAV_LINKS = [
   { href: "/", label: "🏠 الأداة" },
+  { href: "/gpa-calculator", label: "🎓 حاسبة المعدل GPA" },
   { href: "/tip-bill-split-calculator", label: "🧾 تقسيم الفاتورة والبقشيش" },
   { href: "/roommate-expense-splitter", label: "🏠 تقسيم مصاريف السكن" },
   { href: "/group-trip-cost-splitter", label: "✈️ تقسيم مصاريف الرحلة" },
