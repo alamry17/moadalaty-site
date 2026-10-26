@@ -40,7 +40,7 @@ id = "01ee659caeb946538f809e659f27a2dc"
 # مفتاح الموقع (Site Key) عام مش سرّي، حطه هنا. سيبه "" = الحماية مقفولة.
 # المفتاح السري (Secret Key) ما يتحطش هنا أبدًا: ضيفه من الـ Dashboard كـ Secret باسم TURNSTILE_SECRET_KEY.
 [vars]
-TURNSTILE_SITE_KEY = ""
+TURNSTILE_SITE_KEY = "0x4AAAAAAFmex9gvmMz9llpO"
 
 [observability]
 enabled = true
