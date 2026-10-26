@@ -25,7 +25,6 @@ import { EmailMessage } from "cloudflare:email";
 // زي ما هم، لأن تاريخ "آخر تحديث" بيختلف من مقالة لمقالة ولازم يفضل كده.
 const FOOTER_NAV_LINKS = [
   { href: "/", label: "🏠 الأداة" },
-  { href: "/gpa-calculator", label: "🎓 حاسبة المعدل GPA" },
   { href: "/tip-bill-split-calculator", label: "🧾 تقسيم الفاتورة والبقشيش" },
   { href: "/roommate-expense-splitter", label: "🏠 تقسيم مصاريف السكن" },
   { href: "/group-trip-cost-splitter", label: "✈️ تقسيم مصاريف الرحلة" },
@@ -69,6 +68,17 @@ class JoinSuccessHandler {
   }
 }
 
+// بيحقن مفتاح الموقع العام (TURNSTILE_SITE_KEY من wrangler.toml) في مكان الـ widget في كل صفحة فيها
+// نموذج النشرة. لو المفتاح فاضي، مفيش attribute بيتحط والنموذج بيشتغل من غير Turnstile.
+class TurnstileSiteKeyHandler {
+  constructor(siteKey) {
+    this.siteKey = siteKey || "";
+  }
+  element(el) {
+    if (this.siteKey) el.setAttribute("data-sitekey", this.siteKey);
+  }
+}
+
 function buildFooterNavHtml(links, langSwitch) {
   const allLinks = langSwitch ? [...links, langSwitch] : links;
   return allLinks
@@ -107,7 +117,7 @@ const LANG_ALTERNATES = {
 // بيتطبّق بس على استجابات HTML فعلية (مش CSS/JS/صور... إلخ) — بنتأكد من
 // الـ Content-Type قبل ما نحاول نعمل rewrite، تجنبًا لأي محاولة تعديل على
 // ملفات مش HTML أصلاً.
-function applyUnifiedFooter(response, pathname) {
+function applyUnifiedFooter(response, pathname, env) {
   const contentType = response.headers.get("Content-Type") || "";
   if (!contentType.includes("text/html")) return response;
 
@@ -117,6 +127,7 @@ function applyUnifiedFooter(response, pathname) {
     .on('nav[aria-label="روابط الموقع الرئيسية"]', new FooterNavHandler(FOOTER_NAV_LINKS, langSwitch))
     .on('nav[aria-label="Main site links"]', new FooterNavHandler(FOOTER_NAV_LINKS_EN, langSwitch))
     .on('#join-success p', new JoinSuccessHandler())
+    .on('#join-turnstile', new TurnstileSiteKeyHandler(env && env.TURNSTILE_SITE_KEY))
     .transform(response);
 }
 
@@ -434,6 +445,13 @@ async function handleSubscribe(request, env, ctx) {
       return json({ error: "invalid email" }, 400);
     }
 
+    // Turnstile: قبل أي قراءة/كتابة في KV وقبل أي إيميل.
+    const human = await verifyTurnstile(env, body.turnstileToken, request.headers.get("CF-Connecting-IP"));
+    if (!human.ok) {
+      console.warn("turnstile rejected:", human.reason);
+      return json({ error: human.unavailable ? "verification unavailable" : "verification failed" }, human.unavailable ? 503 : 403);
+    }
+
     const key = `sub:${email}`;
     const now = new Date().toISOString();
 
@@ -482,6 +500,34 @@ async function handleSubscribe(request, env, ctx) {
     return json({ ok: true, pending: true });
   } catch (err) {
     return json({ error: "server error" }, 500);
+  }
+}
+
+// ═══ Cloudflare Turnstile — التأكد إن طلب الاشتراك جاي من إنسان مش بوت ═══
+// شغّال بس لما TURNSTILE_SECRET_KEY يكون متضاف كـ Secret في Cloudflare. من غيره بيتخطّى
+// التحقق، عشان رفع الكود قبل ما تعمل الـ widget مايوقفش الاشتراك الحالي.
+// التوكن بيتستخدم مرة واحدة بس وبيتحقق منه على السيرفر عن طريق siteverify.
+async function verifyTurnstile(env, token, ip) {
+  if (!env.TURNSTILE_SECRET_KEY) return { ok: true, skipped: true };
+  if (typeof token !== "string" || !token || token.length > 2048) return { ok: false, reason: "missing-token" };
+  try {
+    const form = new URLSearchParams();
+    form.set("secret", env.TURNSTILE_SECRET_KEY);
+    form.set("response", token);
+    if (ip) form.set("remoteip", ip);
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: form,
+      signal: AbortSignal.timeout(5000),
+    });
+    const data = await res.json();
+    if (data.success !== true) return { ok: false, reason: (data["error-codes"] || []).join(",") || "rejected" };
+    // التوكن لازم يكون اتولّد من widget النشرة بالذات (action متضبوط في الـ widget نفسه).
+    if (data.action && data.action !== "newsletter") return { ok: false, reason: "action-mismatch" };
+    return { ok: true };
+  } catch (err) {
+    // مفيش رد من Cloudflare: نرفض بدل ما نسيب الباب مفتوح (والزائر يحاول تاني).
+    return { ok: false, unavailable: true, reason: String(err) };
   }
 }
 
@@ -733,6 +779,6 @@ export default {
     // rewrite لفوتر موحّد قبل ما ترجع للزائر — راجع applyUnifiedFooter فوق.
     const assetResponse = await env.ASSETS.fetch(assetRequest);
     const langSwitchKey = url.pathname === "/en" ? "/en/" : url.pathname;
-    return applyUnifiedFooter(assetResponse, langSwitchKey);
+    return applyUnifiedFooter(assetResponse, langSwitchKey, env);
   },
 };
