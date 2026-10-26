@@ -472,6 +472,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         style="background:var(--accent); color:var(--primary); border:none; padding:13px 28px; border-radius:10px; font-family:'Tajawal',sans-serif; font-weight:800; font-size:15px; cursor:pointer; white-space:nowrap; transition:all 0.2s;">
         اشترك مجاناً ←
       </button>
+      <div id="join-turnstile" style="width:100%; display:flex; justify-content:center;"></div>
     </form>
     <div id="join-success" style="display:none; margin-top:14px;"><p id="join-success-text" style="color:var(--accent); font-weight:700; margin:0 0 12px; font-size:15px;">✅ استلمنا طلبك! افتح بريدك واضغط رابط التأكيد لتفعيل الاشتراك (راجع Spam لو ما لقيتوش)، وحمّل دليلك المجاني من الزر التالي:</p><a href="/assets/moadalaty-study-planner.pdf" download="moadalaty-study-planner.pdf" style="display:inline-block; background:#fff; color:var(--primary); padding:12px 26px; border-radius:10px; font-family:'Tajawal',sans-serif; font-weight:800; font-size:15px; text-decoration:none;">📥 حمّل الملف الآن (PDF)</a></div>
     <p id="join-error" style="display:none; color:#ffdfdf; font-weight:700; margin-top:12px; font-size:15px;"></p>
@@ -520,6 +521,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="/js/site-search.min.js"></script>
 <script>
 // ── الاشتراك في النشرة البريدية — حقيقي عبر /api/subscribe (راجع handleSubscribe في src/index.js) ──
+// + حماية Cloudflare Turnstile (بتشتغل بس لو الـ Worker حقن data-sitekey في #join-turnstile).
 (function () {
   var form = document.getElementById('join-form');
   if (!form) return;
@@ -527,6 +529,68 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var successMsg = document.getElementById('join-success');
   var errorMsg = document.getElementById('join-error');
   var botField = document.getElementById('join-bot-field');
+  var slot = document.getElementById('join-turnstile');
+  // مفتاح الموقع بيتحقن من الـ Worker (TURNSTILE_SITE_KEY في wrangler.toml). لو مش موجود، الحماية مقفولة والنموذج بيشتغل عادي.
+  var siteKey = slot ? (slot.getAttribute('data-sitekey') || '') : '';
+  var widgetId = null, token = '', failed = false, loader = null, waiters = [];
+  var SECURITY_ERROR = '⚠️ تعذّر التحقق الأمني. حدّث الصفحة وحاول تاني (ولو عندك إضافة بتمنع الإعلانات جرّب تقفلها للصفحة دي).';
+
+  function wake() { var w = waiters; waiters = []; w.forEach(function (fn) { fn(); }); }
+
+  // بنحمّل سكربت Turnstile أول ما الزائر يتفاعل مع النموذج، مش مع كل زيارة للصفحة.
+  function ensureWidget() {
+    if (!siteKey) return Promise.resolve(false);
+    if (loader) return loader;
+    loader = new Promise(function (resolve) {
+      if (window.turnstile) { resolve(true); return; }
+      var s = document.createElement('script');
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      s.async = true; s.defer = true;
+      s.onload = function () { resolve(true); };
+      s.onerror = function () { resolve(false); };
+      document.head.appendChild(s);
+    }).then(function (ok) {
+      if (!ok || !window.turnstile) return false;
+      try {
+        widgetId = window.turnstile.render(slot, {
+          sitekey: siteKey,
+          action: 'newsletter',
+          appearance: 'interaction-only',
+          callback: function (t) { token = t; failed = false; wake(); },
+          'expired-callback': function () { token = ''; },
+          'error-callback': function () { token = ''; failed = true; wake(); }
+        });
+        return true;
+      } catch (e) { return false; }
+    });
+    return loader;
+  }
+
+  function getToken() {
+    if (!siteKey) return Promise.resolve('');
+    return ensureWidget().then(function (ok) {
+      if (!ok) return '';
+      if (token) return token;
+      // لو الـ widget فشل قبل كده، بنطلب محاولة جديدة بدل ما الزائر يستنى لحد ما الوقت يخلص.
+      var retrying = failed;
+      if (retrying) { failed = false; resetWidget(); }
+      return new Promise(function (resolve) {
+        var done = false;
+        function finish() { if (!done) { done = true; resolve(token); } }
+        waiters.push(finish);
+        setTimeout(finish, retrying ? 8000 : 20000);
+      });
+    });
+  }
+
+  // التوكن بيتستخدم مرة واحدة بس، فبعد أي محاولة فاشلة بنطلب واحد جديد.
+  function resetWidget() {
+    token = '';
+    try { if (window.turnstile && widgetId !== null) window.turnstile.reset(widgetId); } catch (e) {}
+  }
+
+  form.addEventListener('focusin', function () { ensureWidget(); }, { once: true });
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (errorMsg) { errorMsg.style.display = 'none'; errorMsg.textContent = ''; }
@@ -534,31 +598,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (!email) return;
     var btn = form.querySelector('button');
     var originalText = btn ? btn.textContent : '';
+    function showError(msg) {
+      if (errorMsg) { errorMsg.textContent = msg; errorMsg.style.display = 'block'; }
+      if (btn) { btn.disabled = false; btn.textContent = originalText; }
+    }
     if (btn) { btn.disabled = true; btn.textContent = '... جارٍ الإرسال'; }
-    fetch('/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, source: location.pathname, botField: botField ? botField.value : '' })
-    })
-      .then(function (res) {
-        return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, data: data }; });
+    getToken().then(function (t) {
+      if (siteKey && !t) { showError(SECURITY_ERROR); return; }
+      return fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, source: location.pathname, botField: botField ? botField.value : '', turnstileToken: t })
       })
-      .then(function (result) {
-        if (result.ok) {
-          var successText = document.getElementById('join-success-text');
-          if (successText && result.data && result.data.alreadySubscribed) successText.textContent = '✅ إنت مشترك بالفعل في النشرة. حمّل دليلك المجاني من الزر التالي:';
-          if (successMsg) successMsg.style.display = 'block';
-          if (emailInput) emailInput.value = '';
-          if (btn) btn.style.display = 'none';
-        } else {
-          if (errorMsg) { errorMsg.textContent = '⚠️ حصل خطأ، حاول تاني لاحقًا.'; errorMsg.style.display = 'block'; }
-          if (btn) { btn.disabled = false; btn.textContent = originalText; }
-        }
-      })
-      .catch(function () {
-        if (errorMsg) { errorMsg.textContent = '⚠️ تعذّر الاتصال. تأكد من الإنترنت وحاول تاني.'; errorMsg.style.display = 'block'; }
-        if (btn) { btn.disabled = false; btn.textContent = originalText; }
-      });
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, data: data }; });
+        })
+        .then(function (result) {
+          if (result.ok) {
+            var successText = document.getElementById('join-success-text');
+            if (successText && result.data && result.data.alreadySubscribed) successText.textContent = '✅ إنت مشترك بالفعل في النشرة. حمّل دليلك المجاني من الزر التالي:';
+            if (successMsg) successMsg.style.display = 'block';
+            if (emailInput) emailInput.value = '';
+            if (btn) btn.style.display = 'none';
+          } else if (result.data && (result.data.error === 'verification failed' || result.data.error === 'verification unavailable')) {
+            resetWidget();
+            showError(SECURITY_ERROR);
+          } else {
+            resetWidget();
+            showError('⚠️ حصل خطأ، حاول تاني لاحقًا.');
+          }
+        });
+    }).catch(function () {
+      resetWidget();
+      showError('⚠️ تعذّر الاتصال. تأكد من الإنترنت وحاول تاني.');
+    });
   });
 })();
 </script>
